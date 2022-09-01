@@ -6,7 +6,13 @@
 //* This is the landing page for the StreamingServicesLister project *//
 //********************************************************************//
 
+// TO DO:
+// Add button for login
+// Add button for signup 
+
 import 'package:flutter/material.dart';
+// import 'package:flutter/services.dart';
+// import 'package:streaming_service_lister/widgets/my_container.dart';
 
 class MyLanding extends StatelessWidget {
   const MyLanding({Key? key}) : super(key: key);
@@ -24,12 +30,12 @@ class MyLanding extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.all(40.0),
                   child: Text(
-                    "SSL",
+                    "<Insert Logo Here>",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Color.fromARGB(190, 255, 0, 0),
                       fontWeight: FontWeight.bold,
-                      fontSize: 48,
+                      fontSize: 50, 
                       letterSpacing: 8,
                       ),
                     ),

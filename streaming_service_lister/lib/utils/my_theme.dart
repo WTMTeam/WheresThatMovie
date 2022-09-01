@@ -3,6 +3,7 @@
 // Date Created: 08/30/2022
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class MyTheme{
   // Color variables
@@ -12,6 +13,8 @@ class MyTheme{
   ThemeData buildTheme(){
     return ThemeData(
       canvasColor: _dark,
+      brightness: Brightness.dark,
+      
     );
   }
 }
