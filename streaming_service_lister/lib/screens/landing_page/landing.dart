@@ -11,6 +11,7 @@
 // Add button for signup 
 
 import 'package:flutter/material.dart';
+import 'package:streaming_service_lister/screens/login/login.dart';
 // import 'package:flutter/services.dart';
 // import 'package:streaming_service_lister/widgets/my_container.dart';
 
@@ -26,8 +27,8 @@ class MyLanding extends StatelessWidget {
           Expanded(
             child: ListView(
               padding: const EdgeInsets.all(20.0),
-              children: const <Widget>[
-                Padding(
+              children: <Widget>[
+                const Padding(
                   padding: EdgeInsets.all(40.0),
                   child: Text(
                     "<Insert Logo Here>",
@@ -39,7 +40,33 @@ class MyLanding extends StatelessWidget {
                       letterSpacing: 8,
                       ),
                     ),
-                )
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                ElevatedButton(  
+                  // style: ElevatedButton.styleFrom(
+                  //   primary: const Color.fromARGB(255, 255, 0, 0)
+                  // ),          
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 100),
+                    child: Text(
+                      "Log In", 
+                      style: TextStyle(
+                        //color: Colors.white, 
+                        fontWeight: FontWeight.bold, 
+                        fontSize: 20.0
+                        ),
+                      ),
+                    ),
+                  onPressed: (){
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context)=> const MyLogin(),
+                      ),
+                    );
+                  },           
+                ),
               ],
             )
           )

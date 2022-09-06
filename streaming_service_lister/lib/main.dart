@@ -25,8 +25,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false, // removes the little banner in the top
       title: "Hello",
       theme: MyTheme().buildTheme(), // get the theme from utils/my_theme.dart
-      //home: const MyLanding(),
-      home: const MyLogin(),
+      home: const MyLanding(),
+      //home: const MyLogin(),
     );
   }
 }

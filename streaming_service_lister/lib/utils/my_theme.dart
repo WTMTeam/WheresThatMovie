@@ -7,14 +7,53 @@ import 'package:flutter/services.dart';
 
 class MyTheme{
   // Color variables
-  Color _red = Color.fromARGB(255, 255, 0, 0);
-  Color _dark = Color.fromARGB(255, 20, 20, 20);
+  final Color _red = const Color.fromARGB(255, 255, 0, 0);
+  final Color _redOpacity = const Color.fromARGB(100, 255, 0, 0);
+  final Color _dark = const Color.fromARGB(255, 20, 20, 20);
+  final Color _grey = const Color.fromARGB(255, 119, 124, 135);
 
   ThemeData buildTheme(){
     return ThemeData(
       canvasColor: _dark,
-      brightness: Brightness.dark,
+      secondaryHeaderColor: _grey,
       
+      // Change the theme of text selection and cursor
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: _red,
+        selectionColor: _red,
+      ),
+
+      // Change the theme of input borders
+      inputDecorationTheme: InputDecorationTheme(
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20.0),
+          borderSide: BorderSide(
+            color: _redOpacity,
+          ),
+        ),
+
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20.0),
+          borderSide: BorderSide(
+            color: _red,
+          ),
+        ),
+        //iconColor: _red,
+        //focusColor: _red,
+      ),
+
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          primary: _red,
+          //padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          minimumSize: const Size(200, 40),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+        ),
+      ),
+
+      brightness: Brightness.dark, // Makes text light instead of dark by default      
     );
   }
 }
