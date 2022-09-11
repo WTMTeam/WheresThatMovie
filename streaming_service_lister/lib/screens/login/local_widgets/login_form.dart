@@ -7,6 +7,7 @@
 
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:streaming_service_lister/screens/logged_in/logged_in.dart';
 import 'package:streaming_service_lister/widgets/my_container.dart';
 import 'package:flutter/material.dart';
 
@@ -30,7 +31,9 @@ class MyLoginForm extends StatelessWidget {
             ),
           ),
           TextFormField(
-            decoration: const InputDecoration(prefixIcon: Icon(Icons.alternate_email), 
+            decoration: const InputDecoration(
+              prefixIcon: Icon(Icons.alternate_email), 
+              //prefixIconColor: Color.fromARGB(255, 255, 0, 0),
             hintText: "Email",
             ),
           ),
@@ -38,9 +41,12 @@ class MyLoginForm extends StatelessWidget {
             height: 20.0,
           ),
           TextFormField(
-            decoration: const InputDecoration(prefixIcon: Icon(Icons.lock_outline), 
-            hintText: "Password",
+            decoration: const InputDecoration(
+              prefixIcon: Icon(Icons.lock_outline), 
+              hintText: "Password",
             ),
+            // Hide the input in the password field
+            obscureText: true,
           ),
           const SizedBox(
             height: 20.0,
@@ -60,7 +66,13 @@ class MyLoginForm extends StatelessWidget {
                   ),
                 ),
               ),
-            onPressed: (){}, // Do nothing for now            
+            onPressed: (){
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const MyLoggedIn(),
+                ),
+              );
+            }, // Do nothing for now            
           ),
           TextButton(
             child: const Text(
@@ -69,9 +81,11 @@ class MyLoginForm extends StatelessWidget {
                 color: Color.fromARGB(255, 255, 0, 0)
               ),
             ),
-            onPressed: (){}, // Do nothing for now
-          )
-        ]
+            onPressed: (){
+              
+            },
+          ),
+        ],
       ),
     );
   }
