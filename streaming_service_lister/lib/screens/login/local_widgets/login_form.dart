@@ -5,8 +5,7 @@
 // Purpose:
 //    A login form to be used on the login page
 
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
+
 import 'package:streaming_service_lister/screens/logged_in/logged_in.dart';
 import 'package:streaming_service_lister/widgets/my_container.dart';
 import 'package:flutter/material.dart';

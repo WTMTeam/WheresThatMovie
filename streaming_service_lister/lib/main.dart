@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:streaming_service_lister/screens/landing_page/landing.dart';
-import 'package:streaming_service_lister/screens/login/login.dart';
 import 'package:streaming_service_lister/utils/my_theme.dart';
 
 void main() {

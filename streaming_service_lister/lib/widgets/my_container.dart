@@ -6,8 +6,6 @@
 //    Create a container that can be used throughout the app
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class MyContainer extends StatelessWidget {
   final Widget child;
