@@ -108,8 +108,13 @@ class _MyListState extends State<MyList> {
                     //print(myList);
                     // Update the state of the widget when an item is added to the list
                     setState(() {
-                      myList.add(myController.text);
-                      myList.sort();
+                      myController.text.isEmpty?
+                      // does not show
+                        Text(
+                          "Can't add empty show",
+                        ):
+                        myList.add(myController.text);
+                        myList.sort();
                       //key: UniqueKey();
                     });
                   }                                   
