@@ -18,28 +18,28 @@ class MyLogin extends StatelessWidget {
           Expanded(
             child: ListView(
               padding: const EdgeInsets.all(20.0),
-              children:  <Widget>[
+              children:  const <Widget>[
 
                 // Insert padding on the top to move down the back button and form
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(top: 20.0),
                   // child: Image.asset("assets.logo.png"),
                   //child: Text("Login Page"),
                 ),
 
                 // Align the back button on the left side.
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: const <Widget>[
-                    BackButton(),
-                  ],
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.start,
+                //   children: const <Widget>[
+                //     BackButton(),
+                //   ],
+                // ),
 
                 // Add some space between the back button and login form
-                const SizedBox(
-                  height: 20.0,
+                SizedBox(
+                  height: 100.0,
                 ),
-                const MyLoginForm(),
+                MyLoginForm(),
                 
               ],
             )

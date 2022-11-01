@@ -29,12 +29,15 @@ class MyLoginForm extends StatelessWidget {
               ),
             ),
           ),
+          Theme(data: Theme.of(context).copyWith(primaryColor: Colors.red), child: 
           TextFormField(
             decoration: const InputDecoration(
               prefixIcon: Icon(Icons.alternate_email), 
               //prefixIconColor: Color.fromARGB(255, 255, 0, 0),
             hintText: "Email",
             ),
+            autofocus: true,
+          ),
           ),
           const SizedBox(
             height: 20.0,

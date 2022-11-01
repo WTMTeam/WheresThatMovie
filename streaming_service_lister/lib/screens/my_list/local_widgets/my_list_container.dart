@@ -1,105 +1,76 @@
-// // service_selector.dart
-// // Author: Samuel Rudqvist
-// // Date Created: 09/26/2022
-// //
+import 'package:flutter/material.dart';
+import '../../../widgets/my_container.dart';
 
-// //********************************************************************//
-// //*       This is the container for displaying the streaming         *//
-// //*               services in the user's list.                       *//
-// //********************************************************************//
+class MyListContainer extends StatelessWidget {
+  //const MyListContainerTest({Key? key}) : super(key: key);
 
+  final List<String> myList;
+  final Function(String) onRemoved;
+  const MyListContainer({Key? key, required this.myList, required this.onRemoved}) : super(key: key);
 
-// import 'package:flutter/material.dart';
-// import 'package:streaming_service_lister/widgets/my_container.dart';
-// import 'dart:developer' as developer;
-
-// class MyListContainer extends StatefulWidget {
-//   const MyListContainer({Key? key}) : super(key: key);
-
-//   @override
-//   State<MyListContainer> createState() => _MyListContainerState();
-// }
-
-// class Movie{
-//   String name;
-//   int testInt;
-
-//   Movie({required this.name, required this.testInt});
-  
-// }
-
-// class TvShow{
-//   String name;
-//   int testInt;
-
-//   TvShow({required this.name, required this.testInt});
-//   //_myList.add(name);
-// }
-
-// class _MyListContainerState extends State<MyListContainer> {
-  
-//   late String name;
-//   List<String> myList = ["test", "test2","test5"];
-//   List<Movie> movieList = [];
-//   List<TvShow> tvShowList = [];
-//   List<Widget> _myList = [];
-  
-//   @override
-//   Widget build(BuildContext context) {
-//     return MyContainer(
-//       child: Column(
-//         children: <Widget>[
+  @override
+  Widget build(BuildContext context) {
+    return MyContainer(
+      
+      child: Column(
+        children: <Widget>[
           
-//           Column(
-//             children: <Widget>[
-//               // Check if myList is empty 
-//               _myList.isEmpty? 
-//                 Text(
-//                   "Add a Movie or Show",
-//                   style: TextStyle(
-//                     color: Theme.of(context).primaryColor,
-//                     fontSize: 20.0,
-//                     fontWeight: FontWeight.bold,
-//                   ),
-//                 ):
-//                 Padding(
-//                   padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 8.0,),
-//                   child: Text(
-//                     "Your List",
-//                     style: TextStyle(
-//                       color: Theme.of(context).primaryColor,
-//                       fontSize: 20.0,
-//                       fontWeight: FontWeight.bold,
-//                     ),
-//                   ),
-//                 ),
-//                 ListView.builder(
-//                   padding: EdgeInsets.zero,
-//                   shrinkWrap: true,
-//                   itemCount: _myList.length,
-//                   // prototypeItem: ListTile(
-//                   //   title: Text(myList.first)
-//                   // ),
-//                   itemBuilder: ((context, index) {
-//                     return ListTile(
-//                       //minVerticalPadding: 0.0,
-//                       dense: true,
-//                       visualDensity: const VisualDensity(vertical: 0.0),
-//                       title: Text(
-//                         myList[index],
-//                         style: TextStyle(
-//                           color: Theme.of(context).primaryColor,
-//                           fontSize: 20.0,
-//                           fontWeight: FontWeight.bold,
-//                         ),
-//                       ),
-//                     );
-//                   }),  
-//                 ),
-//             ],
-//           )
-//         ],
-//       )
-//     );
-//   }
-// }
+          Column(
+            
+            children: <Widget>[
+              // Check if myList is empty 
+              myList.isEmpty? 
+                Text(
+                  "Add a Movie or Show",
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ):
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 8.0,),
+                  child: Text(
+                    "Your List",
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                ListView.builder(
+                  padding: EdgeInsets.zero,
+                  shrinkWrap: true,
+                  itemCount: myList.length,
+                  // Build each item of the list
+                  itemBuilder: ((context, index) {
+                    return ListTile(
+                      dense: true,
+                      visualDensity: const VisualDensity(vertical: 0.0),
+                      title: Text(
+                        myList[index],
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      trailing: IconButton(
+                        // Send the item that is to be removed to my_list.dart
+                        onPressed: (){
+                          final itemToRemove = myList[index];
+                          onRemoved(itemToRemove);
+                        },
+                        icon: const Icon(Icons.delete_outline)
+                      ),
+                    );
+                  }),  
+                ),
+            ],
+          )
+        ],
+      )
+    );
+  }
+}

@@ -11,9 +11,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:streaming_service_lister/screens/my_list/local_widgets/my_list_container.dart';
-import 'package:streaming_service_lister/widgets/my_container.dart';
 
-//import '../../widgets/my_container.dart';
+
 
 class MyList extends StatefulWidget {
   const MyList({Key? key}) : super(key: key);
@@ -46,23 +45,18 @@ class _MyListState extends State<MyList> {
                   padding: EdgeInsets.all(10.0)
                 ),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    BackButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        // Navigator.of(context).push(
-                        //   MaterialPageRoute(
-                        //     builder: (context) => const MyLoggedIn(),
-                        //   ),
-                        // );
-                      }
-                    ),
-                  ],
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: <Widget>[
+                //     BackButton(
+                //       onPressed: () {
+                //         Navigator.pop(context);
+                //       }
+                //     ),
+                //   ],
+                // ),
                 const SizedBox(
-                  height: 25.0,
+                  height: 50.0,
                 ),
 
                 Text(
@@ -104,13 +98,11 @@ class _MyListState extends State<MyList> {
                     ),
                   ),
                   onPressed: (){
-                    //print(myController.text);
-                    //print(myList);
                     // Update the state of the widget when an item is added to the list
                     setState(() {
                       myController.text.isEmpty?
                       // does not show
-                        Text(
+                        const Text(
                           "Can't add empty show",
                         ):
                         myList.add(myController.text);
@@ -123,82 +115,36 @@ class _MyListState extends State<MyList> {
                 const SizedBox(
                   height: 25.0,
                 ),
-                Row(
-                  children: <Widget>[
-                    Expanded(child: 
-                      //MyListContainer(),
-                      //MyContainer(child: Column()),
-                      MyContainer(
-                        child: Column(
-                          children: <Widget>[
-                            Column(
-                              children: <Widget>[
-                                // Check if myList is empty 
-                                myList.isEmpty? 
-                                  Text(
-                                    "Add a Movie or Show",
-                                    style: TextStyle(
-                                      color: Theme.of(context).primaryColor,
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ):
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 8.0,),
-                                    child: Text(
-                                      "Your List",
-                                      style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                  ListView.builder(
-                                    key: UniqueKey(),
-                                    padding: EdgeInsets.zero,
-                                    shrinkWrap: true,
-                                    itemCount: myList.length,
-                                    itemBuilder: ((context, index) {
-                                      return ListTile(
-                                        dense: true,
-                                        visualDensity: const VisualDensity(vertical: 0.0),
-                                        title: Text(
-                                          myList[index],
-                                          style: TextStyle(
-                                            color: Theme.of(context).primaryColor,
-                                            fontSize: 20.0,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        trailing: IconButton(
-                                          onPressed: (){
-                                            setState(() {
-                                              print("before");
-                                              print(myList);
-                                              myList.remove(myList[index]);
-                                              print("after");
-                                              print(myList);
-                                            });
-                                          },
-                                          icon: const Icon(Icons.delete_outline)
-                                        ),
-                                      );
-                                    }),  
-                                  ),
-                              ],
-                            )
-                          ],
-                        )
-                      )
-                    )
-                  ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                  child: MyListContainer(
+                    myList: myList,
+                    onRemoved: (itemToRemove){
+                      setState(() {
+                        print("before");
+                        print(myList);
+                        myList.remove(itemToRemove);
+                        print("after");
+                        print(myList);
+                      });
+                    }
+                  ),
                 ),
+
+                MyListContainer(
+                  myList: myList,
+                  // Get the item to be removed and update the state
+                  onRemoved: (itemToRemove){
+                    setState(() {
+                      myList.remove(itemToRemove);
+                    });
+                  },
+                ),
+
                 const SizedBox(
                   height: 25.0,
                 ),
-                //const MyListContainer(),
-                
+
               ],
             )
           )

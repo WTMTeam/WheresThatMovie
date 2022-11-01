@@ -8,9 +8,12 @@
 //********************************************************************//
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:streaming_service_lister/screens/landing_page/landing.dart';
 import 'package:streaming_service_lister/screens/logged_in/local_widgets/service_selector.dart';
 import 'package:streaming_service_lister/screens/my_list/my_list.dart';
+import 'package:streaming_service_lister/screens/notifications/notifications.dart';
+import 'package:streaming_service_lister/utils/provider/dark_theme_provider.dart';
 
 
 class MyLoggedIn extends StatefulWidget {
@@ -25,6 +28,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
 
   @override
   Widget build(BuildContext context) {
+    final themeState = Provider.of<DarkThemeProvider>(context);
     return Scaffold(
       // Used for opening the drawer header
       key: _scaffoldKey,
@@ -145,25 +149,6 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                       ),                
                     ],
                   ),
-
-                  // ListTile(
-                  //   leading: Icon(
-                  //     Icons.account_circle_outlined,
-                  //     size: 50.0,
-                  //   ),
-                  //   title: Text(
-                  //     "username",
-                  //     style: TextStyle(
-                  //       fontSize: 30.0,
-                  //     ),
-                  //   ),
-                  //   // trailing: Text(
-                  //   //   "username",
-                  //   //   style: TextStyle(
-                  //   //     fontSize: 20.0,
-                  //   //   ),
-                  //   // ),
-                  // ),
                   
                   // Add some space between the username/logo and the first option
                   const SizedBox(height: 20.0,),
@@ -177,7 +162,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                           fontSize: 20.0
                         ),
                       ),
-                      trailing: const Icon(Icons.list),
+                      leading: const Icon(Icons.list),
                       onTap: () {
                         // Update the state of the app
                         // ...
@@ -199,13 +184,30 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                           fontSize: 20.0
                         ),
                       ),
-                      trailing: const Icon(Icons.notifications),
+                      leading: const Icon(Icons.notifications),
                       onTap: () {
                         // Update the state of the app
                         // ...
                         // Then close the drawer
-                        Navigator.pop(context);
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const MyNotifications(),
+                          )
+                        );
                       },
+                    ),
+                  ),
+
+                  Card(
+                    child: SwitchListTile(
+                      title: const Text("Theme"),
+                      secondary: Icon(themeState.getDarkTheme ? Icons.dark_mode_outlined : Icons.light_mode_outlined),
+                      onChanged: (bool value) {
+                        setState(() {
+                          themeState.setDarkTheme = value;
+                        });
+                      },
+                      value: themeState.getDarkTheme,
                     ),
                   ),
                 ],          

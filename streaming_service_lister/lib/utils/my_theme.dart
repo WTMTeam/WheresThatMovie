@@ -18,12 +18,16 @@ class MyTheme{
       //cardColor: _myCardColor,
       canvasColor: _dark,
       primaryColor: _red,
+      primaryColorDark: _red,
+      focusColor: _red,
       secondaryHeaderColor: _grey,
       unselectedWidgetColor: _red,
+      //focusColor: _red,
       
       // iconTheme: const IconThemeData(
       //   color: Colors.red,
       // ).copyWith(color: _red),
+
       // Change the theme of text selection and cursor
       textSelectionTheme: TextSelectionThemeData(
         cursorColor: _red,
