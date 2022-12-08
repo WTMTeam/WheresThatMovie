@@ -21,14 +21,16 @@ class MyContainer extends StatelessWidget {
       //height: 600.0,
       padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
-        color: _containerBackground,
+        // color: _containerBackground,
+        color: Theme.of(context).colorScheme.primaryContainer,
         borderRadius: BorderRadius.circular(20.0),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
-            color: _boxShadowColor,
+            // color: _boxShadowColor,
+            color: Theme.of(context).colorScheme.shadow,
             blurRadius: 10.0,
             spreadRadius: 1.0,
-            offset: Offset(
+            offset: const Offset(
               4.0,
               4.0,
             ),

@@ -4,8 +4,11 @@ import '../../../widgets/my_container.dart';
 class MyListContainer extends StatelessWidget {
   //const MyListContainerTest({Key? key}) : super(key: key);
 
-  final List<String> myList;
-  final Function(String) onRemoved;
+  //final List<String> myList;
+  //List<Map<String, dynamic>> myList = [];
+  final List<Map<String, dynamic>> myList;
+
+  final Function(int) onRemoved;
   const MyListContainer({Key? key, required this.myList, required this.onRemoved}) : super(key: key);
 
   @override
@@ -49,7 +52,7 @@ class MyListContainer extends StatelessWidget {
                       dense: true,
                       visualDensity: const VisualDensity(vertical: 0.0),
                       title: Text(
-                        myList[index],
+                        myList[index]['title'],
                         style: TextStyle(
                           color: Theme.of(context).primaryColor,
                           fontSize: 20.0,
@@ -59,7 +62,7 @@ class MyListContainer extends StatelessWidget {
                       trailing: IconButton(
                         // Send the item that is to be removed to my_list.dart
                         onPressed: (){
-                          final itemToRemove = myList[index];
+                          final itemToRemove = myList[index]['id'];
                           onRemoved(itemToRemove);
                         },
                         icon: const Icon(Icons.delete_outline)
