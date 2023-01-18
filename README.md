@@ -1,6 +1,17 @@
-# StreamingServiceLister
+# Where's That Movie?
 
 Repository for an iOS app using the Flutter framework.
+
+
+
+
+
+
+
+
+
+
+### Links for API and Attribution
 https://www.themoviedb.org/about/logos-attribution
 https://api.themoviedb.org/3/movie/744/watch/providers?api_key=dbffa0d16fb8dc2873531156a5c5f41a&locale=US
 
