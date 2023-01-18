@@ -1,6 +1,8 @@
 # Where's That Movie?
 
-Repository for an iOS app using the Flutter framework.
+Repository for an iOS app using the Flutter framework.  
+
+The purpose of this application is to easily be able to find where a movie or tv-show is available for streaming.  
 
 
 
