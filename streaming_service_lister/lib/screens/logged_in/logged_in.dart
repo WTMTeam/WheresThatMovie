@@ -7,6 +7,8 @@
 //*       This is the screen the user will see when logged in        *//
 //********************************************************************//
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:streaming_service_lister/screens/landing_page/landing.dart';
@@ -15,6 +17,7 @@ import 'package:streaming_service_lister/screens/logged_in/local_widgets/trendin
 import 'package:streaming_service_lister/screens/my_list/local_widgets/my_list_container.dart';
 import 'package:streaming_service_lister/screens/my_list/my_list.dart';
 import 'package:streaming_service_lister/screens/notifications/notifications.dart';
+import 'package:streaming_service_lister/screens/trending_page/trending.dart';
 import 'package:streaming_service_lister/utils/provider/dark_theme_provider.dart';
 
 import 'package:http/http.dart';
@@ -28,16 +31,22 @@ class MyLoggedIn extends StatefulWidget {
 }
 
 // * https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=dbffa0d16fb8dc2873531156a5c5f41a
+
+// https://www.youtube.com/watch?v=ll8B8OnqVp4
 class _MyLoggedInState extends State<MyLoggedIn> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final String apiKey = 'dbffa0d16fb8dc2873531156a5c5f41a';
   final String readAccessToken =
       'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmZmYTBkMTZmYjhkYzI4NzM1MzExNTZhNWM1ZjQxYSIsInN1YiI6IjYzODYzNzE0MDM5OGFiMDBjODM5MTJkOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.qQjwnSQLDfVNAuinpsM-ATK400-dnwuWUVirc7_AiQY';
-  List trendingMovies = [];
-  List trendingTitles = [];
-  List voteAverageMovie = [];
 
-  loadTrendingMovies() async {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final myController = TextEditingController();
+  List searchResults = [];
+  List tvShows = [];
+  List movies = [];
+  List people = [];
+
+  mySearch() async {
+    print("My Controller: ${myController.text}");
     final tmdbWithCustomLogs = TMDB(
       //TMDB instance
       ApiKeys(apiKey, readAccessToken), //ApiKeys instance with your keys,
@@ -46,32 +55,52 @@ class _MyLoggedInState extends State<MyLoggedIn> {
         showErrorLogs: true,
       ),
     );
-    Map result = await tmdbWithCustomLogs.v3.trending.getTrending();
+    String query = myController.text;
+    Map result = await tmdbWithCustomLogs.v3.search.queryMulti(query);
+    // Map result = await tmdbWithCustomLogs.v3.search.queryTvShows(query);
     setState(() {
-      trendingMovies = result['results'];
+      searchResults = result['results'];
     });
-    for (int i = 0; i < 10; i++) {
-      try {
-        // if title returns null, then try name instead
-        String title = trendingMovies[i]["title"] ?? trendingMovies[i]['name'];
-        double vote = trendingMovies[i]["vote_average"];
-        trendingTitles.add(title);
-        voteAverageMovie.add(vote);
-        print(title);
-        print(vote);
-      } catch (e) {
-        print(e);
-        // print(trendingMovies[i]);
+    print("searchResults: ${searchResults}");
+    for (int i = 0; i < searchResults.length; i++) {
+      if (searchResults[i]['media_type'] == "movie") {
+        print(
+            "${searchResults[i]['media_type']}: ${searchResults[i]['title']}");
+        print("movie id: ${searchResults[i]['id']}");
+        List movie = [];
+        movie.add(searchResults[i]['id']);
+        movie.add(searchResults[i]['title']);
+        movie.add(searchResults[i]['overview']);
+        movie.add(searchResults[i]['poster_path']);
+        print("currMovie: ${movie}");
+        movies.add(movie);
+      } else if (searchResults[i]['media_type'] == "tv") {
+        print("${searchResults[i]['media_type']}: ${searchResults[i]['name']}");
+        List show = [];
+        show.add(searchResults[i]['id']);
+        show.add(searchResults[i]['name']);
+        show.add(searchResults[i]['overview']);
+        show.add(searchResults[i]['poster_path']);
+        tvShows.add(show);
+      } else if (searchResults[i]['media_type'] == "person") {
+        print("${searchResults[i]['media_type']}: ${searchResults[i]['name']}");
+        people.add(searchResults[i]['name']);
       }
     }
-    print(trendingTitles);
-    // print(trendingMovies[0]);
-  }
+    print("movie list: ${movies}");
+    print("tv-show list: ${tvShows}");
+    print("people list: ${people}");
+    // Map providerResult = await tmdbWithCustomLogs.v3.discover.getMovies(withWatchProviders: "netflix", watchRegion: "US");
+    Map providerResult =
+        await tmdbWithCustomLogs.v3.movies.getWatchProviders(movies[1][0]);
+    print('');
+    print(providerResult['results']["SE"]['flatrate'][0]);
+    print(providerResult['results']["US"]['flatrate'][0]);
 
-  @override
-  void initState() {
-    loadTrendingMovies();
-    super.initState();
+    // log(providerResult['results']["US"]);
+    // for (int i = 0; i < providerResult['results'].length; i++) {}
+    // List flatrates = providerResult['results']['AD'];
+    // print(flatrates);
   }
 
   @override
@@ -124,6 +153,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                   height: 15.0,
                 ),
                 TextFormField(
+                  controller: myController,
                   decoration: const InputDecoration(
                     prefixIcon: Icon(
                       Icons.search_outlined,
@@ -152,12 +182,32 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                       ),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    mySearch();
+                  },
                 ),
-                TrendingMovies(
-                  movieTitles: trendingTitles,
-                  votes: voteAverageMovie,
-                )
+                ElevatedButton(
+                  // style: ElevatedButton.styleFrom(
+                  //   primary: const Color.fromARGB(255, 255, 0, 0)
+                  // ),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 100),
+                    child: Text(
+                      "See Trending",
+                      style: TextStyle(
+                          //color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.0),
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const MyTrending(),
+                      ),
+                    );
+                  }, // Do nothing for now
+                ),
               ],
             ),
           ),
