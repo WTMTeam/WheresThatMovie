@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:streaming_service_lister/widgets/my_container.dart';
+import 'package:wheres_that_movie/widgets/my_container.dart';
 
 class TrendingMovies extends StatelessWidget {
   const TrendingMovies(

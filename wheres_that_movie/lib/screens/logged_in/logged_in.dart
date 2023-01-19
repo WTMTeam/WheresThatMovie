@@ -11,14 +11,14 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:streaming_service_lister/screens/landing_page/landing.dart';
-import 'package:streaming_service_lister/screens/logged_in/local_widgets/service_selector.dart';
-import 'package:streaming_service_lister/screens/logged_in/local_widgets/trending_movies_container.dart';
-import 'package:streaming_service_lister/screens/my_list/local_widgets/my_list_container.dart';
-import 'package:streaming_service_lister/screens/my_list/my_list.dart';
-import 'package:streaming_service_lister/screens/notifications/notifications.dart';
-import 'package:streaming_service_lister/screens/trending_page/trending.dart';
-import 'package:streaming_service_lister/utils/provider/dark_theme_provider.dart';
+import 'package:wheres_that_movie/screens/landing_page/landing.dart';
+import 'package:wheres_that_movie/screens/logged_in/local_widgets/service_selector.dart';
+import 'package:wheres_that_movie/screens/logged_in/local_widgets/trending_movies_container.dart';
+import 'package:wheres_that_movie/screens/my_list/local_widgets/my_list_container.dart';
+import 'package:wheres_that_movie/screens/my_list/my_list.dart';
+import 'package:wheres_that_movie/screens/notifications/notifications.dart';
+import 'package:wheres_that_movie/screens/trending_page/trending.dart';
+import 'package:wheres_that_movie/utils/provider/dark_theme_provider.dart';
 
 import 'package:http/http.dart';
 import 'package:tmdb_api/tmdb_api.dart';

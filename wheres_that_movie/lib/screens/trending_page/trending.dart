@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:tmdb_api/tmdb_api.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class MyTrending extends StatefulWidget {
   const MyTrending({Key? key}) : super(key: key);
@@ -17,8 +18,10 @@ class _MyTrendingState extends State<MyTrending> {
   List trendingMovies = [];
   List trendingTitles = [];
   List voteAverageMovie = [];
+  bool _isLoading = false;
 
   loadTrendingMovies() async {
+    _isLoading = true;
     final tmdbWithCustomLogs = TMDB(
       //TMDB instance
       ApiKeys(apiKey, readAccessToken), //ApiKeys instance with your keys,
@@ -28,6 +31,8 @@ class _MyTrendingState extends State<MyTrending> {
       ),
     );
     Map result = await tmdbWithCustomLogs.v3.trending.getTrending();
+    _isLoading = false;
+
     setState(() {
       trendingMovies = result['results'];
     });
@@ -55,54 +60,85 @@ class _MyTrendingState extends State<MyTrending> {
     loadTrendingMovies();
     super.initState();
   }
+  
 
   @override
+  Widget _loader (BuildContext context, String url) {
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
+  }
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const <Widget>[
+            SizedBox(
+              height: 50.0,
+              width: 50.0,
+              child: CircularProgressIndicator(),
+            )
+          ],),
+      );
+    }
+    else {
     return Scaffold(
         body: Column(
       children: [
-        Text("Trending Movies"),
+        const Padding(padding: EdgeInsets.only(top: 50.0, bottom: 10.0
+        )),
+        Text("Trending Movies", 
+          style: Theme.of(context).textTheme.headline1,
+        ),
         Expanded(
             child: ListView.builder(
-                itemCount: trendingMovies.length,
-                itemBuilder: ((context, index) {
-                  return Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Column(children: [
-                      //Image(image: NetworkImage())
-                      Image.network(
-                        'https://image.tmdb.org/t/p/w500' +
-                            trendingMovies[index]['poster_path'],
-                      ),
-                      Text(trendingMovies[index]['title'] ??
-                          trendingMovies[index]['name']),
-                      Text(trendingMovies[index]['overview']),
-                      Text("Rating:"),
-                      Text(trendingMovies[index]['vote_average']
-                          .toStringAsFixed(2)),
-                    ]),
-                  );
-                })))
+          itemCount: trendingMovies.length,
+          itemBuilder: ((context, index) {
+          return Padding(
+            padding: EdgeInsets.all(10.0),
+            child: Column(children: [
+              //Image(image: NetworkImage())
+
+              // )
+              // Image.network(
+              //   'https://image.tmdb.org/t/p/w500' +
+              //       trendingMovies[index]['poster_path'],
+              // ),
+
+              // ! Check if this is actually showing a loader.
+              Text(trendingMovies[index]['title'] ??
+                  trendingMovies[index]['name'], 
+                  style: Theme.of(context).textTheme.headline2,),
+
+              CachedNetworkImage(imageUrl: 'https://image.tmdb.org/t/p/w500' +
+                    trendingMovies[index]['poster_path'],
+                    placeholder: _loader,),
+              SizedBox(
+                height: 10.0,
+              ),
+                            
+              Text(trendingMovies[index]['overview'],
+                style: Theme.of(context).textTheme.bodyLarge,),
+              
+              Text("Rating:", style: Theme.of(context).textTheme.headline3,),
+              Text(trendingMovies[index]['vote_average']
+                  .toStringAsFixed(2)),
+            ]),
+          );
+          })))
+          
+          // itemBuilder: 
+          // (BuildContext context, int index) => CachedNetworkImage(
+          //   imageUrl: 'https://image.tmdb.org/t/p/w500' +
+          //       trendingMovies[index]['poster_path'],
+          //   placeholder: _loader,
+          // ),
+        // ))
       ],
     ));
-    //   TrendingMovies(
-    //   movieTitles: trendingTitles,
-    //   votes: voteAverageMovie,
-    // ));
   }
 }
 
-
-// children: [
-//                         Container(
-//                           height: 200,
-//                           decoration: BoxDecoration(
-//                               image: DecorationImage(
-//                                   image: NetworkImage(
-//                                       'https://image.tmdb.org/t/p/w500' +
-//                                           trendingMovies[index]
-//                                               ['poster_path']))),
-//                         ),
-//                         Text(trendingMovies[index]["title"] ??
-//                             trendingMovies[index]["name"])
-//                       ],
+}

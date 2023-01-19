@@ -8,23 +8,17 @@
 //*               services to include in the search.                 *//
 //********************************************************************//
 
-
 import 'package:flutter/material.dart';
-import 'package:streaming_service_lister/widgets/my_container.dart';
+import 'package:wheres_that_movie/widgets/my_container.dart';
 
 class MyServiceSelector extends StatefulWidget {
   const MyServiceSelector({Key? key}) : super(key: key);
-  
-  
 
   @override
   State<MyServiceSelector> createState() => _MyServiceSelectorState();
-
-
 }
 
 class _MyServiceSelectorState extends State<MyServiceSelector> {
-
   bool netflixValue = false;
   bool huluValue = false;
   bool amazonValue = false;
@@ -35,11 +29,14 @@ class _MyServiceSelectorState extends State<MyServiceSelector> {
       child: Column(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 8.0,),
+            padding: const EdgeInsets.symmetric(
+              vertical: 20.0,
+              horizontal: 8.0,
+            ),
             child: Text(
               "Select Streaming Services",
               style: Theme.of(context).textTheme.headline2,
-              
+
               // style: TextStyle(
               //   //color: Theme.of(context).primaryColor,
               //   color: Theme.of(context).colorScheme.primary,
@@ -48,13 +45,10 @@ class _MyServiceSelectorState extends State<MyServiceSelector> {
               // ),
             ),
           ),
-
           Row(
             children: <Widget>[
               const Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 20.0, 
-                  horizontal: 8.0),
+                padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 8.0),
               ),
               Expanded(
                 child: Text(
@@ -62,12 +56,12 @@ class _MyServiceSelectorState extends State<MyServiceSelector> {
                   style: Theme.of(context).textTheme.headline3,
                 ),
               ),
-              // 
+              //
               Checkbox(
                 checkColor: const Color.fromARGB(255, 0, 255, 0),
-                activeColor: const Color.fromARGB(0, 0, 0, 0),                
-                value: netflixValue, 
-                onChanged: (value){
+                activeColor: const Color.fromARGB(0, 0, 0, 0),
+                value: netflixValue,
+                onChanged: (value) {
                   setState(() {
                     netflixValue = value!;
                   });
@@ -75,13 +69,10 @@ class _MyServiceSelectorState extends State<MyServiceSelector> {
               ),
             ],
           ),
-
           Row(
             children: <Widget>[
               const Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 20.0, 
-                  horizontal: 8.0),
+                padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 8.0),
               ),
               Expanded(
                 child: Text(
@@ -89,12 +80,12 @@ class _MyServiceSelectorState extends State<MyServiceSelector> {
                   style: Theme.of(context).textTheme.headline3,
                 ),
               ),
-              // 
+              //
               Checkbox(
                 checkColor: const Color.fromARGB(255, 0, 255, 0),
-                activeColor: const Color.fromARGB(0, 0, 0, 0),                
-                value: amazonValue, 
-                onChanged: (value){
+                activeColor: const Color.fromARGB(0, 0, 0, 0),
+                value: amazonValue,
+                onChanged: (value) {
                   setState(() {
                     amazonValue = value!;
                   });
@@ -102,38 +93,31 @@ class _MyServiceSelectorState extends State<MyServiceSelector> {
               ),
             ],
           ),
-          
           Row(
             children: <Widget>[
               const Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 20.0, 
-                  horizontal: 8.0),
+                padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 8.0),
               ),
               Expanded(
                 child: Text(
                   "Hulu",
                   style: Theme.of(context).textTheme.headline3,
-
                 ),
-                
               ),
-              // 
+              //
 
               Checkbox(
                 checkColor: const Color.fromARGB(255, 0, 255, 0),
-                activeColor: const Color.fromARGB(0, 0, 0, 0),                
-                value: huluValue, 
-                onChanged: (value){
+                activeColor: const Color.fromARGB(0, 0, 0, 0),
+                value: huluValue,
+                onChanged: (value) {
                   setState(() {
                     huluValue = value!;
                   });
                 },
               ),
-
             ],
           ),
-
         ],
       ),
     );

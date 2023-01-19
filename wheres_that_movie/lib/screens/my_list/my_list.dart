@@ -9,8 +9,8 @@
 //********************************************************************//
 
 import 'package:flutter/material.dart';
-import 'package:streaming_service_lister/database/database_helper.dart';
-import 'package:streaming_service_lister/screens/my_list/local_widgets/my_list_container.dart';
+import 'package:wheres_that_movie/database/database_helper.dart';
+import 'package:wheres_that_movie/screens/my_list/local_widgets/my_list_container.dart';
 
 class MyList extends StatefulWidget {
   const MyList({Key? key}) : super(key: key);

@@ -63,9 +63,12 @@ class Styles {
 //                         Text Themes                                //
 // ------------------------------------------------------------------ //
 
-      textTheme: TextTheme(
+      textTheme: const TextTheme(
+        headline1: TextStyle(color: _red, fontSize: 30.0, fontWeight: FontWeight.bold),
         headline2: TextStyle(color: _red, fontSize: 20.0, fontWeight: FontWeight.bold),
         headline3: TextStyle(color: _red, fontSize: 16.0, fontWeight: FontWeight.normal),
+
+        //bodyLarge: TextStyle(fontSize: ),
 
         labelMedium: TextStyle(fontSize: 20.0),
       ),
