@@ -62,26 +62,43 @@ class _MyTrendingState extends State<MyTrending> {
   }
   
 
-  @override
   Widget _loader (BuildContext context, String url) {
     return const Center(
       child: CircularProgressIndicator(),
     );
   }
+  @override
+
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+      return Scaffold(
+        body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: const <Widget>[
-            SizedBox(
-              height: 50.0,
-              width: 50.0,
+            Center(
               child: CircularProgressIndicator(),
-            )
-          ],),
-      );
+
+            ),
+            // SizedBox(
+            //   // height: 50.0,
+            //   // width: 50.0,
+            //   child: CircularProgressIndicator(),
+            // )
+          ],),);
+      // return Center(
+      //   child: Column(
+      //     crossAxisAlignment: CrossAxisAlignment.center,
+      //     mainAxisAlignment: MainAxisAlignment.center,
+      //     children: const <Widget>[
+      //       SizedBox(
+      //         height: 50.0,
+      //         width: 50.0,
+      //         child: CircularProgressIndicator(),
+      //       )
+      //     ],),
+      // );
     }
     else {
     return Scaffold(
@@ -94,6 +111,7 @@ class _MyTrendingState extends State<MyTrending> {
         ),
         Expanded(
             child: ListView.builder(
+          padding: EdgeInsets.only(top: 10.0),
           itemCount: trendingMovies.length,
           itemBuilder: ((context, index) {
           return Padding(
