@@ -12,6 +12,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wheres_that_movie/screens/landing_page/landing.dart';
+import 'package:wheres_that_movie/screens/logged_in/local_widgets/display_movies.dart';
 import 'package:wheres_that_movie/screens/logged_in/local_widgets/service_selector.dart';
 import 'package:wheres_that_movie/screens/logged_in/local_widgets/trending_movies_container.dart';
 import 'package:wheres_that_movie/screens/my_list/local_widgets/my_list_container.dart';
@@ -46,6 +47,11 @@ class _MyLoggedInState extends State<MyLoggedIn> {
   List people = [];
 
   mySearch() async {
+    searchResults = [];
+    tvShows = [];
+    movies = [];
+    people = [];
+
     print("My Controller: ${myController.text}");
     final tmdbWithCustomLogs = TMDB(
       //TMDB instance
@@ -64,18 +70,18 @@ class _MyLoggedInState extends State<MyLoggedIn> {
     print("searchResults: ${searchResults}");
     for (int i = 0; i < searchResults.length; i++) {
       if (searchResults[i]['media_type'] == "movie") {
-        print(
-            "${searchResults[i]['media_type']}: ${searchResults[i]['title']}");
-        print("movie id: ${searchResults[i]['id']}");
+        // print(
+        //     "${searchResults[i]['media_type']}: ${searchResults[i]['title']}");
+        // print("movie id: ${searchResults[i]['id']}");
         List movie = [];
         movie.add(searchResults[i]['id']);
         movie.add(searchResults[i]['title']);
         movie.add(searchResults[i]['overview']);
         movie.add(searchResults[i]['poster_path']);
-        print("currMovie: ${movie}");
+        // print("currMovie: ${movie}");
         movies.add(movie);
       } else if (searchResults[i]['media_type'] == "tv") {
-        print("${searchResults[i]['media_type']}: ${searchResults[i]['name']}");
+        // print("${searchResults[i]['media_type']}: ${searchResults[i]['name']}");
         List show = [];
         show.add(searchResults[i]['id']);
         show.add(searchResults[i]['name']);
@@ -83,24 +89,32 @@ class _MyLoggedInState extends State<MyLoggedIn> {
         show.add(searchResults[i]['poster_path']);
         tvShows.add(show);
       } else if (searchResults[i]['media_type'] == "person") {
-        print("${searchResults[i]['media_type']}: ${searchResults[i]['name']}");
+        // print("${searchResults[i]['media_type']}: ${searchResults[i]['name']}");
         people.add(searchResults[i]['name']);
       }
     }
     print("movie list: ${movies}");
-    print("tv-show list: ${tvShows}");
-    print("people list: ${people}");
+    // print("tv-show list: ${tvShows}");
+    // print("people list: ${people}");
     // Map providerResult = await tmdbWithCustomLogs.v3.discover.getMovies(withWatchProviders: "netflix", watchRegion: "US");
     Map providerResult =
         await tmdbWithCustomLogs.v3.movies.getWatchProviders(movies[1][0]);
     print('');
-    print(providerResult['results']["SE"]['flatrate'][0]);
-    print(providerResult['results']["US"]['flatrate'][0]);
+    List providersUS = providerResult['results']["US"]['flatrate'];
+    List providersSE = providerResult['results']["SE"]['flatrate'];
+    // print(providerResult['results']["SE"]['flatrate']);
+    // print(providerResult['results']["US"]['flatrate'][0]);
+    print("US");
+    for (var i = 0; i < providersUS.length; i++) {
+      print("Provider: " + providersUS[i]['provider_name']);
+    }
+    print("SE");
+    for (var i = 0; i < providersSE.length; i++) {
+      print("Provider: " + providersSE[i]['provider_name']);
+    }
+    //List providersUS2 = providerResult['results'];
 
-    // log(providerResult['results']["US"]);
-    // for (int i = 0; i < providerResult['results'].length; i++) {}
-    // List flatrates = providerResult['results']['AD'];
-    // print(flatrates);
+    print(providerResult);
   }
 
   @override
@@ -186,6 +200,9 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                     mySearch();
                   },
                 ),
+                Padding(
+                    padding: EdgeInsets.all(0.0),
+                    child: DisplayMovies(movieList: movies)),
                 ElevatedButton(
                   // style: ElevatedButton.styleFrom(
                   //   primary: const Color.fromARGB(255, 255, 0, 0)
