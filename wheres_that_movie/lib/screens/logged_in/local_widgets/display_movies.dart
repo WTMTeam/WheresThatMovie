@@ -54,7 +54,7 @@ class DisplayMovies extends StatelessWidget {
                                 imageUrl: myUrl,
                                 placeholder: _loader,
                                 errorWidget: (context, url, error) =>
-                                    const Icon(Icons.error),
+                                    const Icon(Icons.no_photography_outlined),
                               ),
                               Text(movieList[index][1].toString()),
                             ])),

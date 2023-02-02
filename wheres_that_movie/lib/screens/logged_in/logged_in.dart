@@ -8,7 +8,9 @@
 //********************************************************************//
 
 import 'dart:developer';
+import 'dart:math';
 
+import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wheres_that_movie/screens/landing_page/landing.dart';
@@ -23,6 +25,8 @@ import 'package:wheres_that_movie/utils/provider/dark_theme_provider.dart';
 
 import 'package:http/http.dart';
 import 'package:tmdb_api/tmdb_api.dart';
+
+import 'local_widgets/search_result_cards.dart';
 
 class MyLoggedIn extends StatefulWidget {
   const MyLoggedIn({Key? key}) : super(key: key);
@@ -45,6 +49,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
   List tvShows = [];
   List movies = [];
   List people = [];
+  List cards = [];
 
   mySearch() async {
     searchResults = [];
@@ -53,80 +58,139 @@ class _MyLoggedInState extends State<MyLoggedIn> {
     people = [];
 
     print("My Controller: ${myController.text}");
-    final tmdbWithCustomLogs = TMDB(
-      //TMDB instance
-      ApiKeys(apiKey, readAccessToken), //ApiKeys instance with your keys,
-      logConfig: const ConfigLogger(
-        showLogs: true, //must be true than only all other logs will be shown
-        showErrorLogs: true,
-      ),
-    );
-    String query = myController.text;
-    Map result = await tmdbWithCustomLogs.v3.search.queryMulti(query);
-    // Map result = await tmdbWithCustomLogs.v3.search.queryTvShows(query);
-    setState(() {
-      searchResults = result['results'];
-    });
-    print("searchResults: ${searchResults}");
-    for (int i = 0; i < searchResults.length; i++) {
-      if (searchResults[i]['media_type'] == "movie") {
-        // print(
-        //     "${searchResults[i]['media_type']}: ${searchResults[i]['title']}");
-        // print("movie id: ${searchResults[i]['id']}");
-        List movie = [];
-        movie.add(searchResults[i]['id']);
-        movie.add(searchResults[i]['title']);
-        movie.add(searchResults[i]['overview']);
-        movie.add(searchResults[i]['poster_path']);
-        // print("currMovie: ${movie}");
-        movies.add(movie);
-      } else if (searchResults[i]['media_type'] == "tv") {
-        // print("${searchResults[i]['media_type']}: ${searchResults[i]['name']}");
-        List show = [];
-        show.add(searchResults[i]['id']);
-        show.add(searchResults[i]['name']);
-        show.add(searchResults[i]['overview']);
-        show.add(searchResults[i]['poster_path']);
-        tvShows.add(show);
-      } else if (searchResults[i]['media_type'] == "person") {
-        // print("${searchResults[i]['media_type']}: ${searchResults[i]['name']}");
-        people.add(searchResults[i]['name']);
+
+    if (myController.text.isEmpty) {
+      print("No Search Input");
+      setState(() {
+        cards = [];
+      });
+    } else {
+      final tmdbWithCustomLogs = TMDB(
+        //TMDB instance
+        ApiKeys(apiKey, readAccessToken), //ApiKeys instance with your keys,
+        logConfig: const ConfigLogger(
+          showLogs: true, //must be true than only all other logs will be shown
+          showErrorLogs: true,
+        ),
+      );
+      String query = myController.text;
+      Map result = await tmdbWithCustomLogs.v3.search.queryMulti(query);
+      // Map result = await tmdbWithCustomLogs.v3.search.queryTvShows(query);
+      setState(() {
+        searchResults = result['results'];
+      });
+      print("searchResults: ${searchResults}");
+      for (int i = 0; i < searchResults.length; i++) {
+        if (searchResults[i]['media_type'] == "movie") {
+          // print(
+          //     "${searchResults[i]['media_type']}: ${searchResults[i]['title']}");
+          // print("movie id: ${searchResults[i]['id']}");
+          List movie = [];
+          movie.add(searchResults[i]['id']);
+          movie.add(searchResults[i]['title']);
+          movie.add(searchResults[i]['overview']);
+          movie.add(searchResults[i]['poster_path']);
+          // print("currMovie: ${movie}");
+          movies.add(movie);
+        } else if (searchResults[i]['media_type'] == "tv") {
+          // print("${searchResults[i]['media_type']}: ${searchResults[i]['name']}");
+          List show = [];
+          show.add(searchResults[i]['id']);
+          show.add(searchResults[i]['name']);
+          show.add(searchResults[i]['overview']);
+          show.add(searchResults[i]['poster_path']);
+          tvShows.add(show);
+        } else if (searchResults[i]['media_type'] == "person") {
+          // print("${searchResults[i]['media_type']}: ${searchResults[i]['name']}");
+          people.add(searchResults[i]['name']);
+        }
+      }
+      print("movie list: ${movies}");
+      // print("tv-show list: ${tvShows}");
+      // print("people list: ${people}");
+      // Map providerResult = await tmdbWithCustomLogs.v3.discover.getMovies(withWatchProviders: "netflix", watchRegion: "US");
+      Map providerResult =
+          await tmdbWithCustomLogs.v3.movies.getWatchProviders(movies[1][0]);
+      print('');
+      List providersUS = providerResult['results']["US"]['flatrate'];
+      List providersSE = providerResult['results']["SE"]['flatrate'];
+      // print(providerResult['results']["SE"]['flatrate']);
+      // print(providerResult['results']["US"]['flatrate'][0]);
+      print("US");
+      for (var i = 0; i < providersUS.length; i++) {
+        print("Provider: " + providersUS[i]['provider_name']);
+      }
+      print("SE");
+      for (var i = 0; i < providersSE.length; i++) {
+        print("Provider: " + providersSE[i]['provider_name']);
+      }
+      //List providersUS2 = providerResult['results'];
+
+      print(providerResult);
+
+      makeCardList();
+    }
+  }
+
+  // Function to make the card list
+  makeCardList() {
+    // reset the cards list
+    print("here2");
+    print(movies[0]);
+    List newCards = [];
+    for (int i = 0; i < movies.length; i++) {
+      try {
+        // if title returns null, then try name instead
+        String title = movies[i][1];
+        print(title);
+        // ignore: prefer_interpolation_to_compose_strings
+        String imgUrl =
+            'https://image.tmdb.org/t/p/w200' + movies[i][movies[i].length - 1];
+        String overview = movies[i][2];
+        // double vote = movies[i][1];
+        double vote = 5.0;
+
+        if (imgUrl == null) {
+          imgUrl = "";
+        } else {
+          // Do nothing
+        }
+
+        newCards.add(SearchCarouselCard(
+          imgUrl: imgUrl,
+          title: title,
+          overview: overview,
+          rating: vote,
+        ));
+        setState(() {
+          cards = newCards;
+        });
+
+        // print(title);
+        // print(vote);
+      } catch (e) {
+        print(e);
+        // print(trendingMovies[i]);
       }
     }
-    print("movie list: ${movies}");
-    // print("tv-show list: ${tvShows}");
-    // print("people list: ${people}");
-    // Map providerResult = await tmdbWithCustomLogs.v3.discover.getMovies(withWatchProviders: "netflix", watchRegion: "US");
-    Map providerResult =
-        await tmdbWithCustomLogs.v3.movies.getWatchProviders(movies[1][0]);
-    print('');
-    List providersUS = providerResult['results']["US"]['flatrate'];
-    List providersSE = providerResult['results']["SE"]['flatrate'];
-    // print(providerResult['results']["SE"]['flatrate']);
-    // print(providerResult['results']["US"]['flatrate'][0]);
-    print("US");
-    for (var i = 0; i < providersUS.length; i++) {
-      print("Provider: " + providersUS[i]['provider_name']);
-    }
-    print("SE");
-    for (var i = 0; i < providersSE.length; i++) {
-      print("Provider: " + providersSE[i]['provider_name']);
-    }
-    //List providersUS2 = providerResult['results'];
-
-    print(providerResult);
+    print(cards);
+    print("done");
   }
 
   @override
   Widget build(BuildContext context) {
     final themeState = Provider.of<DarkThemeProvider>(context);
+    final carouselController = PageController(viewportFraction: 0.8);
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       // Used for opening the drawer header
       key: _scaffoldKey,
 
       // The settings button
       floatingActionButton: FloatingActionButton(
-        // backgroundColor: const Color.fromARGB(0, 0, 0, 0),
+        backgroundColor: Theme.of(context).canvasColor,
         // foregroundColor: Colors.white,
         elevation: 0.0,
         onPressed: () {
@@ -180,7 +244,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                 const SizedBox(
                   height: 25.0,
                 ),
-                const MyServiceSelector(),
+                // const MyServiceSelector(),
                 const SizedBox(
                   height: 25.0,
                 ),
@@ -200,9 +264,55 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                     mySearch();
                   },
                 ),
-                Padding(
-                    padding: EdgeInsets.all(0.0),
-                    child: DisplayMovies(movieList: movies)),
+                cards.isEmpty
+                    ? SizedBox()
+                    : SizedBox(
+                        height: screenHeight - 450.0,
+                        width: screenWidth,
+                        child: CustomScrollView(
+                          slivers: [
+                            SliverFillRemaining(
+                              hasScrollBody: false,
+                              child: Column(
+                                children: [
+                                  const SizedBox(height: 30),
+                                  ExpandablePageView.builder(
+                                    controller: carouselController,
+                                    // allows our shadow to be displayed outside of widget bounds
+                                    clipBehavior: Clip.none,
+                                    itemCount: cards.length,
+                                    itemBuilder: (_, index) {
+                                      if (!carouselController
+                                          .position.haveDimensions) {
+                                        return const SizedBox();
+                                      }
+                                      return AnimatedBuilder(
+                                        animation: carouselController,
+                                        builder: (_, __) => Transform.scale(
+                                          scale: max(
+                                            0.85,
+                                            (1 -
+                                                (carouselController.page! -
+                                                            index)
+                                                        .abs() /
+                                                    2),
+                                          ),
+                                          child: cards[index],
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  // const Spacer(),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                // Old movie cards
+                // Padding(
+                //     padding: EdgeInsets.all(0.0),
+                //     child: DisplayMovies(movieList: movies)),
                 ElevatedButton(
                   // style: ElevatedButton.styleFrom(
                   //   primary: const Color.fromARGB(255, 255, 0, 0)

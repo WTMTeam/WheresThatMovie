@@ -41,6 +41,9 @@ dependencies:
 
     tmdb_api:
     cached_network_image: ^3.2.3
+    # carousel_slider: ^4.2.1
+    expandable_page_view: ^1.0.17
+    flutter_rating_bar: ^4.0.1
 
 dev_dependencies:
     flutter_test:

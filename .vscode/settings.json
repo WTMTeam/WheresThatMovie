@@ -2,5 +2,9 @@
     "cmake.configureOnOpen": true,
     "[dart]": {
         "editor.defaultFormatter": "Dart-Code.dart-code"
-    }
+    },
+    "cSpell.words": [
+        "Yjhk",
+        "YSIs"
+    ]
 }
