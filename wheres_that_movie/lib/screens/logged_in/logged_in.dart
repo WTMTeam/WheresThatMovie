@@ -94,6 +94,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
           movie.add(searchResults[i]['id']);
           movie.add(searchResults[i]['title']);
           movie.add(searchResults[i]['overview']);
+          movie.add(searchResults[i]['vote_average']);
           movie.add(searchResults[i]['poster_path']);
           // print("currMovie: ${movie}");
           movies.add(movie);
@@ -103,6 +104,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
           show.add(searchResults[i]['id']);
           show.add(searchResults[i]['name']);
           show.add(searchResults[i]['overview']);
+          show.add(searchResults[i]['vote_average']);
           show.add(searchResults[i]['poster_path']);
           tvShows.add(show);
         } else if (searchResults[i]['media_type'] == "person") {
@@ -159,6 +161,9 @@ class _MyLoggedInState extends State<MyLoggedIn> {
         String overview = movies[i][2];
         // double vote = movies[i][1];
         double vote = 5.0;
+        print(movies[i][movies[i].length - 2]);
+
+        vote = movies[i][movies[i].length - 2];
 
         if (imgUrl == null) {
           imgUrl = "";
