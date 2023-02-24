@@ -43,6 +43,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
   final String readAccessToken =
       'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmZmYTBkMTZmYjhkYzI4NzM1MzExNTZhNWM1ZjQxYSIsInN1YiI6IjYzODYzNzE0MDM5OGFiMDBjODM5MTJkOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.qQjwnSQLDfVNAuinpsM-ATK400-dnwuWUVirc7_AiQY';
 
+  String previousSearch = "";
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final myController = TextEditingController();
   List searchResults = [];
@@ -64,6 +65,9 @@ class _MyLoggedInState extends State<MyLoggedIn> {
       setState(() {
         cards = [];
       });
+    } else if (myController.text == previousSearch) {
+      // Do nothing
+      print("Same search input as previous, not sending a new request");
     } else {
       final tmdbWithCustomLogs = TMDB(
         //TMDB instance
@@ -77,6 +81,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
       Map result = await tmdbWithCustomLogs.v3.search.queryMulti(query);
       // Map result = await tmdbWithCustomLogs.v3.search.queryTvShows(query);
       setState(() {
+        previousSearch = myController.text;
         searchResults = result['results'];
       });
       print("searchResults: ${searchResults}");
@@ -112,22 +117,26 @@ class _MyLoggedInState extends State<MyLoggedIn> {
       Map providerResult =
           await tmdbWithCustomLogs.v3.movies.getWatchProviders(movies[1][0]);
       print('');
-      List providersUS = providerResult['results']["US"]['flatrate'];
-      List providersSE = providerResult['results']["SE"]['flatrate'];
-      // print(providerResult['results']["SE"]['flatrate']);
-      // print(providerResult['results']["US"]['flatrate'][0]);
-      print("US");
-      for (var i = 0; i < providersUS.length; i++) {
-        print("Provider: " + providersUS[i]['provider_name']);
-      }
-      print("SE");
-      for (var i = 0; i < providersSE.length; i++) {
-        print("Provider: " + providersSE[i]['provider_name']);
-      }
-      //List providersUS2 = providerResult['results'];
+      try {
+        List providersUS = providerResult['results']["US"]['flatrate'];
+        List providersSE = providerResult['results']["SE"]['flatrate'];
+        // print(providerResult['results']["SE"]['flatrate']);
+        // print(providerResult['results']["US"]['flatrate'][0]);
 
-      print(providerResult);
+        print("US");
+        for (var i = 0; i < providersUS.length; i++) {
+          print("Provider: " + providersUS[i]['provider_name']);
+        }
+        print("SE");
+        for (var i = 0; i < providersSE.length; i++) {
+          print("Provider: " + providersSE[i]['provider_name']);
+        }
+        //List providersUS2 = providerResult['results'];
 
+        print(providerResult);
+      } catch (e) {
+        print(e);
+      }
       makeCardList();
     }
   }
@@ -141,6 +150,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
     for (int i = 0; i < movies.length; i++) {
       try {
         // if title returns null, then try name instead
+        int id = movies[i][0];
         String title = movies[i][1];
         print(title);
         // ignore: prefer_interpolation_to_compose_strings
@@ -157,6 +167,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
         }
 
         newCards.add(SearchCarouselCard(
+          id: id,
           imgUrl: imgUrl,
           title: title,
           overview: overview,
@@ -183,6 +194,11 @@ class _MyLoggedInState extends State<MyLoggedIn> {
     final carouselController = PageController(viewportFraction: 0.8);
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+
+    void toTop() {
+      carouselController.animateTo(0,
+          duration: Duration(milliseconds: 500), curve: Curves.easeInOut);
+    }
 
     return Scaffold(
       // Used for opening the drawer header
@@ -249,19 +265,20 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                   height: 25.0,
                 ),
                 ElevatedButton(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 100.0),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 100.0),
                     child: Text(
                       "Search",
                       style: TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.secondary,
+                        // color: Theme.of(context).colorScheme.secondary,
                       ),
                     ),
                   ),
                   onPressed: () {
                     mySearch();
+                    toTop();
                   },
                 ),
                 cards.isEmpty
@@ -318,7 +335,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                   //   primary: const Color.fromARGB(255, 255, 0, 0)
                   // ),
                   child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 100),
+                    padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Text(
                       "See Trending",
                       style: TextStyle(

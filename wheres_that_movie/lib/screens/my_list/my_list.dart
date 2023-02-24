@@ -27,7 +27,8 @@ class _MyListState extends State<MyList> {
   bool _isLoading = true;
 
   void _refreshList() async {
-    final data = await SQLHelper.getItems();
+    final data = await SQLHelper.getMovies();
+
     setState(() {
       myList = data;
       _isLoading = false;
@@ -48,12 +49,12 @@ class _MyListState extends State<MyList> {
   // }
 
   // Insert a new journal to the database
-  Future<void> _addItem() async {
-    print("adding item: ");
-    print(myController.text);
-    await SQLHelper.createItem(myController.text);
-    _refreshList();
-  }
+  // Future<void> _addItem(int movieId) async {
+  //   print("adding item: ");
+  //   print(myController.text);
+  //   await SQLHelper.createItem(movieId);
+  //   _refreshList();
+  // }
 
   // Delete an item
   void _deleteItem(int id) async {
@@ -65,111 +66,114 @@ class _MyListState extends State<MyList> {
     _refreshList();
   }
 
+  ScrollController myScrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Row(children: <Widget>[
-        Expanded(
-            child: ListView(
-          padding: const EdgeInsets.all(20.0),
-          children: <Widget>[
-            const Padding(padding: EdgeInsets.all(10.0)),
+    if (_isLoading) {
+      return Scaffold(
+        body: Text("isLoading"),
+      );
+    } else {
+      return Scaffold(
+          body: SingleChildScrollView(
+        child: Column(children: <Widget>[
+          const SizedBox(
+            height: 50.0,
+          ),
 
-            const SizedBox(
-              height: 50.0,
-            ),
+          // Text(
+          //   "Search Movie or Show",
+          //   textAlign: TextAlign.center,
+          //   style: TextStyle(
+          //     color: Theme.of(context).primaryColor,
+          //     fontSize: 20.0,
+          //     fontWeight: FontWeight.bold,
+          //   ),
+          // ),
 
-            Text(
-              "Search Movie or Show",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Theme.of(context).primaryColor,
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+          // const SizedBox(
+          //   height: 15.0,
+          // ),
 
-            const SizedBox(
-              height: 15.0,
-            ),
+          // TextFormField(
+          //   controller: myController,
+          //   decoration: const InputDecoration(
+          //     prefixIcon: Icon(
+          //       Icons.search_outlined,
+          //     ),
+          //   ),
+          // ),
 
-            TextFormField(
-              controller: myController,
-              decoration: const InputDecoration(
-                prefixIcon: Icon(
-                  Icons.search_outlined,
-                ),
-              ),
-            ),
+          // const SizedBox(
+          //   height: 25.0,
+          // ),
 
-            const SizedBox(
-              height: 25.0,
-            ),
+          // ElevatedButton(
+          //     child: const Padding(
+          //       padding: EdgeInsets.symmetric(horizontal: 100.0),
+          //       child: Text(
+          //         "Add",
+          //         style: TextStyle(
+          //           fontSize: 20.0,
+          //           fontWeight: FontWeight.bold,
+          //         ),
+          //       ),
+          //     ),
+          //     onPressed: () async {
+          //       print("here");
+          //       print(myList);
 
-            ElevatedButton(
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 100.0),
-                  child: Text(
-                    "Add",
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                onPressed: () async {
-                  print("here");
-                  print(myList);
+          //       myController.text.isEmpty
+          //           ?
+          //           // does not show
+          //           const Text(
+          //               "Can't add empty show",
+          //             )
+          //           :
+          //           //myList.add(myController.text);
+          //           //myList.sort();
+          //           // await _addItem();
+          //           print("adding removed");
+          //       //key: UniqueKey();
+          //     }),
 
-                  myController.text.isEmpty
-                      ?
-                      // does not show
-                      const Text(
-                          "Can't add empty show",
-                        )
-                      :
-                      //myList.add(myController.text);
-                      //myList.sort();
-                      await _addItem();
-                  //key: UniqueKey();
+          const SizedBox(
+            height: 25.0,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 0.0),
+            child: MyListContainer(
+                myList: myList,
+                myController: myScrollController,
+                onRemoved: (itemToRemove) {
+                  setState(() {
+                    print("before");
+                    print(myList);
+                    //myList.remove(itemToRemove);
+                    _deleteItem(itemToRemove);
+                    //_deleteItem()
+                    print("after");
+                    print(myList);
+                  });
                 }),
+          ),
 
-            const SizedBox(
-              height: 25.0,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30.0),
-              child: MyListContainer(
-                  myList: myList,
-                  onRemoved: (itemToRemove) {
-                    setState(() {
-                      print("before");
-                      print(myList);
-                      //myList.remove(itemToRemove);
-                      _deleteItem(itemToRemove);
-                      //_deleteItem()
-                      print("after");
-                      print(myList);
-                    });
-                  }),
-            ),
+          // MyListContainer(
+          //   myList: myList,
+          //   // Get the item to be removed and update the state
+          //   onRemoved: (itemToRemove){
+          //     setState(() {
+          //       myList.remove(itemToRemove);
+          //     });
+          //   },
+          // ),
 
-            // MyListContainer(
-            //   myList: myList,
-            //   // Get the item to be removed and update the state
-            //   onRemoved: (itemToRemove){
-            //     setState(() {
-            //       myList.remove(itemToRemove);
-            //     });
-            //   },
-            // ),
-
-            const SizedBox(
-              height: 25.0,
-            ),
-          ],
-        ))
-      ]),
-    );
+          const SizedBox(
+            height: 25.0,
+          ),
+        ]),
+      ));
+    }
   }
 }

@@ -27,6 +27,8 @@ class _MyTrendingState extends State<MyTrending> {
   List cards = [];
   bool _isLoading = false;
   bool isHorizontal = false;
+  final carouselController = PageController(viewportFraction: 0.8);
+  final carouselController2 = PageController(viewportFraction: 0.8);
 
   loadTrendingMovies() async {
     _isLoading = true;
@@ -40,6 +42,8 @@ class _MyTrendingState extends State<MyTrending> {
     );
     Map result = await tmdbWithCustomLogs.v3.trending.getTrending();
     // _isLoading = false;
+    print("here is the");
+    print(result);
 
     setState(() {
       trendingMovies = result['results'];
@@ -90,8 +94,10 @@ class _MyTrendingState extends State<MyTrending> {
             trendingMovies[i]['poster_path'];
         String overview = trendingMovies[i]['overview'];
         double vote = trendingMovies[i]["vote_average"];
+        int id = trendingMovies[i]["id"];
 
         newCards.add(CarouselCard(
+          id: id,
           imgUrl: imgUrl,
           title: title,
           overview: overview,
@@ -124,9 +130,6 @@ class _MyTrendingState extends State<MyTrending> {
       child: CircularProgressIndicator(),
     );
   }
-
-  final carouselController = PageController(viewportFraction: 0.8);
-  final carouselController2 = PageController(viewportFraction: 0.8);
 
   @override
   Widget build(BuildContext context) {
@@ -202,7 +205,8 @@ class _MyTrendingState extends State<MyTrending> {
 
       return Scaffold(
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Theme.of(context).canvasColor,
+          backgroundColor: Color.fromARGB(0, 0, 0, 0),
+          // backgroundColor: Theme.of(context).canvasColor,
           elevation: 0.0,
           onPressed: () {
             isHorizontal ? isHorizontal = false : isHorizontal = true;
@@ -224,13 +228,13 @@ class _MyTrendingState extends State<MyTrending> {
           ),
           SizedBox(
             width: screenWidth,
-            height: screenHeight - 183,
+            height: screenHeight / 1.2,
             child: CustomScrollView(
               slivers: [
                 SliverToBoxAdapter(
                   child: Container(
                     width: screenWidth,
-                    height: screenHeight - 183,
+                    height: screenHeight / 1.2,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
