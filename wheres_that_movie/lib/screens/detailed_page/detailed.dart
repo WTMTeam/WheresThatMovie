@@ -166,7 +166,7 @@ class _DetailedPageState extends State<DetailedPage> {
             // ),
             ElevatedButton(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 100.0),
+                padding: const EdgeInsets.symmetric(horizontal: 70.0),
                 child: Text(
                   "Add to My List",
                   style: TextStyle(

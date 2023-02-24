@@ -212,68 +212,75 @@ class _MyTrendingState extends State<MyTrending> {
             isHorizontal ? isHorizontal = false : isHorizontal = true;
             makeCardList();
           },
-          child: isHorizontal ? Icon(Icons.swap_vert) : Icon(Icons.swap_horiz),
+          child: isHorizontal
+              ? Icon(
+                  Icons.swap_vert,
+                )
+              : Icon(
+                  Icons.swap_horiz,
+                ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-        body: Column(children: <Widget>[
-          SizedBox(
-            height: 55.0,
-          ),
-          SizedBox(
-            height: 40.0,
-            child: Text(
-              "Trending",
-              style: Theme.of(context).textTheme.headline1,
+        body: SafeArea(
+          bottom: false,
+          child: Column(children: <Widget>[
+            SizedBox(
+              height: 50.0,
+              child: Text(
+                "Trending",
+                style: Theme.of(context).textTheme.headline1,
+              ),
             ),
-          ),
-          SizedBox(
-            width: screenWidth,
-            height: screenHeight / 1.2,
-            child: CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(
-                  child: Container(
-                    width: screenWidth,
-                    height: screenHeight / 1.2,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ExpandablePageView.builder(
-                          scrollDirection: Axis.vertical,
-                          controller: carouselController,
-                          clipBehavior: Clip.none,
-                          itemCount: cards.length,
-                          itemBuilder: (_, index) {
-                            if (!carouselController.position.haveDimensions) {
-                              return const SizedBox();
-                            }
-                            return AnimatedBuilder(
-                              animation: carouselController,
-                              builder: (_, __) => Transform.scale(
-                                scale: max(
-                                  0.85,
-                                  (1 -
-                                      (carouselController.page! - index).abs() /
-                                          2),
+            SizedBox(
+              width: screenWidth,
+              height: screenHeight / 1.2,
+              child: CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: Container(
+                      width: screenWidth,
+                      height: screenHeight / 1.2,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ExpandablePageView.builder(
+                            scrollDirection: Axis.vertical,
+                            controller: carouselController,
+                            clipBehavior: Clip.none,
+                            itemCount: cards.length,
+                            itemBuilder: (_, index) {
+                              if (!carouselController.position.haveDimensions) {
+                                return const SizedBox();
+                              }
+                              return AnimatedBuilder(
+                                animation: carouselController,
+                                builder: (_, __) => Transform.scale(
+                                  scale: max(
+                                    0.85,
+                                    (1 -
+                                        (carouselController.page! - index)
+                                                .abs() /
+                                            2),
+                                  ),
+                                  child: cards[index],
                                 ),
-                                child: cards[index],
-                              ),
-                            );
-                          },
-                        ),
-                      ],
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ]),
+          ]),
+        ),
       );
     } else {
       return Scaffold(
           floatingActionButton: FloatingActionButton(
-            backgroundColor: Theme.of(context).canvasColor,
+            backgroundColor: Color.fromARGB(0, 0, 0, 0),
             elevation: 0.0,
             onPressed: () {
               isHorizontal ? isHorizontal = false : isHorizontal = true;
@@ -283,59 +290,61 @@ class _MyTrendingState extends State<MyTrending> {
                 isHorizontal ? Icon(Icons.swap_vert) : Icon(Icons.swap_horiz),
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-          body: Column(children: <Widget>[
-            SizedBox(
-              height: 55.0,
-            ),
-            SizedBox(
-              height: 40.0,
-              child: Text(
-                "Trending",
-                style: Theme.of(context).textTheme.headline1,
+          body: SafeArea(
+            bottom: false,
+            child: Column(children: <Widget>[
+              SizedBox(
+                height: 50.0,
+                child: Text(
+                  "Trending",
+                  style: Theme.of(context).textTheme.headline1,
+                ),
               ),
-            ),
-            SizedBox(
-              height: screenHeight - 95.0,
-              width: screenWidth,
-              child: CustomScrollView(
-                slivers: [
-                  SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 70),
-                        ExpandablePageView.builder(
-                          controller: carouselController2,
-                          // allows our shadow to be displayed outside of widget bounds
-                          clipBehavior: Clip.none,
-                          itemCount: cards.length,
-                          itemBuilder: (_, index) {
-                            if (!carouselController2.position.haveDimensions) {
-                              return const SizedBox();
-                            }
-                            return AnimatedBuilder(
-                              animation: carouselController2,
-                              builder: (_, __) => Transform.scale(
-                                scale: max(
-                                  0.85,
-                                  (1 -
-                                      (carouselController2.page! - index)
-                                              .abs() /
-                                          2),
+              SizedBox(
+                height: screenHeight / 1.2,
+                width: screenWidth,
+                child: CustomScrollView(
+                  slivers: [
+                    SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // const SizedBox(height: 70),
+                          ExpandablePageView.builder(
+                            controller: carouselController2,
+                            // allows our shadow to be displayed outside of widget bounds
+                            clipBehavior: Clip.none,
+                            itemCount: cards.length,
+                            itemBuilder: (_, index) {
+                              if (!carouselController2
+                                  .position.haveDimensions) {
+                                return const SizedBox();
+                              }
+                              return AnimatedBuilder(
+                                animation: carouselController2,
+                                builder: (_, __) => Transform.scale(
+                                  scale: max(
+                                    0.85,
+                                    (1 -
+                                        (carouselController2.page! - index)
+                                                .abs() /
+                                            2),
+                                  ),
+                                  child: cards[index],
                                 ),
-                                child: cards[index],
-                              ),
-                            );
-                          },
-                        ),
-                        const Spacer(),
-                      ],
-                    ),
-                  )
-                ],
+                              );
+                            },
+                          ),
+                          // const Spacer(),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-          ]));
+            ]),
+          ));
     }
   }
 }

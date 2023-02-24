@@ -192,12 +192,20 @@ class _MyLoggedInState extends State<MyLoggedIn> {
   Widget build(BuildContext context) {
     final themeState = Provider.of<DarkThemeProvider>(context);
     final carouselController = PageController(viewportFraction: 0.8);
+    final scrollController = ScrollController();
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
     void toTop() {
+      print(carouselController.offset);
+      int animTime = carouselController.offset.round();
+      if (animTime < 600) {
+        animTime = 500;
+      }
+      print(animTime);
+      // original time 200
       carouselController.animateTo(0,
-          duration: Duration(milliseconds: 500), curve: Curves.easeInOut);
+          duration: Duration(milliseconds: animTime), curve: Curves.easeInOut);
     }
 
     return Scaffold(
@@ -206,7 +214,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
 
       // The settings button
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Theme.of(context).canvasColor,
+        backgroundColor: Color.fromARGB(0, 0, 0, 0),
         // foregroundColor: Colors.white,
         elevation: 0.0,
         onPressed: () {
@@ -221,20 +229,21 @@ class _MyLoggedInState extends State<MyLoggedIn> {
       // Setting the location of the settings button
       floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
 
-      body: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.all(20.0),
-              children: <Widget>[
-                const Padding(
-                  padding: EdgeInsets.all(10.0),
-                ),
-                const SizedBox(
-                  height: 100.0,
-                ),
-                Text(
+      body: SafeArea(
+        bottom: false,
+        child: SingleChildScrollView(
+          controller: scrollController,
+          child: Column(
+            // mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              const Padding(
+                padding: EdgeInsets.all(10.0),
+              ),
+
+              Container(
+                margin: EdgeInsets.only(top: 30.0),
+                child: Text(
                   "Search for a movie or tv-show",
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -243,10 +252,11 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(
-                  height: 15.0,
-                ),
-                TextFormField(
+              ),
+
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
+                child: TextFormField(
                   controller: myController,
                   decoration: const InputDecoration(
                     prefixIcon: Icon(
@@ -257,91 +267,114 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                   ),
                   //autofocus: true,
                 ),
-                const SizedBox(
-                  height: 25.0,
-                ),
-                // const MyServiceSelector(),
-                const SizedBox(
-                  height: 25.0,
-                ),
-                ElevatedButton(
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 100.0),
-                    child: Text(
-                      "Search",
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                        // color: Theme.of(context).colorScheme.secondary,
-                      ),
+              ),
+
+              ElevatedButton(
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 100.0),
+                  child: Text(
+                    "Search",
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                      // color: Theme.of(context).colorScheme.secondary,
                     ),
                   ),
-                  onPressed: () {
-                    mySearch();
-                    toTop();
-                  },
                 ),
-                cards.isEmpty
-                    ? SizedBox()
-                    : SizedBox(
-                        height: screenHeight - 450.0,
-                        width: screenWidth,
-                        child: CustomScrollView(
-                          slivers: [
-                            SliverFillRemaining(
-                              hasScrollBody: false,
-                              child: Column(
-                                children: [
-                                  const SizedBox(height: 30),
-                                  ExpandablePageView.builder(
-                                    controller: carouselController,
-                                    // allows our shadow to be displayed outside of widget bounds
-                                    clipBehavior: Clip.none,
-                                    itemCount: cards.length,
-                                    itemBuilder: (_, index) {
-                                      if (!carouselController
-                                          .position.haveDimensions) {
-                                        return const SizedBox();
-                                      }
-                                      return AnimatedBuilder(
-                                        animation: carouselController,
-                                        builder: (_, __) => Transform.scale(
-                                          scale: max(
-                                            0.85,
-                                            (1 -
-                                                (carouselController.page! -
-                                                            index)
-                                                        .abs() /
-                                                    2),
-                                          ),
-                                          child: cards[index],
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  // const Spacer(),
-                                ],
+                onPressed: () {
+                  mySearch();
+                  toTop();
+                },
+              ),
+              cards.isEmpty
+                  ? SizedBox()
+                  : Container(
+                      margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                      child: ExpandablePageView.builder(
+                        controller: carouselController,
+                        // allows our shadow to be displayed outside of widget bounds
+                        clipBehavior: Clip.none,
+                        itemCount: cards.length,
+                        itemBuilder: (_, index) {
+                          if (!carouselController.position.haveDimensions) {
+                            return const SizedBox();
+                          }
+                          return AnimatedBuilder(
+                            animation: carouselController,
+                            builder: (_, __) => Transform.scale(
+                              scale: max(
+                                0.85,
+                                (1 -
+                                    (carouselController.page! - index).abs() /
+                                        2),
                               ),
-                            )
-                          ],
-                        ),
+                              child: cards[index],
+                            ),
+                          );
+                        },
                       ),
-                // Old movie cards
-                // Padding(
-                //     padding: EdgeInsets.all(0.0),
-                //     child: DisplayMovies(movieList: movies)),
-                ElevatedButton(
-                  // style: ElevatedButton.styleFrom(
-                  //   primary: const Color.fromARGB(255, 255, 0, 0)
-                  // ),
+                    ),
+              //     : Container(
+              //         constraints: BoxConstraints.loose(
+              //             Size.fromHeight(screenHeight / 1.2)),
+              //         child: CustomScrollView(
+              //           controller: scrollController,
+              //           // shrinkWrap: true,
+              //           slivers: [
+              //             SliverFillRemaining(
+              //               hasScrollBody: false,
+              //               child: Column(
+              //                 children: [
+              //                   const SizedBox(height: 30),
+              //                   ExpandablePageView.builder(
+              //                     controller: carouselController,
+              //                     // allows our shadow to be displayed outside of widget bounds
+              //                     clipBehavior: Clip.none,
+              //                     itemCount: cards.length,
+              //                     itemBuilder: (_, index) {
+              //                       if (!carouselController
+              //                           .position.haveDimensions) {
+              //                         return const SizedBox();
+              //                       }
+              //                       return AnimatedBuilder(
+              //                         animation: carouselController,
+              //                         builder: (_, __) => Transform.scale(
+              //                           scale: max(
+              //                             0.85,
+              //                             (1 -
+              //                                 (carouselController.page! - index)
+              //                                         .abs() /
+              //                                     2),
+              //                           ),
+              //                           child: cards[index],
+              //                         ),
+              //                       );
+              //                     },
+              //                   ),
+              //                   // const Spacer(),
+              //                 ],
+              //               ),
+              //             )
+              //           ],
+              //         ),
+              //       ),
+              // // Old movie cards
+              // Padding(
+              //     padding: EdgeInsets.all(0.0),
+              //     child: DisplayMovies(movieList: movies)),
+
+              Container(
+                margin: EdgeInsets.only(bottom: 10.0),
+                child: ElevatedButton(
                   child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    padding: EdgeInsets.symmetric(horizontal: 70.0),
                     child: Text(
                       "See Trending",
                       style: TextStyle(
-                          //color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.0),
+                        //color: Colors.white,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                   onPressed: () {
@@ -352,10 +385,11 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                     );
                   }, // Do nothing for now
                 ),
-              ],
-            ),
+              ),
+              // Spacer()
+            ],
           ),
-        ],
+        ),
       ),
 
       // Settings Menu
