@@ -32,6 +32,7 @@ class _MyTrendingState extends State<MyTrending> {
 
   loadTrendingMovies() async {
     _isLoading = true;
+    print("here");
     final tmdbWithCustomLogs = TMDB(
       //TMDB instance
       ApiKeys(apiKey, readAccessToken), //ApiKeys instance with your keys,
@@ -41,6 +42,8 @@ class _MyTrendingState extends State<MyTrending> {
       ),
     );
     Map result = await tmdbWithCustomLogs.v3.trending.getTrending();
+    print("here2");
+
     // _isLoading = false;
     print("here is the");
     print(result);

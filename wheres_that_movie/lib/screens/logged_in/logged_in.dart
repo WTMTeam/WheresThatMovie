@@ -237,7 +237,8 @@ class _MyLoggedInState extends State<MyLoggedIn> {
       body: SafeArea(
         bottom: false,
         child: SingleChildScrollView(
-          controller: scrollController,
+          controller:
+              scrollController.hasClients ? scrollController : scrollController,
           child: Column(
             // mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
@@ -383,6 +384,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                     ),
                   ),
                   onPressed: () {
+                    print("pressed");
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => const MyTrending(),
