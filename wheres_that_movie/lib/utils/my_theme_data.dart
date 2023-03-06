@@ -12,13 +12,13 @@ class Styles {
   static const Color _darkBoxShadowColor = Color.fromARGB(255, 25, 25, 25);
 
   // Light theme variables
-  static const Color _light = Color.fromARGB(255, 255, 255, 255);
+  static const Color _light = Color.fromARGB(255, 228, 228, 228);
   static const Color _lightContainerBackground =
       Color.fromARGB(255, 232, 235, 241);
-  static const Color _lightBoxShadowColor = Color.fromARGB(255, 222, 225, 231);
+  static const Color _lightBoxShadowColor = Color.fromARGB(255, 190, 191, 195);
 
   //static const Color _lightCanvasColor = Color.fromARGB(255, 206, 211, 221);
-  static const Color _lightCardColor = Color.fromARGB(255, 232, 235, 241);
+  static const Color _lightCardColor = Color.fromARGB(255, 204, 206, 210);
 
   // Both theme variables
   static const Color _red = Color.fromARGB(255, 164, 10, 10);
@@ -48,6 +48,7 @@ class Styles {
             secondary:
                 //isDarkTheme ? const Color(0xFF1a1f3c) : const Color(0xFFE8FDFD),
                 isDarkTheme ? _darkBoxShadowColor : _lightBoxShadowColor,
+            tertiary: _red,
             // isDarkTheme ? _dark : _light,
             primaryContainer: isDarkTheme
                 ? _darkContainerBackground
@@ -119,7 +120,7 @@ class Styles {
 
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          primary: _red,
+          backgroundColor: _red,
           //padding: const EdgeInsets.symmetric(horizontal: 10.0),
           minimumSize: const Size(200, 40),
           shape: RoundedRectangleBorder(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:wheres_that_movie/screens/landing_page/landing.dart';
+import 'package:wheres_that_movie/screens/logged_in/logged_in.dart';
 //import 'package:wheres_that_movie/utils/my_app_theme.dart';
 import 'package:wheres_that_movie/utils/my_theme.dart';
 import 'package:wheres_that_movie/utils/my_theme_data.dart';
@@ -59,7 +60,7 @@ class _MyAppState extends State<MyApp> {
             // darkTheme: MyAppTheme.darkTheme,
             // themeMode: ThemeMode.system,
             theme: Styles.themeData(themeProvider.getDarkTheme, context),
-            home: const MyLanding(),
+            home: const MyLoggedIn(),
             //home: const MyLogin(),
           );
         })));

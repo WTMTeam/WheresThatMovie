@@ -62,6 +62,7 @@ class CarouselCard extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => DetailedPage(
                 id: id,
+                isMovie: true,
               ),
             ),
           );
@@ -205,6 +206,7 @@ class CarouselCard extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => DetailedPage(
                 id: id,
+                isMovie: true,
               ),
             ),
           );

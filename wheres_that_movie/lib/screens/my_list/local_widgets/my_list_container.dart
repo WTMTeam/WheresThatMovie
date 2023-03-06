@@ -10,14 +10,16 @@ class MyListContainer extends StatefulWidget {
   //List<Map<String, dynamic>> myList = [];
   final List<Map<String, dynamic>> myList;
   final ScrollController myController;
+  // final bool isMovie;
 
   final Function(int) onRemoved;
-  MyListContainer(
-      {Key? key,
-      required this.myList,
-      required this.onRemoved,
-      required this.myController})
-      : super(key: key);
+  MyListContainer({
+    Key? key,
+    required this.myList,
+    required this.onRemoved,
+    required this.myController,
+    // required this.isMovie,
+  }) : super(key: key);
 
   @override
   State<MyListContainer> createState() => _MyListContainerState();
@@ -90,10 +92,15 @@ class _MyListContainerState extends State<MyListContainer> {
                       },
                       icon: const Icon(Icons.delete_outline)),
                   onTap: () {
+                    bool isMovie = false;
+                    if (widget.myList[index]['isMovie'] == 1) {
+                      isMovie = true;
+                    }
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => DetailedPage(
                           id: widget.myList[index]['movieId'],
+                          isMovie: isMovie,
                         ),
                       ),
                     );

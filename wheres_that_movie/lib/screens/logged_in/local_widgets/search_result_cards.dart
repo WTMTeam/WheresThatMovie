@@ -11,6 +11,7 @@ class SearchCarouselCard extends StatelessWidget {
   final String title;
   final String overview;
   final double rating;
+  final bool isMovie;
 
   final int id;
 
@@ -21,6 +22,7 @@ class SearchCarouselCard extends StatelessWidget {
     required this.title,
     required this.overview,
     required this.rating,
+    required this.isMovie,
   }) : super(key: key);
 
   Widget myRatingBar() {
@@ -54,6 +56,7 @@ class SearchCarouselCard extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => DetailedPage(
               id: id,
+              isMovie: isMovie,
             ),
           ),
         );

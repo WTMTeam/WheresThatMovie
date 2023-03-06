@@ -6,13 +6,16 @@ import 'package:flutter/material.dart';
 
 import 'package:tmdb_api/tmdb_api.dart';
 import 'package:wheres_that_movie/database/database_helper.dart';
+import 'package:wheres_that_movie/widgets/flash_message.dart';
 import 'package:wheres_that_movie/widgets/my_container.dart';
 
 class DetailedPage extends StatefulWidget {
   final int id;
+  final bool isMovie;
   const DetailedPage({
     Key? key,
     required this.id,
+    required this.isMovie,
   }) : super(key: key);
 
   @override
@@ -37,11 +40,17 @@ class _DetailedPageState extends State<DetailedPage> {
 
   bool _isLoading = false;
   bool _wentWrong = false;
+  bool _noSuchMethod = false;
+
+  late Map movieResult;
+  late Map showResult;
 
   // Function to get the different providers for the
   // current movie or show
   getProviders(int id, String currentOption) async {
     _isLoading = true;
+    _noSuchMethod = false;
+
     try {
       final tmdbWithCustomLogs = TMDB(
         //TMDB instance
@@ -52,31 +61,76 @@ class _DetailedPageState extends State<DetailedPage> {
         ),
       );
 
-      Map providerResult =
-          await tmdbWithCustomLogs.v3.movies.getWatchProviders(id);
-      Map movieResult = await tmdbWithCustomLogs.v3.movies.getDetails(id);
+      Map providerResult;
+      // ! Check if it is a movie or show and call the proper function ! \\
 
-      print(providerResult);
+      if (widget.isMovie) {
+        movieResult = await tmdbWithCustomLogs.v3.movies.getDetails(id);
+        providerResult =
+            await tmdbWithCustomLogs.v3.movies.getWatchProviders(id);
+      } else {
+        showResult = await tmdbWithCustomLogs.v3.tv.getDetails(id);
+        providerResult =
+            await tmdbWithCustomLogs.v3.tv.getWatchProviders(id.toString());
+      }
+
+      print("providerResult ${providerResult['results']}");
+      // print(providerResult['results']["US"]['flatrate']);
       // print(providerResult['result']);
       // streamingProviders = providerResult['results']["US"]['flatrate'];
       setState(() {
-        if (currentOption == "Stream") {
-          streamingProviders = providerResult['results']["US"]['flatrate'];
-        } else if (currentOption == "Buy") {
-          streamingProviders = providerResult['results']["US"]['buy'];
-        } else if (currentOption == "Rent") {
-          streamingProviders = providerResult['results']["US"]['rent'];
+        if (widget.isMovie) {
+          print("movie");
+          title = movieResult['title'];
+          description = movieResult['overview'];
+          posterPath = movieResult['poster_path'];
+        } else {
+          print("show");
+          title = showResult['name'];
+          description = showResult['overview'];
+          posterPath = showResult['poster_path'];
         }
-        title = movieResult['title'];
-        description = movieResult['overview'];
-        posterPath = movieResult['poster_path'];
+        if (currentOption == "Stream") {
+          if (providerResult['results']["US"]['flatrate'] == null) {
+            _noSuchMethod = true;
+          } else {
+            streamingProviders =
+                providerResult['results']["US"]['flatrate'] ?? [];
+          }
+        } else if (currentOption == "Buy") {
+          if (providerResult['results']["US"]['buy'] == null) {
+            _noSuchMethod = true;
+          } else {
+            streamingProviders = providerResult['results']["US"]['buy'] ?? [];
+          }
+        } else if (currentOption == "Rent") {
+          if (providerResult['results']["US"]['rent'] == null) {
+            _noSuchMethod = true;
+          } else {
+            streamingProviders = providerResult['results']["US"]['rent'] ?? [];
+          }
+        }
       });
       _isLoading = false;
-    } catch (e) {
+    } on NoSuchMethodError {
       setState(() {
+        print("No Such method");
+        _noSuchMethod = true;
         _isLoading = false;
-        _wentWrong = true;
       });
+    } catch (e) {
+      if (e is NoSuchMethodError) {
+        setState(() {
+          _isLoading = false;
+          _noSuchMethod = true;
+        });
+      } else {
+        print("something went wrong");
+        setState(() {
+          _isLoading = false;
+          _wentWrong = true;
+        });
+      }
 
       print(e);
     }
@@ -98,9 +152,13 @@ class _DetailedPageState extends State<DetailedPage> {
 
   // Insert a new journal to the database
   Future<void> _addItem(
-      int movieId, String movieTitle, String moviePath) async {
+      int movieId, String movieTitle, String moviePath, bool isMovie) async {
     print("adding item: ${movieId}");
-    await SQLHelper.createItem(movieId, movieTitle, moviePath);
+    int isMovieInt = 0;
+    if (isMovie) {
+      isMovieInt = 1;
+    }
+    await SQLHelper.createItem(movieId, movieTitle, moviePath, isMovieInt);
   }
 
   @override
@@ -165,23 +223,23 @@ class _DetailedPageState extends State<DetailedPage> {
             //   ),
             // ),
             ElevatedButton(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 70.0),
+              child: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 70.0),
                 child: Text(
                   "Add to My List",
                   style: TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.secondary,
+                    // color: Theme.of(context).colorScheme.secondary,
                   ),
                 ),
               ),
               onPressed: () {
-                _addItem(widget.id, title, posterPath);
+                _addItem(widget.id, title, posterPath, widget.isMovie);
               },
             ),
             Container(
-              margin: EdgeInsets.symmetric(
+              margin: const EdgeInsets.symmetric(
                 vertical: 10.0,
                 horizontal: 10.0,
               ),
@@ -216,31 +274,37 @@ class _DetailedPageState extends State<DetailedPage> {
                 ),
               ),
             ),
-            ListView.builder(
-                padding: EdgeInsets.only(top: 10),
-                shrinkWrap: true,
-                itemCount: streamingProviders.length,
-                controller: _myController,
-                itemBuilder: ((context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10.0, horizontal: 10.0),
-                    child: MyContainer(
-                      // margin: EdgeInsets.only(
-                      //     left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
-                      child: ListTile(
-                        // tileColor: Theme.of(context).colorScheme.primaryContainer,
-                        contentPadding: EdgeInsets.all(5),
-                        leading: CachedNetworkImage(
-                          imageUrl: 'https://image.tmdb.org/t/p/w45' +
-                              streamingProviders[index]['logo_path'],
-                          width: 50.0,
+            _noSuchMethod
+                ? MyCustomErrorMessage(
+                    errorText: currentOption,
+                    isMovie: widget.isMovie,
+                  )
+                : ListView.builder(
+                    padding: EdgeInsets.only(top: 10),
+                    shrinkWrap: true,
+                    itemCount: streamingProviders.length,
+                    controller: _myController,
+                    itemBuilder: ((context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 10.0),
+                        child: MyContainer(
+                          // margin: EdgeInsets.only(
+                          //     left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
+                          child: ListTile(
+                            // tileColor: Theme.of(context).colorScheme.primaryContainer,
+                            contentPadding: EdgeInsets.all(5),
+                            leading: CachedNetworkImage(
+                              imageUrl: 'https://image.tmdb.org/t/p/w45' +
+                                  streamingProviders[index]['logo_path'],
+                              width: 50.0,
+                            ),
+                            title: Text(
+                                streamingProviders[index]['provider_name']),
+                          ),
                         ),
-                        title: Text(streamingProviders[index]['provider_name']),
-                      ),
-                    ),
-                  );
-                })),
+                      );
+                    })),
             const SizedBox(
               height: 15.0,
             ),

@@ -51,12 +51,14 @@ class _MyLoggedInState extends State<MyLoggedIn> {
   List movies = [];
   List people = [];
   List cards = [];
+  List showsAndMovies = [];
 
   mySearch() async {
     searchResults = [];
     tvShows = [];
     movies = [];
     people = [];
+    showsAndMovies = [];
 
     print("My Controller: ${myController.text}");
 
@@ -98,6 +100,16 @@ class _MyLoggedInState extends State<MyLoggedIn> {
           movie.add(searchResults[i]['poster_path']);
           // print("currMovie: ${movie}");
           movies.add(movie);
+          // showsAndMovies.add(movie);
+          var thisMovie = {
+            'id': searchResults[i]['id'],
+            'title': searchResults[i]['title'],
+            'overview': searchResults[i]['overview'],
+            'rating': searchResults[i]['vote_average'],
+            'poster_path': searchResults[i]['poster_path'],
+            'isMovie': true,
+          };
+          showsAndMovies.add(thisMovie);
         } else if (searchResults[i]['media_type'] == "tv") {
           // print("${searchResults[i]['media_type']}: ${searchResults[i]['name']}");
           List show = [];
@@ -106,39 +118,53 @@ class _MyLoggedInState extends State<MyLoggedIn> {
           show.add(searchResults[i]['overview']);
           show.add(searchResults[i]['vote_average']);
           show.add(searchResults[i]['poster_path']);
+
           tvShows.add(show);
+          // showsAndMovies.add(show);
+
+          var thisShow = {
+            'id': searchResults[i]['id'],
+            'title': searchResults[i]['name'],
+            'overview': searchResults[i]['overview'],
+            'rating': searchResults[i]['vote_average'],
+            'poster_path': searchResults[i]['poster_path'],
+            'isMovie': false,
+          };
+          showsAndMovies.add(thisShow);
         } else if (searchResults[i]['media_type'] == "person") {
           // print("${searchResults[i]['media_type']}: ${searchResults[i]['name']}");
           people.add(searchResults[i]['name']);
         }
       }
       print("movie list: ${movies}");
+      print("show list: ${tvShows}");
+      print("Shows and Movies: ${showsAndMovies[0]['id']}");
       // print("tv-show list: ${tvShows}");
       // print("people list: ${people}");
       // Map providerResult = await tmdbWithCustomLogs.v3.discover.getMovies(withWatchProviders: "netflix", watchRegion: "US");
-      Map providerResult =
-          await tmdbWithCustomLogs.v3.movies.getWatchProviders(movies[1][0]);
-      print('');
-      try {
-        List providersUS = providerResult['results']["US"]['flatrate'];
-        List providersSE = providerResult['results']["SE"]['flatrate'];
-        // print(providerResult['results']["SE"]['flatrate']);
-        // print(providerResult['results']["US"]['flatrate'][0]);
+      // Map providerResult = await tmdbWithCustomLogs.v3.movies
+      //     .getWatchProviders(showsAndMovies[1][0]);
+      // print('');
+      // try {
+      //   List providersUS = providerResult['results']["US"]['flatrate'];
+      //   List providersSE = providerResult['results']["SE"]['flatrate'];
+      //   // print(providerResult['results']["SE"]['flatrate']);
+      //   // print(providerResult['results']["US"]['flatrate'][0]);
 
-        print("US");
-        for (var i = 0; i < providersUS.length; i++) {
-          print("Provider: " + providersUS[i]['provider_name']);
-        }
-        print("SE");
-        for (var i = 0; i < providersSE.length; i++) {
-          print("Provider: " + providersSE[i]['provider_name']);
-        }
-        //List providersUS2 = providerResult['results'];
+      //   print("US");
+      //   for (var i = 0; i < providersUS.length; i++) {
+      //     print("Provider: " + providersUS[i]['provider_name']);
+      //   }
+      //   print("SE");
+      //   for (var i = 0; i < providersSE.length; i++) {
+      //     print("Provider: " + providersSE[i]['provider_name']);
+      //   }
+      //   //List providersUS2 = providerResult['results'];
 
-        print(providerResult);
-      } catch (e) {
-        print(e);
-      }
+      //   print(providerResult);
+      // } catch (e) {
+      //   print(e);
+      // }
       makeCardList();
     }
   }
@@ -147,23 +173,25 @@ class _MyLoggedInState extends State<MyLoggedIn> {
   makeCardList() {
     // reset the cards list
     print("here2");
-    print(movies[0]);
+    // print(movies[0]);
     List newCards = [];
-    for (int i = 0; i < movies.length; i++) {
+    for (int i = 0; i < showsAndMovies.length; i++) {
       try {
         // if title returns null, then try name instead
-        int id = movies[i][0];
-        String title = movies[i][1];
-        print(title);
-        // ignore: prefer_interpolation_to_compose_strings
-        String imgUrl =
-            'https://image.tmdb.org/t/p/w200' + movies[i][movies[i].length - 1];
-        String overview = movies[i][2];
-        // double vote = movies[i][1];
-        double vote = 5.0;
-        print(movies[i][movies[i].length - 2]);
+        // int id = showsAndMovies[i][0];
+        // String title = showsAndMovies[i][1];
+        // print(title);
+        // // ignore: prefer_interpolation_to_compose_strings
+        // String imgUrl = 'https://image.tmdb.org/t/p/w200' +
+        //     showsAndMovies[i][showsAndMovies[i].length - 1];
+        // String overview = movies[i][2];
+        // // double vote = movies[i][1];
+        // double vote = 5.0;
+        // print(showsAndMovies[i][showsAndMovies[i].length - 2]);
 
-        vote = movies[i][movies[i].length - 2];
+        // vote = showsAndMovies[i][showsAndMovies[i].length - 2];
+        String imgUrl = 'https://image.tmdb.org/t/p/w200' +
+            showsAndMovies[i]['poster_path'];
 
         if (imgUrl == null) {
           imgUrl = "";
@@ -172,12 +200,20 @@ class _MyLoggedInState extends State<MyLoggedIn> {
         }
 
         newCards.add(SearchCarouselCard(
-          id: id,
+          id: showsAndMovies[i]['id'],
           imgUrl: imgUrl,
-          title: title,
-          overview: overview,
-          rating: vote,
+          title: showsAndMovies[i]['title'],
+          overview: showsAndMovies[i]['overview'],
+          rating: showsAndMovies[i]['rating'],
+          isMovie: showsAndMovies[i]['isMovie'],
         ));
+        // newCards.add(SearchCarouselCard(
+        //   id: id,
+        //   imgUrl: imgUrl,
+        //   title: title,
+        //   overview: overview,
+        //   rating: vote,
+        // ));
         setState(() {
           cards = newCards;
         });
@@ -264,10 +300,10 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                 margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
                 child: TextFormField(
                   controller: myController,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     prefixIcon: Icon(
                       Icons.search_outlined,
-                      //color: Theme.of(context).secondary,
+                      color: Theme.of(context).primaryColor,
                     ),
                     //focusColor: Colors.red,
                   ),
@@ -411,19 +447,26 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                   const EdgeInsets.symmetric(vertical: 70.0, horizontal: 10.0),
               children: [
                 Row(
-                  children: const <Widget>[
-                    Icon(
-                      Icons.account_circle_rounded,
-                      size: 50.0,
+                  children: <Widget>[
+                    // FlutterLogo(),
+                    Padding(padding: EdgeInsets.only(left: 5.0)),
+                    Image.asset(
+                      'assets/logo2.png',
+                      width: 45,
+                      height: 45,
                     ),
+                    // Icon(
+                    //   Icons.account_circle_rounded,
+                    //   size: 50.0,
+                    // ),
                     // Add space between the logo and the username
                     SizedBox(
                       width: 10.0,
                     ),
                     // Add the logged in users name
                     Text(
-                      "username",
-                      style: TextStyle(fontSize: 30.0),
+                      "WMM",
+                      style: Theme.of(context).textTheme.headline1,
                     ),
                   ],
                 ),
@@ -455,26 +498,28 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                   ),
                 ),
 
-                Card(
-                  child: ListTile(
-                    title: Text(
-                      "Notifications",
-                      style: Theme.of(context).textTheme.labelMedium,
-                      // style: TextStyle(
-                      //   fontSize: 20.0
-                      // ),
-                    ),
-                    leading: const Icon(Icons.notifications),
-                    onTap: () {
-                      // Update the state of the app
-                      // ...
-                      // Then close the drawer
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const MyNotifications(),
-                      ));
-                    },
-                  ),
-                ),
+                // * Card for notification * \\
+                // Card(
+                //   child: ListTile(
+                //     title: Text(
+                //       "Notifications",
+                //       style: Theme.of(context).textTheme.labelMedium,
+                //       // style: TextStyle(
+                //       //   fontSize: 20.0
+                //       // ),
+                //     ),
+                //     leading: const Icon(Icons.notifications),
+                //     onTap: () {
+                //       // Update the state of the app
+                //       // ...
+                //       // Then close the drawer
+                //       Navigator.of(context).push(MaterialPageRoute(
+                //         builder: (context) => const MyNotifications(),
+                //       ));
+                //     },
+                //   ),
+                // ),
+                // * End Card for notification * \\
 
                 Card(
                   child: SwitchListTile(
@@ -489,6 +534,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                     onChanged: (bool value) {
                       setState(() {
                         themeState.setDarkTheme = value;
+                        previousSearch = "";
                       });
                     },
                     value: themeState.getDarkTheme,
@@ -497,30 +543,33 @@ class _MyLoggedInState extends State<MyLoggedIn> {
               ],
             ),
           ),
-          Container(
-            alignment: Alignment.bottomCenter,
-            padding: const EdgeInsetsDirectional.only(bottom: 75.0),
-            child: Card(
-              child: ListTile(
-                title: const Text(
-                  "Log Out",
-                  style: TextStyle(fontSize: 20.0),
-                ),
-                trailing: const Icon(
-                  Icons.logout_rounded,
-                ),
-                //style: ListTileTheme.of(context),
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const MyLanding(),
-                  ));
-                },
-              ),
-            ),
-          ),
+
+          // * Container for log out button * \\
+          // Container(
+          //   alignment: Alignment.bottomCenter,
+          //   padding: const EdgeInsetsDirectional.only(bottom: 75.0),
+          //   child: Card(
+          //     child: ListTile(
+          //       title: const Text(
+          //         "Log Out",
+          //         style: TextStyle(fontSize: 20.0),
+          //       ),
+          //       trailing: const Icon(
+          //         Icons.logout_rounded,
+          //       ),
+          //       //style: ListTileTheme.of(context),
+          //       onTap: () {
+          //         // Update the state of the app
+          //         // ...
+          //         // Then close the drawer
+          //         Navigator.of(context).push(MaterialPageRoute(
+          //           builder: (context) => const MyLanding(),
+          //         ));
+          //       },
+          //     ),
+          //   ),
+          // ),
+          // * End container for log out button * \\
         ],
       )),
     );

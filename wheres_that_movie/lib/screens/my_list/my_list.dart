@@ -145,6 +145,7 @@ class _MyListState extends State<MyList> {
             padding: const EdgeInsets.symmetric(horizontal: 0.0),
             child: MyListContainer(
                 myList: myList,
+                // isMovie: isMovie,
                 myController: myScrollController,
                 onRemoved: (itemToRemove) {
                   setState(() {

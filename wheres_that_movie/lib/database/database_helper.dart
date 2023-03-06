@@ -35,6 +35,7 @@ class SQLHelper {
         movieId INTEGER,
         movieTitle STRING,
         movieImgPath STRING,
+        isMovie INTEGER,
         createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
       )
       """);
@@ -52,13 +53,14 @@ class SQLHelper {
 
   // Create new item
   static Future<int> createItem(
-      int movieId, String movieTitle, String movieImgPath) async {
+      int movieId, String movieTitle, String movieImgPath, int isMovie) async {
     final db = await SQLHelper.db();
 
     final data = {
       'movieId': movieId,
       'movieTitle': movieTitle,
       'movieImgPath': movieImgPath,
+      'isMovie': isMovie,
     };
     final id = await db.insert('movies', data,
         conflictAlgorithm: sql.ConflictAlgorithm.replace);
