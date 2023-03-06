@@ -116,11 +116,6 @@ class CarouselCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Icon(icon, color: Colors.white, size: 48),
-              // SizedBox(
-              //   width: 100.0,
-              //   child: Text(title, style: Theme.of(context).textTheme.headline3),
-              // ),
               SizedBox(
                 width: screenWidth / 1.33,
                 child: Text(
@@ -129,17 +124,6 @@ class CarouselCard extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
-              // Flexible(
-              //     flex: 3,
-              //     child: SizedBox(
-              //       width: screenWidth / 1.33,
-              //       child: Text(
-              //         title,
-              //         style: Theme.of(context).textTheme.headline3,
-              //         textAlign: TextAlign.center,
-              //       ),
-              //     )),
-
               Flexible(flex: 1, child: const SizedBox(height: 12)),
               Flexible(
                 flex: 20,
@@ -151,51 +135,10 @@ class CarouselCard extends StatelessWidget {
                   // fit: BoxFit.scaleDown,
                 ),
               ),
-              // LayoutBuilder(
-              //   builder: (BuildContext context, BoxConstraints constraints) {
-              //     double scaleFactor = constraints.biggest.width / 500;
-              //     return Transform.scale(
-              //       scale: scaleFactor,
-              //       child: CachedNetworkImage(
-              //         imageUrl: imgUrl,
-              //       ),
-              //     );
-              //   },
-              // ),
-              // LayoutBuilder(
-              //   builder: (BuildContext context, BoxConstraints constraints) {
-              //     double scaleFactor = constraints.biggest.width / 500;
-              //     return Transform.scale(
-              //       scale: scaleFactor,
-              //       child: CachedNetworkImage(
-              //         imageUrl: imgUrl,
-              //         // width: double.infinity,
-              //         // height: BoxFit
-              //         // fit: BoxFit.contain,
-              //       ),
-              //     );
-              //   },
-              // ),
-
               Flexible(child: const SizedBox(height: 12)),
-
-              // SizedBox(
-              //   width: 100.0,
-              //   child: Text(
-              //     overview,
-              //     style: Theme.of(context).textTheme.bodyLarge,
-              //   ),
-              // ),
-              // Text(
-              //   overview,
-              //   style: Theme.of(context).textTheme.bodyLarge,
-              // ),
-              // const SizedBox(height: 12),
               Flexible(
                 child: myRatingBar(),
               )
-
-              // Text(rating.toStringAsFixed(2)),
             ],
           ),
           // )
@@ -258,35 +201,13 @@ class CarouselCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Icon(icon, color: Colors.white, size: 48),
-              // SizedBox(
-              //   width: 100.0,
-              //   child: Text(title, style: Theme.of(context).textTheme.headline3),
-              // ),
-
               Text(title, style: Theme.of(context).textTheme.headline3),
-
               const SizedBox(height: 12),
               CachedNetworkImage(
                 imageUrl: imgUrl,
               ),
-
               const SizedBox(height: 12),
-              // SizedBox(
-              //   width: 100.0,
-              //   child: Text(
-              //     overview,
-              //     style: Theme.of(context).textTheme.bodyLarge,
-              //   ),
-              // ),
-              // Text(
-              //   overview,
-              //   style: Theme.of(context).textTheme.bodyLarge,
-              // ),
-              // const SizedBox(height: 12),
               myRatingBar(),
-
-              // Text(rating.toStringAsFixed(2)),
             ],
           ),
           // )
@@ -295,16 +216,3 @@ class CarouselCard extends StatelessWidget {
     }
   }
 }
-
-// Text(
-//                           trendingMovies[index]['overview'],
-//                           style: Theme.of(context).textTheme.bodyLarge,
-//                         ),
-
-//                         Text(
-//                           "Rating:",
-//                           style: Theme.of(context).textTheme.headline3,
-//                         ),
-//                         Text(trendingMovies[index]['vote_average']
-//                             .toStringAsFixed(2)),
-//                       ]),

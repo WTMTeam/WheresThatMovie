@@ -10,7 +10,7 @@ class SQLHelper {
     //await database.execute("DROP TABLE IF EXISTS items");
     await database.execute("""CREATE TABLE movies(
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-        movieId INTEGER,
+        movieId INTEGER NOT NULL,
         movieTitle STRING,
         movieImgPath STRING,
         isMovie INTEGER,
@@ -49,6 +49,24 @@ class SQLHelper {
   static Future<List<Map<String, dynamic>>> getMovies() async {
     final db = await SQLHelper.db();
     return db.query('movies', orderBy: "id");
+  }
+
+  // Check if item is in the db
+  static Future<bool> checkItem(int movieId) async {
+    final db = await SQLHelper.db();
+    bool itemExists = false;
+    final result =
+        await db.query("movies", where: "movieId = ?", whereArgs: [movieId]);
+    print("result: ${result}");
+    if (result.length > 0) {
+      itemExists = true;
+    }
+    return itemExists;
+  }
+
+  static Future<List<Map<String, dynamic>>> getItem(int movieId) async {
+    final db = await SQLHelper.db();
+    return await db.query("movies", where: "movieId = ?", whereArgs: [movieId]);
   }
 
   // Delete

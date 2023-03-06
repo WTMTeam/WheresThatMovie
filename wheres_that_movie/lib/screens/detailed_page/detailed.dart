@@ -41,6 +41,9 @@ class _DetailedPageState extends State<DetailedPage> {
   bool _isLoading = false;
   bool _wentWrong = false;
   bool _noSuchMethod = false;
+  bool itemExists = false;
+
+  List myList = [];
 
   late Map movieResult;
   late Map showResult;
@@ -62,7 +65,7 @@ class _DetailedPageState extends State<DetailedPage> {
       );
 
       Map providerResult;
-      // ! Check if it is a movie or show and call the proper function ! \\
+      // Check if it is a movie or show and call the proper function \\
 
       if (widget.isMovie) {
         movieResult = await tmdbWithCustomLogs.v3.movies.getDetails(id);
@@ -134,10 +137,20 @@ class _DetailedPageState extends State<DetailedPage> {
     }
   }
 
+  getMyList() async {
+    List thisList = await SQLHelper.getMovies();
+    bool currExists = await SQLHelper.checkItem(widget.id);
+    setState(() {
+      itemExists = currExists;
+    });
+    // print(myList);
+  }
+
   @override
   void initState() {
     currentOption = "Stream";
     getProviders(widget.id, currentOption);
+    getMyList();
 
     super.initState();
   }
@@ -153,6 +166,18 @@ class _DetailedPageState extends State<DetailedPage> {
       isMovieInt = 1;
     }
     await SQLHelper.createItem(movieId, movieTitle, moviePath, isMovieInt);
+    setState(() {
+      getMyList();
+    });
+  }
+
+  void _deleteItem(int movieOrShowId) async {
+    List<Map<String, dynamic>> currItem =
+        await SQLHelper.getItem(movieOrShowId);
+    int id = currItem[0]['id'];
+    await SQLHelper.deleteItem(id);
+    print("deleted $currItem");
+    getMyList();
   }
 
   @override
@@ -217,19 +242,35 @@ class _DetailedPageState extends State<DetailedPage> {
             //   ),
             // ),
             ElevatedButton(
-              child: const Padding(
+              child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 70.0),
-                child: Text(
-                  "Add to My List",
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                    // color: Theme.of(context).colorScheme.secondary,
-                  ),
-                ),
+                child: itemExists
+                    ? const Text(
+                        "Remove from My List",
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                          // color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      )
+                    : const Text(
+                        "Add to My List",
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                          // color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      ),
               ),
               onPressed: () {
-                _addItem(widget.id, title, posterPath, widget.isMovie);
+                print("this ${myList.contains(widget.id)}");
+                if (itemExists) {
+                  _deleteItem(widget.id);
+                } else {
+                  _addItem(widget.id, title, posterPath, widget.isMovie);
+                }
+
+                getMyList();
               },
             ),
             Container(

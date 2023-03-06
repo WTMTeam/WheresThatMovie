@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:wheres_that_movie/screens/detailed_page/detailed.dart';
+import 'package:wheres_that_movie/screens/my_list/my_list.dart';
 import '../../../widgets/my_container.dart';
 
 class MyListContainer extends StatefulWidget {
@@ -10,6 +11,7 @@ class MyListContainer extends StatefulWidget {
   //List<Map<String, dynamic>> myList = [];
   final List<Map<String, dynamic>> myList;
   final ScrollController myController;
+  final VoidCallback refreshList;
   // final bool isMovie;
 
   final Function(int) onRemoved;
@@ -18,6 +20,7 @@ class MyListContainer extends StatefulWidget {
     required this.myList,
     required this.onRemoved,
     required this.myController,
+    required this.refreshList,
     // required this.isMovie,
   }) : super(key: key);
 
@@ -96,14 +99,19 @@ class _MyListContainerState extends State<MyListContainer> {
                     if (widget.myList[index]['isMovie'] == 1) {
                       isMovie = true;
                     }
-                    Navigator.of(context).push(
+                    Navigator.of(context)
+                        .push(
                       MaterialPageRoute(
                         builder: (context) => DetailedPage(
                           id: widget.myList[index]['movieId'],
                           isMovie: isMovie,
                         ),
                       ),
-                    );
+                    )
+                        .then((_) {
+                      print("I came back");
+                      widget.refreshList();
+                    });
                   },
                 ),
               ),

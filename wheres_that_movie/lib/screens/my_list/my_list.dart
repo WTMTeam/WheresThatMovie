@@ -28,7 +28,7 @@ class _MyListState extends State<MyList> {
 
   void _refreshList() async {
     final data = await SQLHelper.getMovies();
-
+    print("refreshing");
     setState(() {
       myList = data;
       _isLoading = false;
@@ -82,62 +82,6 @@ class _MyListState extends State<MyList> {
             height: 50.0,
           ),
 
-          // Text(
-          //   "Search Movie or Show",
-          //   textAlign: TextAlign.center,
-          //   style: TextStyle(
-          //     color: Theme.of(context).primaryColor,
-          //     fontSize: 20.0,
-          //     fontWeight: FontWeight.bold,
-          //   ),
-          // ),
-
-          // const SizedBox(
-          //   height: 15.0,
-          // ),
-
-          // TextFormField(
-          //   controller: myController,
-          //   decoration: const InputDecoration(
-          //     prefixIcon: Icon(
-          //       Icons.search_outlined,
-          //     ),
-          //   ),
-          // ),
-
-          // const SizedBox(
-          //   height: 25.0,
-          // ),
-
-          // ElevatedButton(
-          //     child: const Padding(
-          //       padding: EdgeInsets.symmetric(horizontal: 100.0),
-          //       child: Text(
-          //         "Add",
-          //         style: TextStyle(
-          //           fontSize: 20.0,
-          //           fontWeight: FontWeight.bold,
-          //         ),
-          //       ),
-          //     ),
-          //     onPressed: () async {
-          //       print("here");
-          //       print(myList);
-
-          //       myController.text.isEmpty
-          //           ?
-          //           // does not show
-          //           const Text(
-          //               "Can't add empty show",
-          //             )
-          //           :
-          //           //myList.add(myController.text);
-          //           //myList.sort();
-          //           // await _addItem();
-          //           print("adding removed");
-          //       //key: UniqueKey();
-          //     }),
-
           const SizedBox(
             height: 25.0,
           ),
@@ -147,6 +91,7 @@ class _MyListState extends State<MyList> {
                 myList: myList,
                 // isMovie: isMovie,
                 myController: myScrollController,
+                refreshList: _refreshList,
                 onRemoved: (itemToRemove) {
                   setState(() {
                     print("before");
