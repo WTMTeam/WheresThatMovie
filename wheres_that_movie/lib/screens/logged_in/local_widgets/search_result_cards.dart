@@ -106,16 +106,9 @@ class SearchCarouselCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Icon(icon, color: Colors.white, size: 48),
-            // SizedBox(
-            //   width: 100.0,
-            //   child: Text(title, style: Theme.of(context).textTheme.headline3),
-            // ),
-
             Text(title,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headline3),
-
             const SizedBox(height: 12),
             CachedNetworkImage(
               imageUrl: imgUrl,
@@ -123,23 +116,8 @@ class SearchCarouselCard extends StatelessWidget {
               errorWidget: (context, url, error) =>
                   const Icon(Icons.no_photography_outlined),
             ),
-
             const SizedBox(height: 12),
-            // SizedBox(
-            //   width: 100.0,
-            //   child: Text(
-            //     overview,
-            //     style: Theme.of(context).textTheme.bodyLarge,
-            //   ),
-            // ),
-            // Text(
-            //   overview,
-            //   style: Theme.of(context).textTheme.bodyLarge,
-            // ),
-            // const SizedBox(height: 12),
             myRatingBar(),
-
-            // Text(rating.toStringAsFixed(2)),
           ],
         ),
         // )

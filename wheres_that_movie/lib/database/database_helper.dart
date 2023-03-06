@@ -1,28 +1,6 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 
-// class DatabaseHelper {
-
-//   static final _databaseName = 'MyLocalDatabase.db';
-//   static final _databaseVersion = 1;
-
-//   static final table = 'my_table';
-
-//   static final columnId = 'id';
-//   static final columnName = 'name';
-
-// }
-
-// class DatabaseHelper {
-//   DatabaseHelper._privateConstructor();
-//   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
-//   static Database? _database;
-//   Future<Database> get database async => _database ??= await _initDatabase();
-
-//   Future<Database>
-
-// }
-
 // https://www.kindacode.com/article/flutter-sqlite/
 class SQLHelper {
   // id: the id of a item

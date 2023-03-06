@@ -75,9 +75,7 @@ class _DetailedPageState extends State<DetailedPage> {
       }
 
       print("providerResult ${providerResult['results']}");
-      // print(providerResult['results']["US"]['flatrate']);
-      // print(providerResult['result']);
-      // streamingProviders = providerResult['results']["US"]['flatrate'];
+
       setState(() {
         if (widget.isMovie) {
           print("movie");
@@ -135,10 +133,6 @@ class _DetailedPageState extends State<DetailedPage> {
       print(e);
     }
   }
-
-  // getInfo(int id) async {
-  //   is
-  // }
 
   @override
   void initState() {

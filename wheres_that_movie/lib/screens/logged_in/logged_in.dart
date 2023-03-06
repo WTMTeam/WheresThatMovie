@@ -7,23 +7,15 @@
 //*       This is the screen the user will see when logged in        *//
 //********************************************************************//
 
-import 'dart:developer';
 import 'dart:math';
 
 import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wheres_that_movie/screens/landing_page/landing.dart';
-import 'package:wheres_that_movie/screens/logged_in/local_widgets/display_movies.dart';
-import 'package:wheres_that_movie/screens/logged_in/local_widgets/service_selector.dart';
-import 'package:wheres_that_movie/screens/logged_in/local_widgets/trending_movies_container.dart';
-import 'package:wheres_that_movie/screens/my_list/local_widgets/my_list_container.dart';
 import 'package:wheres_that_movie/screens/my_list/my_list.dart';
-import 'package:wheres_that_movie/screens/notifications/notifications.dart';
 import 'package:wheres_that_movie/screens/trending_page/trending.dart';
 import 'package:wheres_that_movie/utils/provider/dark_theme_provider.dart';
 
-import 'package:http/http.dart';
 import 'package:tmdb_api/tmdb_api.dart';
 
 import 'local_widgets/search_result_cards.dart';
@@ -136,35 +128,10 @@ class _MyLoggedInState extends State<MyLoggedIn> {
           people.add(searchResults[i]['name']);
         }
       }
-      print("movie list: ${movies}");
-      print("show list: ${tvShows}");
-      print("Shows and Movies: ${showsAndMovies[0]['id']}");
-      // print("tv-show list: ${tvShows}");
-      // print("people list: ${people}");
-      // Map providerResult = await tmdbWithCustomLogs.v3.discover.getMovies(withWatchProviders: "netflix", watchRegion: "US");
-      // Map providerResult = await tmdbWithCustomLogs.v3.movies
-      //     .getWatchProviders(showsAndMovies[1][0]);
-      // print('');
-      // try {
-      //   List providersUS = providerResult['results']["US"]['flatrate'];
-      //   List providersSE = providerResult['results']["SE"]['flatrate'];
-      //   // print(providerResult['results']["SE"]['flatrate']);
-      //   // print(providerResult['results']["US"]['flatrate'][0]);
+      // print("movie list: ${movies}");
+      // print("show list: ${tvShows}");
+      // print("Shows and Movies: ${showsAndMovies[0]['id']}");
 
-      //   print("US");
-      //   for (var i = 0; i < providersUS.length; i++) {
-      //     print("Provider: " + providersUS[i]['provider_name']);
-      //   }
-      //   print("SE");
-      //   for (var i = 0; i < providersSE.length; i++) {
-      //     print("Provider: " + providersSE[i]['provider_name']);
-      //   }
-      //   //List providersUS2 = providerResult['results'];
-
-      //   print(providerResult);
-      // } catch (e) {
-      //   print(e);
-      // }
       makeCardList();
     }
   }
@@ -356,54 +323,6 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                         },
                       ),
                     ),
-              //     : Container(
-              //         constraints: BoxConstraints.loose(
-              //             Size.fromHeight(screenHeight / 1.2)),
-              //         child: CustomScrollView(
-              //           controller: scrollController,
-              //           // shrinkWrap: true,
-              //           slivers: [
-              //             SliverFillRemaining(
-              //               hasScrollBody: false,
-              //               child: Column(
-              //                 children: [
-              //                   const SizedBox(height: 30),
-              //                   ExpandablePageView.builder(
-              //                     controller: carouselController,
-              //                     // allows our shadow to be displayed outside of widget bounds
-              //                     clipBehavior: Clip.none,
-              //                     itemCount: cards.length,
-              //                     itemBuilder: (_, index) {
-              //                       if (!carouselController
-              //                           .position.haveDimensions) {
-              //                         return const SizedBox();
-              //                       }
-              //                       return AnimatedBuilder(
-              //                         animation: carouselController,
-              //                         builder: (_, __) => Transform.scale(
-              //                           scale: max(
-              //                             0.85,
-              //                             (1 -
-              //                                 (carouselController.page! - index)
-              //                                         .abs() /
-              //                                     2),
-              //                           ),
-              //                           child: cards[index],
-              //                         ),
-              //                       );
-              //                     },
-              //                   ),
-              //                   // const Spacer(),
-              //                 ],
-              //               ),
-              //             )
-              //           ],
-              //         ),
-              //       ),
-              // // Old movie cards
-              // Padding(
-              //     padding: EdgeInsets.all(0.0),
-              //     child: DisplayMovies(movieList: movies)),
 
               Container(
                 margin: EdgeInsets.only(bottom: 10.0),
@@ -455,11 +374,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                       width: 45,
                       height: 45,
                     ),
-                    // Icon(
-                    //   Icons.account_circle_rounded,
-                    //   size: 50.0,
-                    // ),
-                    // Add space between the logo and the username
+
                     SizedBox(
                       width: 10.0,
                     ),
@@ -482,9 +397,6 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                     title: Text(
                       "My List",
                       style: Theme.of(context).textTheme.labelMedium,
-                      // style: TextStyle(
-                      //   fontSize: 20.0
-                      // ),
                     ),
                     leading: const Icon(Icons.list),
                     onTap: () {

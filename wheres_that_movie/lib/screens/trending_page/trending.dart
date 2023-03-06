@@ -98,6 +98,11 @@ class _MyTrendingState extends State<MyTrending> {
         String overview = trendingMovies[i]['overview'];
         double vote = trendingMovies[i]["vote_average"];
         int id = trendingMovies[i]["id"];
+        String mediaType = trendingMovies[i]["media_type"];
+        bool isMovie = false;
+        if (mediaType == "movie") {
+          isMovie = true;
+        }
 
         newCards.add(CarouselCard(
           id: id,
@@ -106,6 +111,7 @@ class _MyTrendingState extends State<MyTrending> {
           overview: overview,
           rating: vote,
           isHorizontal: isHorizontal,
+          isMovie: isMovie,
         ));
         setState(() {
           cards = newCards;
@@ -351,150 +357,3 @@ class _MyTrendingState extends State<MyTrending> {
     }
   }
 }
-      // return Scaffold(
-      //     body: Column(children: <Widget>[
-      //   SizedBox(
-      //     height: 55.0,
-      //   ),
-      //   SizedBox(
-      //     height: 40.0,
-      //     child: Text(
-      //       "Trending",
-      //       style: Theme.of(context).textTheme.headline1,
-      //     ),
-      //   ),
-      //   SizedBox(
-      //       width: screenWidth,
-      //       height: screenHeight - 200,
-      //       child: CustomScrollView(
-      //         slivers: [
-      //           SliverFillRemaining(
-      //               hasScrollBody: false,
-      //               // child: Center(
-      //               child: Row(
-      //                   mainAxisAlignment: MainAxisAlignment.center,
-      //                   children: [
-      //                     // Text(
-      //                     //   "test",
-      //                     //   style: Theme.of(context).textTheme.bodyLarge,
-      //                     // ),
-      //                     ExpandablePageView.builder(
-      //                       scrollDirection: Axis.vertical,
-      //                       controller: carouselController,
-      //                       // allows our shadow to be displayed outside of widget bounds
-      //                       clipBehavior: Clip.none,
-      //                       itemCount: cards.length,
-      //                       itemBuilder: (_, index) {
-      //                         if (!carouselController.position.haveDimensions) {
-      //                           return const SizedBox();
-      //                         }
-      //                         return AnimatedBuilder(
-      //                           animation: carouselController,
-      //                           builder: (_, __) => Transform.scale(
-      //                             scale: max(
-      //                               0.85,
-      //                               (1 -
-      //                                   (carouselController.page! - index)
-      //                                           .abs() /
-      //                                       2),
-      //                             ),
-      //                             child: cards[index],
-      //                           ),
-      //                         );
-      //                       },
-      //                     ),
-      //                     // const Spacer(),
-      //                   ])),
-      //           // )
-      //         ],
-      //       ))
-      // ]));
-//     }
-//   }
-// }
-
-// * Kind of works for vertical scrolling
-// return Scaffold(
-//           body: SizedBox(
-//         width: screenWidth,
-//         height: screenHeight,
-//         child: ExpandablePageView.builder(
-//           scrollDirection: Axis.vertical,
-//           controller: carouselController,
-//           // allows our shadow to be displayed outside of widget bounds
-//           clipBehavior: Clip.none,
-//           itemCount: cards.length,
-//           itemBuilder: (_, index) {
-//             if (!carouselController.position.haveDimensions) {
-//               return const SizedBox();
-//             }
-//             return AnimatedBuilder(
-//               animation: carouselController,
-//               builder: (_, __) => Transform.scale(
-//                 scale: max(
-//                   0.85,
-//                   (1 - (carouselController.page! - index).abs() / 2),
-//                 ),
-//                 child: cards[index],
-//               ),
-//             );
-//           },
-//         ),
-//         // const Spacer(),
-//       ));
-
-// * Works for horizontal scrolling
-// return Scaffold(
-//           body: Column(children: <Widget>[
-//         SizedBox(
-//           height: 55.0,
-//         ),
-//         SizedBox(
-//           height: 40.0,
-//           child: Text(
-//             "Trending",
-//             style: Theme.of(context).textTheme.headline1,
-//           ),
-//         ),
-//         SizedBox(
-//           height: screenHeight - 95.0,
-//           width: screenWidth,
-//           child: CustomScrollView(
-//             slivers: [
-//               SliverFillRemaining(
-//                 hasScrollBody: false,
-//                 child: Column(
-//                   children: [
-//                     const SizedBox(height: 15),
-//                     ExpandablePageView.builder(
-//                       controller: carouselController,
-//                       // allows our shadow to be displayed outside of widget bounds
-//                       clipBehavior: Clip.none,
-//                       itemCount: cards.length,
-//                       itemBuilder: (_, index) {
-//                         if (!carouselController.position.haveDimensions) {
-//                           return const SizedBox();
-//                         }
-//                         return AnimatedBuilder(
-//                           animation: carouselController,
-//                           builder: (_, __) => Transform.scale(
-//                             scale: max(
-//                               0.85,
-//                               (1 -
-//                                   (carouselController.page! - index).abs() / 2),
-//                             ),
-//                             child: cards[index],
-//                           ),
-//                         );
-//                       },
-//                     ),
-//                     const Spacer(),
-//                   ],
-//                 ),
-//               )
-//             ],
-//           ),
-//         ),
-//       ]));
-
-

@@ -14,6 +14,7 @@ class CarouselCard extends StatelessWidget {
   final double rating;
   final bool isHorizontal;
   final int id;
+  final bool isMovie;
 
   const CarouselCard({
     Key? key,
@@ -23,6 +24,7 @@ class CarouselCard extends StatelessWidget {
     required this.overview,
     required this.rating,
     required this.isHorizontal,
+    required this.isMovie,
   }) : super(key: key);
 
   Widget myRatingBar() {
@@ -62,7 +64,7 @@ class CarouselCard extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => DetailedPage(
                 id: id,
-                isMovie: true,
+                isMovie: isMovie,
               ),
             ),
           );
@@ -206,7 +208,7 @@ class CarouselCard extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => DetailedPage(
                 id: id,
-                isMovie: true,
+                isMovie: isMovie,
               ),
             ),
           );
