@@ -71,7 +71,7 @@ class _MyListState extends State<MyList> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return Scaffold(
+      return const Scaffold(
         body: Text("isLoading"),
       );
     } else {

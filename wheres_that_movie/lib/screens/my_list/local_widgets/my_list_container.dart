@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:wheres_that_movie/screens/detailed_page/detailed.dart';
-import 'package:wheres_that_movie/screens/my_list/my_list.dart';
 import '../../../widgets/my_container.dart';
 
 class MyListContainer extends StatefulWidget {

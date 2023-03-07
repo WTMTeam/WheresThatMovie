@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class Styles {
   // Dark theme variables
@@ -78,7 +76,7 @@ class Styles {
 
         //bodyLarge: TextStyle(fontSize: ),
 
-        labelMedium: TextStyle(fontSize: 20.0),
+        labelMedium: const TextStyle(fontSize: 20.0),
       ),
 
       textSelectionTheme: const TextSelectionThemeData(

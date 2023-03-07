@@ -183,7 +183,6 @@ class _DetailedPageState extends State<DetailedPage> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
     if (_isLoading) {
       return Scaffold(
         body: Column(
@@ -228,7 +227,8 @@ class _DetailedPageState extends State<DetailedPage> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
               child: MyContainer(
                   child: Text(description,
                       style: Theme.of(context).textTheme.bodyLarge)),
@@ -243,7 +243,7 @@ class _DetailedPageState extends State<DetailedPage> {
             // ),
             ElevatedButton(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 70.0),
+                padding: const EdgeInsets.symmetric(horizontal: 70.0),
                 child: itemExists
                     ? const Text(
                         "Remove from My List",
@@ -315,7 +315,7 @@ class _DetailedPageState extends State<DetailedPage> {
                     isMovie: widget.isMovie,
                   )
                 : ListView.builder(
-                    padding: EdgeInsets.only(top: 10),
+                    padding: const EdgeInsets.only(top: 10),
                     shrinkWrap: true,
                     itemCount: streamingProviders.length,
                     controller: _myController,
@@ -328,7 +328,7 @@ class _DetailedPageState extends State<DetailedPage> {
                           //     left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
                           child: ListTile(
                             // tileColor: Theme.of(context).colorScheme.primaryContainer,
-                            contentPadding: EdgeInsets.all(5),
+                            contentPadding: const EdgeInsets.all(5),
                             leading: CachedNetworkImage(
                               imageUrl: 'https://image.tmdb.org/t/p/w45' +
                                   streamingProviders[index]['logo_path'],

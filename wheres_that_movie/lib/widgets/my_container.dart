@@ -10,9 +10,6 @@ import 'package:flutter/material.dart';
 class MyContainer extends StatelessWidget {
   final Widget child;
 
-  static const Color _containerBackground = Color.fromARGB(255, 40, 40, 40);
-  static const Color _boxShadowColor = Color.fromARGB(255, 25, 25, 25);
-
   const MyContainer({Key? key, required this.child}) : super(key: key);
 
   @override

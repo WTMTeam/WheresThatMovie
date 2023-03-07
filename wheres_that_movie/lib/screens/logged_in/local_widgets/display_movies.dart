@@ -2,8 +2,6 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class DisplayMovies extends StatelessWidget {
   final List<dynamic> movieList;
@@ -48,7 +46,7 @@ class DisplayMovies extends StatelessWidget {
                       return Card(
                         elevation: 5.0,
                         child: Padding(
-                            padding: EdgeInsets.all(10.0),
+                            padding: const EdgeInsets.all(10.0),
                             child: Column(children: [
                               CachedNetworkImage(
                                 imageUrl: myUrl,

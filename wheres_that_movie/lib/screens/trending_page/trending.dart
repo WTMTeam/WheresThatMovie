@@ -214,7 +214,7 @@ class _MyTrendingState extends State<MyTrending> {
 
       return Scaffold(
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Color.fromARGB(0, 0, 0, 0),
+          backgroundColor: const Color.fromARGB(0, 0, 0, 0),
           // backgroundColor: Theme.of(context).canvasColor,
           elevation: 0.0,
           onPressed: () {
@@ -222,10 +222,10 @@ class _MyTrendingState extends State<MyTrending> {
             makeCardList();
           },
           child: isHorizontal
-              ? Icon(
+              ? const Icon(
                   Icons.swap_vert,
                 )
-              : Icon(
+              : const Icon(
                   Icons.swap_horiz,
                 ),
         ),
@@ -289,14 +289,15 @@ class _MyTrendingState extends State<MyTrending> {
     } else {
       return Scaffold(
           floatingActionButton: FloatingActionButton(
-            backgroundColor: Color.fromARGB(0, 0, 0, 0),
+            backgroundColor: const Color.fromARGB(0, 0, 0, 0),
             elevation: 0.0,
             onPressed: () {
               isHorizontal ? isHorizontal = false : isHorizontal = true;
               makeCardList();
             },
-            child:
-                isHorizontal ? Icon(Icons.swap_vert) : Icon(Icons.swap_horiz),
+            child: isHorizontal
+                ? const Icon(Icons.swap_vert)
+                : const Icon(Icons.swap_horiz),
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
           body: SafeArea(

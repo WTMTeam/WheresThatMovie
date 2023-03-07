@@ -1,4 +1,3 @@
-import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 
 // https://www.kindacode.com/article/flutter-sqlite/

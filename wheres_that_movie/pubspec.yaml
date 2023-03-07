@@ -44,6 +44,11 @@ dependencies:
     # carousel_slider: ^4.2.1
     expandable_page_view: ^1.0.17
     flutter_rating_bar: ^4.0.1
+    flutter_native_splash: ^2.2.19
+
+flutter_native_splash:
+    color: "#0d253f"
+    image: assets/FullPNGBigger.png
 
 dev_dependencies:
     flutter_test:

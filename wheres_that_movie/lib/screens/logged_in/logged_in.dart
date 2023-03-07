@@ -201,8 +201,6 @@ class _MyLoggedInState extends State<MyLoggedIn> {
     final themeState = Provider.of<DarkThemeProvider>(context);
     final carouselController = PageController(viewportFraction: 0.8);
     final scrollController = ScrollController();
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
 
     void toTop() {
       print(carouselController.offset);
@@ -222,7 +220,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
 
       // The settings button
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Color.fromARGB(0, 0, 0, 0),
+        backgroundColor: const Color.fromARGB(0, 0, 0, 0),
         // foregroundColor: Colors.white,
         elevation: 0.0,
         onPressed: () {
@@ -251,7 +249,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
               ),
 
               Container(
-                margin: EdgeInsets.only(top: 30.0),
+                margin: const EdgeInsets.only(top: 30.0),
                 child: Text(
                   "Search for a movie or tv-show",
                   textAlign: TextAlign.center,
@@ -264,7 +262,8 @@ class _MyLoggedInState extends State<MyLoggedIn> {
               ),
 
               Container(
-                margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
+                margin: const EdgeInsets.symmetric(
+                    vertical: 10.0, horizontal: 30.0),
                 child: TextFormField(
                   controller: myController,
                   decoration: InputDecoration(
@@ -296,9 +295,9 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                 },
               ),
               cards.isEmpty
-                  ? SizedBox()
+                  ? const SizedBox()
                   : Container(
-                      margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                      margin: const EdgeInsets.only(top: 10.0, bottom: 10.0),
                       child: ExpandablePageView.builder(
                         controller: carouselController,
                         // allows our shadow to be displayed outside of widget bounds
@@ -325,7 +324,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                     ),
 
               Container(
-                margin: EdgeInsets.only(bottom: 10.0),
+                margin: const EdgeInsets.only(bottom: 10.0),
                 child: ElevatedButton(
                   child: const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 70.0),
@@ -368,14 +367,14 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                 Row(
                   children: <Widget>[
                     // FlutterLogo(),
-                    Padding(padding: EdgeInsets.only(left: 5.0)),
+                    const Padding(padding: EdgeInsets.only(left: 5.0)),
                     Image.asset(
                       'assets/logo2.png',
                       width: 45,
                       height: 45,
                     ),
 
-                    SizedBox(
+                    const SizedBox(
                       width: 10.0,
                     ),
                     // Add the logged in users name

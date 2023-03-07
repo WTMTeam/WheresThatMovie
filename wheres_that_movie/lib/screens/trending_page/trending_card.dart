@@ -56,7 +56,6 @@ class CarouselCard extends StatelessWidget {
     print("");
     print(isHorizontal);
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
     if (!isHorizontal) {
       return InkWell(
         onTap: () {
@@ -124,7 +123,7 @@ class CarouselCard extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
-              Flexible(flex: 1, child: const SizedBox(height: 12)),
+              const Flexible(flex: 1, child: SizedBox(height: 12)),
               Flexible(
                 flex: 20,
                 child: CachedNetworkImage(
@@ -135,7 +134,7 @@ class CarouselCard extends StatelessWidget {
                   // fit: BoxFit.scaleDown,
                 ),
               ),
-              Flexible(child: const SizedBox(height: 12)),
+              const Flexible(child: SizedBox(height: 12)),
               Flexible(
                 child: myRatingBar(),
               )

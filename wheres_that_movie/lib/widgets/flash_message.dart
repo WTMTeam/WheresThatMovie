@@ -3,8 +3,6 @@
 //
 // displays a message
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class MyCustomErrorMessage extends StatelessWidget {
   final String errorText;
@@ -18,12 +16,12 @@ class MyCustomErrorMessage extends StatelessWidget {
       clipBehavior: Clip.none,
       children: [
         Container(
-          padding: EdgeInsets.all(16),
-          margin: EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.all(16),
+          margin: const EdgeInsets.symmetric(horizontal: 10),
           height: 90,
           decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.tertiary,
-              borderRadius: BorderRadius.all(Radius.circular(20))),
+              borderRadius: const BorderRadius.all(Radius.circular(20))),
           child: Row(children: [
             // const SizedBox(
             //   width: 48,
