@@ -232,7 +232,7 @@ class _DetailedPageState extends State<DetailedPage> {
             ),
             ElevatedButton(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 70.0),
+                padding: const EdgeInsets.symmetric(horizontal: 50.0),
                 child: itemExists
                     ? const Text(
                         "Remove from My List",
