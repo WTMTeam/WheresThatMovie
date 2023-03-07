@@ -6,7 +6,8 @@
 //    This is displaying the information in the users list
 //
 // Modification Log:
-//    (03/07/2023)(SR): Removed dead code.
+//    (03/07/2023)(SR): Removed dead code and changed imgUrl
+//                      to use interpolation.
 //
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -76,8 +77,8 @@ class _MyListContainerState extends State<MyListContainer> {
                   dense: true,
                   visualDensity: const VisualDensity(vertical: 0.0),
                   leading: CachedNetworkImage(
-                    imageUrl: 'https://image.tmdb.org/t/p/w45' +
-                        widget.myList[index]['movieImgPath'],
+                    imageUrl:
+                        "https://image.tmdb.org/t/p/w45${widget.myList[index]['movieImgPath']}",
                     // * We have to set the width so that the ListTile has a size
                     // * otherwise an error will be thrown
                     width: 45.0,

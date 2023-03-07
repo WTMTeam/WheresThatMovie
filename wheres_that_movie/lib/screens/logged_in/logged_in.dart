@@ -10,6 +10,8 @@
 //
 // Modification Log:
 //    (03/07/2023)(SR): Removed dead code.
+//    (03/07/2023)(SR): Changed deprecated headlines and imageUrl to
+//                      use interpolation.
 //
 
 import 'dart:math';
@@ -126,8 +128,8 @@ class _MyLoggedInState extends State<MyLoggedIn> {
     List newCards = [];
     for (int i = 0; i < showsAndMovies.length; i++) {
       try {
-        String imgUrl = 'https://image.tmdb.org/t/p/w200' +
-            showsAndMovies[i]['poster_path'];
+        String imgUrl =
+            "https://image.tmdb.org/t/p/w200${showsAndMovies[i]['poster_path']}";
 
         if (imgUrl == null) {
           imgUrl = "";
@@ -320,7 +322,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                     // Add the logged in users name
                     Text(
                       "WMM",
-                      style: Theme.of(context).textTheme.headline1,
+                      style: Theme.of(context).textTheme.displayLarge,
                     ),
                   ],
                 ),

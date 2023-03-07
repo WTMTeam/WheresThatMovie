@@ -7,6 +7,7 @@
 
 // Modification Log:
 //    (03/07/2023)(SR): Removed dead code.
+//    (03/07/2023)(SR): Changed deprecated headlines
 //
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -107,7 +108,7 @@ class CarouselCard extends StatelessWidget {
                 width: screenWidth / 1.33,
                 child: Text(
                   title,
-                  style: Theme.of(context).textTheme.headline3,
+                  style: Theme.of(context).textTheme.displaySmall,
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -170,7 +171,7 @@ class CarouselCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(title, style: Theme.of(context).textTheme.headline3),
+              Text(title, style: Theme.of(context).textTheme.displaySmall),
               const SizedBox(height: 12),
               CachedNetworkImage(
                 imageUrl: imgUrl,

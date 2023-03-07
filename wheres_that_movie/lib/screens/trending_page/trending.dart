@@ -8,15 +8,14 @@
 
 // Modification Log:
 //    (03/07/2023)(SR): Removed dead code.
+//    (03/07/2023)(SR): Changed deprecated headlines
 //
 
 import 'dart:math';
 import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:tmdb_api/tmdb_api.dart';
 import 'package:wheres_that_movie/screens/trending_page/trending_card.dart';
-import '../../utils/provider/dark_theme_provider.dart';
 
 // carousel https://itnext.io/dynamically-sized-animated-carousel-in-flutter-8a88b005be74
 
@@ -78,7 +77,6 @@ class _MyTrendingState extends State<MyTrending> {
       try {
         // if title returns null, then try name instead
         String title = trendingMovies[i]["title"] ?? trendingMovies[i]['name'];
-        print(title);
         // ignore: prefer_interpolation_to_compose_strings
         String imgUrl = 'https://image.tmdb.org/t/p/w500' +
             trendingMovies[i]['poster_path'];
@@ -160,7 +158,7 @@ class _MyTrendingState extends State<MyTrending> {
               height: 50.0,
               child: Text(
                 "Trending",
-                style: Theme.of(context).textTheme.headline1,
+                style: Theme.of(context).textTheme.displayLarge,
               ),
             ),
             SizedBox(
@@ -230,7 +228,7 @@ class _MyTrendingState extends State<MyTrending> {
                 height: 50.0,
                 child: Text(
                   "Trending",
-                  style: Theme.of(context).textTheme.headline1,
+                  style: Theme.of(context).textTheme.displayLarge,
                 ),
               ),
               SizedBox(

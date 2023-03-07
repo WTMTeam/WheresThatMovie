@@ -7,6 +7,8 @@
 //
 // Modification Log:
 //    (03/07/2023)(SR): Removed dead code.
+//    (03/07/2023)(SR): Changed deprecated headlines and interpolation
+//                      for the image path for the icons.
 //
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -84,16 +86,12 @@ class _DetailedPageState extends State<DetailedPage> {
             await tmdbWithCustomLogs.v3.tv.getWatchProviders(id.toString());
       }
 
-      print("providerResult ${providerResult['results']}");
-
       setState(() {
         if (widget.isMovie) {
-          print("movie");
           title = movieResult['title'];
           description = movieResult['overview'];
           posterPath = movieResult['poster_path'];
         } else {
-          print("show");
           title = showResult['name'];
           description = showResult['overview'];
           posterPath = showResult['poster_path'];
@@ -122,7 +120,6 @@ class _DetailedPageState extends State<DetailedPage> {
       _isLoading = false;
     } on NoSuchMethodError {
       setState(() {
-        print("No Such method");
         _noSuchMethod = true;
         _isLoading = false;
       });
@@ -133,14 +130,11 @@ class _DetailedPageState extends State<DetailedPage> {
           _noSuchMethod = true;
         });
       } else {
-        print("something went wrong");
         setState(() {
           _isLoading = false;
           _wentWrong = true;
         });
       }
-
-      print(e);
     }
   }
 
@@ -207,7 +201,7 @@ class _DetailedPageState extends State<DetailedPage> {
             Center(
               child: Text(
                 "Something Went Wrong",
-                style: Theme.of(context).textTheme.headline1,
+                style: Theme.of(context).textTheme.displayLarge,
               ),
             ),
           ],
@@ -226,7 +220,7 @@ class _DetailedPageState extends State<DetailedPage> {
               child: Text(
                 textAlign: TextAlign.center,
                 title,
-                style: Theme.of(context).textTheme.headline1,
+                style: Theme.of(context).textTheme.displayLarge,
               ),
             ),
             Padding(
@@ -314,8 +308,8 @@ class _DetailedPageState extends State<DetailedPage> {
                           child: ListTile(
                             contentPadding: const EdgeInsets.all(5),
                             leading: CachedNetworkImage(
-                              imageUrl: 'https://image.tmdb.org/t/p/w45' +
-                                  streamingProviders[index]['logo_path'],
+                              imageUrl:
+                                  "https://image.tmdb.org/t/p/w45${streamingProviders[index]['logo_path']}",
                               width: 50.0,
                             ),
                             title: Text(

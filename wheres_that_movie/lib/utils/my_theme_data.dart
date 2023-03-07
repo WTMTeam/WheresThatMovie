@@ -4,6 +4,7 @@
 
 // Modification Log:
 //    (03/07/2023)(SR): Removed dead code.
+//    (03/07/2023)(SR): Changed deprecated headlines
 //
 
 import 'package:flutter/material.dart';
@@ -12,7 +13,6 @@ class Styles {
   // Dark theme variables
 
   static const Color _dark = Color.fromARGB(255, 20, 20, 20);
-  static const Color _grey = Color.fromARGB(255, 119, 124, 135);
   static const Color _myCardColor = Color.fromARGB(255, 40, 40, 40);
   static const Color _darkContainerBackground = Color.fromARGB(255, 40, 40, 40);
   static const Color _darkBoxShadowColor = Color.fromARGB(255, 25, 25, 25);
@@ -58,15 +58,15 @@ class Styles {
 // ------------------------------------------------------------------ //
 
       textTheme: TextTheme(
-        headline1: TextStyle(
+        displayLarge: TextStyle(
             color: isDarkTheme ? _red : _otherRed,
             fontSize: 30.0,
             fontWeight: FontWeight.bold),
-        headline2: TextStyle(
+        displayMedium: TextStyle(
             color: isDarkTheme ? _red : _otherRed,
             fontSize: 20.0,
             fontWeight: FontWeight.bold),
-        headline3: TextStyle(
+        displaySmall: TextStyle(
             color: isDarkTheme ? _light : _dark,
             // color: isDarkTheme ? _red : _otherRed,
             fontSize: 16.0,

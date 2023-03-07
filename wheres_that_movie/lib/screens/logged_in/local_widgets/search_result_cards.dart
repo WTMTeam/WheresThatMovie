@@ -6,6 +6,7 @@
 //    This Class creates the card for the carousel on the logged in screen
 // Modification Log:
 //    (03/07/2023)(SR): Removed dead code.
+//    (03/07/2023)(SR): Changed deprecated headlines
 //
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -102,7 +103,7 @@ class SearchCarouselCard extends StatelessWidget {
           children: [
             Text(title,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headline3),
+                style: Theme.of(context).textTheme.displaySmall),
             const SizedBox(height: 12),
             CachedNetworkImage(
               imageUrl: imgUrl,
