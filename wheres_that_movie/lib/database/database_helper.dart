@@ -1,3 +1,16 @@
+// database_helper.dart
+// Author: Samuel Rudqvist
+// Date Created: Unknown
+//
+// Purpose:
+//    The database helper creates the database when the app is
+//    started the first time and has methods for adding, getting,
+//    and deleting items.
+//
+// Modification Log:
+//    (03/07/2023)(SR): Removed dead code.
+//
+
 import 'package:sqflite/sqflite.dart' as sql;
 
 // https://www.kindacode.com/article/flutter-sqlite/
@@ -56,8 +69,7 @@ class SQLHelper {
     bool itemExists = false;
     final result =
         await db.query("movies", where: "movieId = ?", whereArgs: [movieId]);
-    print("result: ${result}");
-    if (result.length > 0) {
+    if (result.isNotEmpty) {
       itemExists = true;
     }
     return itemExists;
@@ -74,7 +86,7 @@ class SQLHelper {
     try {
       await db.delete("movies", where: "id = ?", whereArgs: [id]);
     } catch (err) {
-      print("Something went wrong when deleting an item: $err");
+      // print error message here
     }
   }
 }

@@ -1,4 +1,13 @@
 // trending_card.dart
+// Author: Samuel Rudqvist
+// Date Created: Unknown
+
+// Purpose:
+//    Creates the card for the carousel on the trending screen
+
+// Modification Log:
+//    (03/07/2023)(SR): Removed dead code.
+//
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -6,8 +15,6 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:wheres_that_movie/screens/detailed_page/detailed.dart';
 
 class CarouselCard extends StatelessWidget {
-  // final IconData icon;
-  // final String label;
   final String imgUrl;
   final String title;
   final String overview;
@@ -52,9 +59,6 @@ class CarouselCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("");
-    print("");
-    print(isHorizontal);
     double screenWidth = MediaQuery.of(context).size.width;
     if (!isHorizontal) {
       return InkWell(
@@ -69,38 +73,24 @@ class CarouselCard extends StatelessWidget {
           );
         },
         child: Container(
-          // width: screenWidth - 90.0,
-          // height: screenHeight - 1.0,
           decoration: ShapeDecoration(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
               side: BorderSide(
                   color: Theme.of(context).colorScheme.secondary, width: 4),
-              // side: const BorderSide(color: Colors.red, width: 4),
-              // side: const BorderSide(color: Colors.white, width: 4),
             ),
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                // Colors.red.shade900,
-                // Colors.red.shade500,
-
                 // Standard card color
                 Theme.of(context).cardColor,
                 Theme.of(context).cardColor,
-
-                // Black with slightly lighter middle
-                // Colors.black,
-                // Theme.of(context).cardColor,
-                // Colors.black,
               ],
             ),
             shadows: [
               BoxShadow(
                 color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
-                // color: Colors.red.withOpacity(0.5),
-                // color: Colors.grey.withOpacity(0.5),
                 spreadRadius: -2,
                 // you can animate the radius to make the feeling of cards
                 // 'coming closer to you' stronger
@@ -110,8 +100,6 @@ class CarouselCard extends StatelessWidget {
             ],
           ),
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 25),
-          // child: SingleChildScrollView(
-
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -128,10 +116,7 @@ class CarouselCard extends StatelessWidget {
                 flex: 20,
                 child: CachedNetworkImage(
                   imageUrl: imgUrl,
-                  // width: screenWidth - 122,
                   width: screenWidth / 1.33,
-                  // height: BoxFit
-                  // fit: BoxFit.scaleDown,
                 ),
               ),
               const Flexible(child: SizedBox(height: 12)),
@@ -140,7 +125,6 @@ class CarouselCard extends StatelessWidget {
               )
             ],
           ),
-          // )
         ),
       );
     } else {
@@ -161,31 +145,19 @@ class CarouselCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
               side: BorderSide(
                   color: Theme.of(context).colorScheme.secondary, width: 4),
-              // side: const BorderSide(color: Colors.red, width: 4),
-              // side: const BorderSide(color: Colors.white, width: 4),
             ),
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                // Colors.red.shade900,
-                // Colors.red.shade500,
-
                 // Standard card color
                 Theme.of(context).cardColor,
                 Theme.of(context).cardColor,
-
-                // Black with slightly lighter middle
-                // Colors.black,
-                // Theme.of(context).cardColor,
-                // Colors.black,
               ],
             ),
             shadows: [
               BoxShadow(
                 color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
-                // color: Colors.red.withOpacity(0.5),
-                // color: Colors.grey.withOpacity(0.5),
                 spreadRadius: -2,
                 // you can animate the radius to make the feeling of cards
                 // 'coming closer to you' stronger
@@ -195,8 +167,6 @@ class CarouselCard extends StatelessWidget {
             ],
           ),
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 25),
-          // child: SingleChildScrollView(
-
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -209,7 +179,6 @@ class CarouselCard extends StatelessWidget {
               myRatingBar(),
             ],
           ),
-          // )
         ),
       );
     }

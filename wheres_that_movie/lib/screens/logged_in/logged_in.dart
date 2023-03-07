@@ -2,22 +2,24 @@
 // Author: Samuel Rudqvist
 // Date Created: 09/10/2022
 //
-
-//********************************************************************//
-//*       This is the screen the user will see when logged in        *//
-//********************************************************************//
+// Purpose:
+//    This is the screen that the user is presented with after
+//    the splash screen. Here the user can search for movies
+//    and shows, click them to see more information or click a
+//    button to see the trending movies or shows.
+//
+// Modification Log:
+//    (03/07/2023)(SR): Removed dead code.
+//
 
 import 'dart:math';
-
 import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wheres_that_movie/screens/my_list/my_list.dart';
 import 'package:wheres_that_movie/screens/trending_page/trending.dart';
 import 'package:wheres_that_movie/utils/provider/dark_theme_provider.dart';
-
 import 'package:tmdb_api/tmdb_api.dart';
-
 import 'local_widgets/search_result_cards.dart';
 
 class MyLoggedIn extends StatefulWidget {
@@ -52,16 +54,12 @@ class _MyLoggedInState extends State<MyLoggedIn> {
     people = [];
     showsAndMovies = [];
 
-    print("My Controller: ${myController.text}");
-
     if (myController.text.isEmpty) {
-      print("No Search Input");
       setState(() {
         cards = [];
       });
     } else if (myController.text == previousSearch) {
       // Do nothing
-      print("Same search input as previous, not sending a new request");
     } else {
       final tmdbWithCustomLogs = TMDB(
         //TMDB instance
@@ -73,26 +71,20 @@ class _MyLoggedInState extends State<MyLoggedIn> {
       );
       String query = myController.text;
       Map result = await tmdbWithCustomLogs.v3.search.queryMulti(query);
-      // Map result = await tmdbWithCustomLogs.v3.search.queryTvShows(query);
       setState(() {
         previousSearch = myController.text;
         searchResults = result['results'];
       });
-      print("searchResults: ${searchResults}");
       for (int i = 0; i < searchResults.length; i++) {
         if (searchResults[i]['media_type'] == "movie") {
-          // print(
-          //     "${searchResults[i]['media_type']}: ${searchResults[i]['title']}");
-          // print("movie id: ${searchResults[i]['id']}");
           List movie = [];
           movie.add(searchResults[i]['id']);
           movie.add(searchResults[i]['title']);
           movie.add(searchResults[i]['overview']);
           movie.add(searchResults[i]['vote_average']);
           movie.add(searchResults[i]['poster_path']);
-          // print("currMovie: ${movie}");
           movies.add(movie);
-          // showsAndMovies.add(movie);
+
           var thisMovie = {
             'id': searchResults[i]['id'],
             'title': searchResults[i]['title'],
@@ -103,16 +95,13 @@ class _MyLoggedInState extends State<MyLoggedIn> {
           };
           showsAndMovies.add(thisMovie);
         } else if (searchResults[i]['media_type'] == "tv") {
-          // print("${searchResults[i]['media_type']}: ${searchResults[i]['name']}");
           List show = [];
           show.add(searchResults[i]['id']);
           show.add(searchResults[i]['name']);
           show.add(searchResults[i]['overview']);
           show.add(searchResults[i]['vote_average']);
           show.add(searchResults[i]['poster_path']);
-
           tvShows.add(show);
-          // showsAndMovies.add(show);
 
           var thisShow = {
             'id': searchResults[i]['id'],
@@ -124,14 +113,9 @@ class _MyLoggedInState extends State<MyLoggedIn> {
           };
           showsAndMovies.add(thisShow);
         } else if (searchResults[i]['media_type'] == "person") {
-          // print("${searchResults[i]['media_type']}: ${searchResults[i]['name']}");
           people.add(searchResults[i]['name']);
         }
       }
-      // print("movie list: ${movies}");
-      // print("show list: ${tvShows}");
-      // print("Shows and Movies: ${showsAndMovies[0]['id']}");
-
       makeCardList();
     }
   }
@@ -139,24 +123,9 @@ class _MyLoggedInState extends State<MyLoggedIn> {
   // Function to make the card list
   makeCardList() {
     // reset the cards list
-    print("here2");
-    // print(movies[0]);
     List newCards = [];
     for (int i = 0; i < showsAndMovies.length; i++) {
       try {
-        // if title returns null, then try name instead
-        // int id = showsAndMovies[i][0];
-        // String title = showsAndMovies[i][1];
-        // print(title);
-        // // ignore: prefer_interpolation_to_compose_strings
-        // String imgUrl = 'https://image.tmdb.org/t/p/w200' +
-        //     showsAndMovies[i][showsAndMovies[i].length - 1];
-        // String overview = movies[i][2];
-        // // double vote = movies[i][1];
-        // double vote = 5.0;
-        // print(showsAndMovies[i][showsAndMovies[i].length - 2]);
-
-        // vote = showsAndMovies[i][showsAndMovies[i].length - 2];
         String imgUrl = 'https://image.tmdb.org/t/p/w200' +
             showsAndMovies[i]['poster_path'];
 
@@ -174,26 +143,13 @@ class _MyLoggedInState extends State<MyLoggedIn> {
           rating: showsAndMovies[i]['rating'],
           isMovie: showsAndMovies[i]['isMovie'],
         ));
-        // newCards.add(SearchCarouselCard(
-        //   id: id,
-        //   imgUrl: imgUrl,
-        //   title: title,
-        //   overview: overview,
-        //   rating: vote,
-        // ));
         setState(() {
           cards = newCards;
         });
-
-        // print(title);
-        // print(vote);
       } catch (e) {
-        print(e);
-        // print(trendingMovies[i]);
+        // print error message
       }
     }
-    print(cards);
-    print("done");
   }
 
   @override
@@ -202,13 +158,12 @@ class _MyLoggedInState extends State<MyLoggedIn> {
     final carouselController = PageController(viewportFraction: 0.8);
     final scrollController = ScrollController();
 
+    // Scroll to the start of the carousel
     void toTop() {
-      print(carouselController.offset);
       int animTime = carouselController.offset.round();
       if (animTime < 600) {
         animTime = 500;
       }
-      print(animTime);
       // original time 200
       carouselController.animateTo(0,
           duration: Duration(milliseconds: animTime), curve: Curves.easeInOut);
@@ -221,7 +176,6 @@ class _MyLoggedInState extends State<MyLoggedIn> {
       // The settings button
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color.fromARGB(0, 0, 0, 0),
-        // foregroundColor: Colors.white,
         elevation: 0.0,
         onPressed: () {
           _scaffoldKey.currentState?.openDrawer();
@@ -241,13 +195,11 @@ class _MyLoggedInState extends State<MyLoggedIn> {
           controller:
               scrollController.hasClients ? scrollController : scrollController,
           child: Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               const Padding(
                 padding: EdgeInsets.all(10.0),
               ),
-
               Container(
                 margin: const EdgeInsets.only(top: 30.0),
                 child: Text(
@@ -260,7 +212,6 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                   ),
                 ),
               ),
-
               Container(
                 margin: const EdgeInsets.symmetric(
                     vertical: 10.0, horizontal: 30.0),
@@ -271,12 +222,9 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                       Icons.search_outlined,
                       color: Theme.of(context).primaryColor,
                     ),
-                    //focusColor: Colors.red,
                   ),
-                  //autofocus: true,
                 ),
               ),
-
               ElevatedButton(
                 child: const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 100.0),
@@ -285,7 +233,6 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                     style: TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
-                      // color: Theme.of(context).colorScheme.secondary,
                     ),
                   ),
                 ),
@@ -322,7 +269,6 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                         },
                       ),
                     ),
-
               Container(
                 margin: const EdgeInsets.only(bottom: 10.0),
                 child: ElevatedButton(
@@ -331,23 +277,20 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                     child: Text(
                       "See Trending",
                       style: TextStyle(
-                        //color: Colors.white,
                         fontSize: 20.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                   onPressed: () {
-                    print("pressed");
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => const MyTrending(),
                       ),
                     );
-                  }, // Do nothing for now
+                  },
                 ),
               ),
-              // Spacer()
             ],
           ),
         ),
@@ -355,8 +298,6 @@ class _MyLoggedInState extends State<MyLoggedIn> {
 
       // Settings Menu
       drawer: Drawer(
-          //width: 200,
-
           child: Column(
         children: <Widget>[
           Expanded(
@@ -366,7 +307,6 @@ class _MyLoggedInState extends State<MyLoggedIn> {
               children: [
                 Row(
                   children: <Widget>[
-                    // FlutterLogo(),
                     const Padding(padding: EdgeInsets.only(left: 5.0)),
                     Image.asset(
                       'assets/logo2.png',
@@ -391,7 +331,6 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                 ),
 
                 Card(
-                  //color: Theme.of(context).,
                   child: ListTile(
                     title: Text(
                       "My List",
@@ -409,29 +348,6 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                   ),
                 ),
 
-                // * Card for notification * \\
-                // Card(
-                //   child: ListTile(
-                //     title: Text(
-                //       "Notifications",
-                //       style: Theme.of(context).textTheme.labelMedium,
-                //       // style: TextStyle(
-                //       //   fontSize: 20.0
-                //       // ),
-                //     ),
-                //     leading: const Icon(Icons.notifications),
-                //     onTap: () {
-                //       // Update the state of the app
-                //       // ...
-                //       // Then close the drawer
-                //       Navigator.of(context).push(MaterialPageRoute(
-                //         builder: (context) => const MyNotifications(),
-                //       ));
-                //     },
-                //   ),
-                // ),
-                // * End Card for notification * \\
-
                 Card(
                   child: SwitchListTile(
                     title: Text(
@@ -441,7 +357,6 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                     secondary: Icon(themeState.getDarkTheme
                         ? Icons.dark_mode_outlined
                         : Icons.light_mode_outlined),
-                    // activeColor: Theme.of(context).colorScheme.primary,
                     onChanged: (bool value) {
                       setState(() {
                         themeState.setDarkTheme = value;
@@ -454,33 +369,6 @@ class _MyLoggedInState extends State<MyLoggedIn> {
               ],
             ),
           ),
-
-          // * Container for log out button * \\
-          // Container(
-          //   alignment: Alignment.bottomCenter,
-          //   padding: const EdgeInsetsDirectional.only(bottom: 75.0),
-          //   child: Card(
-          //     child: ListTile(
-          //       title: const Text(
-          //         "Log Out",
-          //         style: TextStyle(fontSize: 20.0),
-          //       ),
-          //       trailing: const Icon(
-          //         Icons.logout_rounded,
-          //       ),
-          //       //style: ListTileTheme.of(context),
-          //       onTap: () {
-          //         // Update the state of the app
-          //         // ...
-          //         // Then close the drawer
-          //         Navigator.of(context).push(MaterialPageRoute(
-          //           builder: (context) => const MyLanding(),
-          //         ));
-          //       },
-          //     ),
-          //   ),
-          // ),
-          // * End container for log out button * \\
         ],
       )),
     );

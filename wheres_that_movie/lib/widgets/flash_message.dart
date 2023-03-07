@@ -1,7 +1,15 @@
+// flash_message.dart
+// Author: Samuel Rudqvist
+// Date Created: 02/25/2023
 //
+// Purpose:
+//    Display an error message to the user on the detailed screen
+//    when the movie or show is not available for Streaming, Buying, or Renting
+
+// Modification Log:
+//    (03/07/2023)(SR): Removed dead code.
 //
-//
-// displays a message
+
 import 'package:flutter/material.dart';
 
 class MyCustomErrorMessage extends StatelessWidget {
@@ -23,9 +31,6 @@ class MyCustomErrorMessage extends StatelessWidget {
               color: Theme.of(context).colorScheme.tertiary,
               borderRadius: const BorderRadius.all(Radius.circular(20))),
           child: Row(children: [
-            // const SizedBox(
-            //   width: 48,
-            // ),
             Expanded(
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,35 +52,6 @@ class MyCustomErrorMessage extends StatelessWidget {
             ))
           ]),
         ),
-        // Positioned(
-        //     bottom: 0,
-        //     child: ClipRRect(
-        //       borderRadius:
-        //           const BorderRadius.only(bottomLeft: Radius.circular(20)),
-        //       child: Stack(children: [
-        //         Icon(Icons.exit_to_app)
-        //         // SvgPicture.asset("asset_path",
-        //         //     height: 48, width: 40, color: const Color(0xFF801336))
-        //       ]),
-        //     )),
-        // Positioned(
-        //     top: -10,
-        //     right: -10,
-        //     child: ClipRRect(
-        //       borderRadius:
-        //           const BorderRadius.only(bottomLeft: Radius.circular(20)),
-        //       child: Stack(children: [
-        //         IconButton(
-        //             onPressed: () {
-        //               print("Closed");
-        //             },
-        //             color: Theme.of(context).colorScheme.secondary,
-        //             iconSize: 40,
-        //             icon: Icon(Icons.close_rounded)),
-        //         // SvgPicture.asset("asset_path",
-        //         //     height: 40, color: const Color(0xFF801336)),
-        //       ]),
-        //     )),
       ],
     );
   }

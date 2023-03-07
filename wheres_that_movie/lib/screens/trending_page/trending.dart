@@ -1,11 +1,21 @@
-import 'dart:math';
+// trending.dart
+// Author: Samuel Rudqvist
+// Date Created: Unknown
 
+// Purpose:
+//    This is the screen where the user can see the movies and shows
+//    that are currently trending.
+
+// Modification Log:
+//    (03/07/2023)(SR): Removed dead code.
+//
+
+import 'dart:math';
 import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tmdb_api/tmdb_api.dart';
 import 'package:wheres_that_movie/screens/trending_page/trending_card.dart';
-
 import '../../utils/provider/dark_theme_provider.dart';
 
 // carousel https://itnext.io/dynamically-sized-animated-carousel-in-flutter-8a88b005be74
@@ -32,7 +42,6 @@ class _MyTrendingState extends State<MyTrending> {
 
   loadTrendingMovies() async {
     _isLoading = true;
-    print("here");
     final tmdbWithCustomLogs = TMDB(
       //TMDB instance
       ApiKeys(apiKey, readAccessToken), //ApiKeys instance with your keys,
@@ -42,11 +51,6 @@ class _MyTrendingState extends State<MyTrending> {
       ),
     );
     Map result = await tmdbWithCustomLogs.v3.trending.getTrending();
-    print("here2");
-
-    // _isLoading = false;
-    print("here is the");
-    print(result);
 
     setState(() {
       trendingMovies = result['results'];
@@ -55,37 +59,20 @@ class _MyTrendingState extends State<MyTrending> {
       try {
         // if title returns null, then try name instead
         String title = trendingMovies[i]["title"] ?? trendingMovies[i]['name'];
-        // ignore: prefer_interpolation_to_compose_strings
-        // String imgUrl = 'https://image.tmdb.org/t/p/w500' +
-        //     trendingMovies[i]['poster_path'];
-        // String overview = trendingMovies[i]['overview'];
+
         double vote = trendingMovies[i]["vote_average"];
         trendingTitles.add(title);
         voteAverageMovie.add(vote);
-        // cards.add(CarouselCard(
-        //   imgUrl: imgUrl,
-        //   title: title,
-        //   overview: overview,
-        //   rating: vote,
-        // ));
-        print(title);
-        // print(vote);
       } catch (e) {
-        // print(e);
-        // print(trendingMovies[i]);
+        // Print error message
       }
     }
     makeCardList();
-
-    // print(trendingTitles);
-    // print(trendingMovies[0]);
-    // print(trendingMovies[0]);
   }
 
-  // Function to make the card list
+  // Make the card list
   makeCardList() {
     // reset the cards list
-    print("here2");
     List newCards = [];
     for (int i = 0; i < 10; i++) {
       try {
@@ -104,6 +91,7 @@ class _MyTrendingState extends State<MyTrending> {
           isMovie = true;
         }
 
+        // Add the current card to the list of new cards
         newCards.add(CarouselCard(
           id: id,
           imgUrl: imgUrl,
@@ -116,16 +104,12 @@ class _MyTrendingState extends State<MyTrending> {
         setState(() {
           cards = newCards;
         });
-
-        // print(title);
-        // print(vote);
       } catch (e) {
-        // print(e);
-        // print(trendingMovies[i]);
+        // Print error message
       }
     }
+    // All the information should be loaded by now
     _isLoading = false;
-    print("false");
   }
 
   @override
@@ -134,15 +118,8 @@ class _MyTrendingState extends State<MyTrending> {
     super.initState();
   }
 
-  Widget _loader(BuildContext context, String url) {
-    return const Center(
-      child: CircularProgressIndicator(),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    final themeState = Provider.of<DarkThemeProvider>(context);
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
@@ -159,63 +136,9 @@ class _MyTrendingState extends State<MyTrending> {
         ),
       );
     } else if (!isHorizontal) {
-      // return Scaffold(
-      //     body: Column(children: <Widget>[
-      //   SizedBox(
-      //     height: 55.0,
-      //   ),
-      //   SizedBox(
-      //     height: 40.0,
-      //     child: Text(
-      //       "Trending",
-      //       style: Theme.of(context).textTheme.headline1,
-      //     ),
-      //   ),
-      //   SizedBox(
-      //     height: screenHeight - 95.0,
-      //     width: screenWidth,
-      //     child: CustomScrollView(
-      //       slivers: [
-      //         SliverFillRemaining(
-      //           hasScrollBody: false,
-      //           child: Column(
-      //             children: [
-      //               const SizedBox(height: 15),
-      //               ExpandablePageView.builder(
-      //                 controller: carouselController,
-      //                 // allows our shadow to be displayed outside of widget bounds
-      //                 clipBehavior: Clip.none,
-      //                 itemCount: cards.length,
-      //                 itemBuilder: (_, index) {
-      //                   if (!carouselController.position.haveDimensions) {
-      //                     return const SizedBox();
-      //                   }
-      //                   return AnimatedBuilder(
-      //                     animation: carouselController,
-      //                     builder: (_, __) => Transform.scale(
-      //                       scale: max(
-      //                         0.85,
-      //                         (1 -
-      //                             (carouselController.page! - index).abs() / 2),
-      //                       ),
-      //                       child: cards[index],
-      //                     ),
-      //                   );
-      //                 },
-      //               ),
-      //               const Spacer(),
-      //             ],
-      //           ),
-      //         )
-      //       ],
-      //     ),
-      //   ),
-      // ]));
-
       return Scaffold(
         floatingActionButton: FloatingActionButton(
           backgroundColor: const Color.fromARGB(0, 0, 0, 0),
-          // backgroundColor: Theme.of(context).canvasColor,
           elevation: 0.0,
           onPressed: () {
             isHorizontal ? isHorizontal = false : isHorizontal = true;
@@ -320,7 +243,6 @@ class _MyTrendingState extends State<MyTrending> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          // const SizedBox(height: 70),
                           ExpandablePageView.builder(
                             controller: carouselController2,
                             // allows our shadow to be displayed outside of widget bounds
@@ -346,7 +268,6 @@ class _MyTrendingState extends State<MyTrending> {
                               );
                             },
                           ),
-                          // const Spacer(),
                         ],
                       ),
                     )

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:wheres_that_movie/screens/logged_in/logged_in.dart';
-//import 'package:wheres_that_movie/utils/my_app_theme.dart';
 import 'package:wheres_that_movie/utils/my_theme_data.dart';
 import 'package:wheres_that_movie/utils/provider/dark_theme_provider.dart';
 
@@ -52,30 +51,12 @@ class _MyAppState extends State<MyApp> {
           return MaterialApp(
             debugShowCheckedModeBanner:
                 false, // removes the little banner in the top
-            title: "Hello",
-            // theme: MyAppTheme.lightTheme,
-            // darkTheme: MyAppTheme.darkTheme,
-            // themeMode: ThemeMode.system,
+            title: "Where's That Movie",
+
             theme: Styles.themeData(themeProvider.getDarkTheme, context),
             home: const MyLoggedIn(),
             //home: const MyLogin(),
           );
         })));
-
-    // Change statusbar color to white
-    // SystemChrome.setSystemUIOverlayStyle(
-    //   const SystemUiOverlayStyle(
-    //     statusBarBrightness: Brightness.dark, // iPhone only
-    //   )
-    // );
-
-    // return MaterialApp(
-    //   debugShowCheckedModeBanner: false, // removes the little banner in the top
-    //   title: "Hello",
-    //   theme: MyTheme().buildTheme(), // get the theme from utils/my_theme.dart
-
-    //   home: const MyLanding(),
-    //   //home: const MyLogin(),
-    // );
   }
 }

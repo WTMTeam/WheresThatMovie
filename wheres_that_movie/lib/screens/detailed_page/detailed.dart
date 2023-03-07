@@ -1,9 +1,16 @@
 // detailed.dart
+// Author: Samuel Rudqvist
 // Created Date: Feb 12 2023
+// Purpose:
+//    The detailed screen provides details about where the
+//    movie or show is available for Streaming, Buying and Renting.
+//
+// Modification Log:
+//    (03/07/2023)(SR): Removed dead code.
+//
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-
 import 'package:tmdb_api/tmdb_api.dart';
 import 'package:wheres_that_movie/database/database_helper.dart';
 import 'package:wheres_that_movie/widgets/flash_message.dart';
@@ -138,12 +145,10 @@ class _DetailedPageState extends State<DetailedPage> {
   }
 
   getMyList() async {
-    List thisList = await SQLHelper.getMovies();
     bool currExists = await SQLHelper.checkItem(widget.id);
     setState(() {
       itemExists = currExists;
     });
-    // print(myList);
   }
 
   @override
@@ -155,12 +160,11 @@ class _DetailedPageState extends State<DetailedPage> {
     super.initState();
   }
 
-  ScrollController _myController = ScrollController();
+  final ScrollController _myController = ScrollController();
 
   // Insert a new journal to the database
   Future<void> _addItem(
       int movieId, String movieTitle, String moviePath, bool isMovie) async {
-    print("adding item: ${movieId}");
     int isMovieInt = 0;
     if (isMovie) {
       isMovieInt = 1;
@@ -176,7 +180,6 @@ class _DetailedPageState extends State<DetailedPage> {
         await SQLHelper.getItem(movieOrShowId);
     int id = currItem[0]['id'];
     await SQLHelper.deleteItem(id);
-    print("deleted $currItem");
     getMyList();
   }
 
@@ -233,14 +236,6 @@ class _DetailedPageState extends State<DetailedPage> {
                   child: Text(description,
                       style: Theme.of(context).textTheme.bodyLarge)),
             ),
-            // Padding(
-            //   padding:
-            //       const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-            //   child: MyContainer(
-            //     child: CachedNetworkImage(
-            //         imageUrl: 'https://image.tmdb.org/t/p/w500' + posterPath),
-            //   ),
-            // ),
             ElevatedButton(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 70.0),
@@ -250,7 +245,6 @@ class _DetailedPageState extends State<DetailedPage> {
                         style: TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold,
-                          // color: Theme.of(context).colorScheme.secondary,
                         ),
                       )
                     : const Text(
@@ -258,18 +252,15 @@ class _DetailedPageState extends State<DetailedPage> {
                         style: TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold,
-                          // color: Theme.of(context).colorScheme.secondary,
                         ),
                       ),
               ),
               onPressed: () {
-                print("this ${myList.contains(widget.id)}");
                 if (itemExists) {
                   _deleteItem(widget.id);
                 } else {
                   _addItem(widget.id, title, posterPath, widget.isMovie);
                 }
-
                 getMyList();
               },
             ),
@@ -278,16 +269,12 @@ class _DetailedPageState extends State<DetailedPage> {
                 vertical: 10.0,
                 horizontal: 10.0,
               ),
-              // padding: EdgeInsets.only(left: 10.0, right: 10.0),
               alignment: Alignment.bottomLeft,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                // color: Theme.of(context).primaryColor,
-                // color: Theme.of(context).colorScheme.primaryContainer,
               ),
               child: MyContainer(
                 child: DropdownButton(
-                  // alignment: Alignment.topLeft,
                   isExpanded: true,
                   borderRadius: BorderRadius.circular(8),
                   dropdownColor: Theme.of(context).colorScheme.primaryContainer,
@@ -324,10 +311,7 @@ class _DetailedPageState extends State<DetailedPage> {
                         padding: const EdgeInsets.symmetric(
                             vertical: 10.0, horizontal: 10.0),
                         child: MyContainer(
-                          // margin: EdgeInsets.only(
-                          //     left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
                           child: ListTile(
-                            // tileColor: Theme.of(context).colorScheme.primaryContainer,
                             contentPadding: const EdgeInsets.all(5),
                             leading: CachedNetworkImage(
                               imageUrl: 'https://image.tmdb.org/t/p/w45' +

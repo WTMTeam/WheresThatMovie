@@ -5,6 +5,9 @@
 // Purpose:
 //    Create a container that can be used throughout the app
 
+// Modification Log:
+//    (03/07/2023)(SR): Removed dead code.
+//
 import 'package:flutter/material.dart';
 
 class MyContainer extends StatelessWidget {
@@ -15,15 +18,12 @@ class MyContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      //height: 600.0,
       padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
-        // color: _containerBackground,
         color: Theme.of(context).colorScheme.primaryContainer,
         borderRadius: BorderRadius.circular(20.0),
         boxShadow: [
           BoxShadow(
-            // color: _boxShadowColor,
             color: Theme.of(context).colorScheme.shadow,
             blurRadius: 10.0,
             spreadRadius: 1.0,

@@ -1,3 +1,11 @@
+// my_theme_data.dart
+// Author: Samuel Rudqvist
+// Date Created: Unknown
+
+// Modification Log:
+//    (03/07/2023)(SR): Removed dead code.
+//
+
 import 'package:flutter/material.dart';
 
 class Styles {
@@ -14,8 +22,6 @@ class Styles {
   static const Color _lightContainerBackground =
       Color.fromARGB(255, 232, 235, 241);
   static const Color _lightBoxShadowColor = Color.fromARGB(255, 190, 191, 195);
-
-  //static const Color _lightCanvasColor = Color.fromARGB(255, 206, 211, 221);
   static const Color _lightCardColor = Color.fromARGB(255, 204, 206, 210);
 
   // Both theme variables
@@ -30,14 +36,6 @@ class Styles {
 // ------------------------------------------------------------------ //
 
       primaryColor: _red,
-      // primaryIconTheme: IconThemeData(
-      //   color: _dark,
-      // ),
-      //focusColor: _red,
-      // cupertinoOverrideTheme: const NoDefaultCupertinoThemeData(
-      //   primaryColor: _red,
-
-      // ),
 
       // Primary fixed the icon color
       colorScheme: ThemeData().colorScheme.copyWith(
@@ -82,29 +80,22 @@ class Styles {
       textSelectionTheme: const TextSelectionThemeData(
           cursorColor: _red, selectionColor: _red, selectionHandleColor: _red),
 
-      //switchTheme: SwitchT
-
 // ------------------------------------------------------------------ //
 //                       Scaffold Themes                              //
 // ------------------------------------------------------------------ //
 
-      scaffoldBackgroundColor:
-          //isDarkTheme ? const Color(0xFF00001a) : const Color(0xFFFFFFFF),
-          isDarkTheme ? _dark : _light,
+      scaffoldBackgroundColor: isDarkTheme ? _dark : _light,
 
 // ------------------------------------------------------------------ //
 //                         Canvas Themes                              //
 // ------------------------------------------------------------------ //
 
-      //canvasColor: isDarkTheme ? Colors.black : Colors.grey,
       canvasColor: isDarkTheme ? _dark : _light,
 
 // ------------------------------------------------------------------ //
 //                           Card Themes                              //
 // ------------------------------------------------------------------ //
-      cardColor:
-          //isDarkTheme ? _myCardColor : const Color(0xFFF2FDFD),
-          isDarkTheme ? _myCardColor : _lightCardColor,
+      cardColor: isDarkTheme ? _myCardColor : _lightCardColor,
 
 // ------------------------------------------------------------------ //
 //                         Button Themes                              //
@@ -119,7 +110,6 @@ class Styles {
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: _red,
-          //padding: const EdgeInsets.symmetric(horizontal: 10.0),
           minimumSize: const Size(200, 40),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
@@ -133,7 +123,6 @@ class Styles {
 // ------------------------------------------------------------------ //
 //                         Icon Themes                                //
 // ------------------------------------------------------------------ //
-      //iconTheme: ,
 
 // ------------------------------------------------------------------ //
 //                       Checkbox Themes                              //

@@ -1,17 +1,23 @@
+// my_list_container.dart
+// Author: Samuel Rudqvist
+// Date Created: Unknown
+//
+// Purpose:
+//    This is displaying the information in the users list
+//
+// Modification Log:
+//    (03/07/2023)(SR): Removed dead code.
+//
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:wheres_that_movie/screens/detailed_page/detailed.dart';
 import '../../../widgets/my_container.dart';
 
 class MyListContainer extends StatefulWidget {
-  //const MyListContainerTest({Key? key}) : super(key: key);
-
-  //final List<String> myList;
-  //List<Map<String, dynamic>> myList = [];
   final List<Map<String, dynamic>> myList;
   final ScrollController myController;
   final VoidCallback refreshList;
-  // final bool isMovie;
 
   final Function(int) onRemoved;
   MyListContainer({
@@ -20,7 +26,6 @@ class MyListContainer extends StatefulWidget {
     required this.onRemoved,
     required this.myController,
     required this.refreshList,
-    // required this.isMovie,
   }) : super(key: key);
 
   @override
@@ -28,7 +33,6 @@ class MyListContainer extends StatefulWidget {
 }
 
 class _MyListContainerState extends State<MyListContainer> {
-  // ScrollController _myController = ScrollController();
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -108,7 +112,6 @@ class _MyListContainerState extends State<MyListContainer> {
                       ),
                     )
                         .then((_) {
-                      print("I came back");
                       widget.refreshList();
                     });
                   },

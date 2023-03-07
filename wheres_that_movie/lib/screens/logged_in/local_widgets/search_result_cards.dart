@@ -1,4 +1,12 @@
 // search_result_cards.dart
+// Author: Samuel Rudqvist
+// Date Created: Unknown
+//
+// Purpose:
+//    This Class creates the card for the carousel on the logged in screen
+// Modification Log:
+//    (03/07/2023)(SR): Removed dead code.
+//
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -67,31 +75,19 @@ class SearchCarouselCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             side: BorderSide(
                 color: Theme.of(context).colorScheme.secondary, width: 4),
-            // side: const BorderSide(color: Colors.red, width: 4),
-            // side: const BorderSide(color: Colors.white, width: 4),
           ),
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              // Colors.red.shade900,
-              // Colors.red.shade500,
-
               // Standard card color
               Theme.of(context).cardColor,
               Theme.of(context).cardColor,
-
-              // Black with slightly lighter middle
-              // Colors.black,
-              // Theme.of(context).cardColor,
-              // Colors.black,
             ],
           ),
           shadows: [
             BoxShadow(
               color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
-              // color: Colors.red.withOpacity(0.5),
-              // color: Colors.grey.withOpacity(0.5),
               spreadRadius: -2,
               // you can animate the radius to make the feeling of cards
               // 'coming closer to you' stronger
@@ -101,8 +97,6 @@ class SearchCarouselCard extends StatelessWidget {
           ],
         ),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 25),
-        // child: SingleChildScrollView(
-
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -112,7 +106,6 @@ class SearchCarouselCard extends StatelessWidget {
             const SizedBox(height: 12),
             CachedNetworkImage(
               imageUrl: imgUrl,
-              //placeholder: _loader,
               errorWidget: (context, url, error) =>
                   const Icon(Icons.no_photography_outlined),
             ),
@@ -120,7 +113,6 @@ class SearchCarouselCard extends StatelessWidget {
             myRatingBar(),
           ],
         ),
-        // )
       ),
     );
   }
