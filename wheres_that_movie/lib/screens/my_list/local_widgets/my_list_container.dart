@@ -42,11 +42,7 @@ class _MyListContainerState extends State<MyListContainer> {
         widget.myList.isEmpty
             ? Text(
                 "Add a Movie or Show",
-                style: TextStyle(
-                  color: Theme.of(context).primaryColor,
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: Theme.of(context).textTheme.displayLarge,
               )
             : Padding(
                 padding: const EdgeInsets.symmetric(
@@ -55,11 +51,7 @@ class _MyListContainerState extends State<MyListContainer> {
                 ),
                 child: Text(
                   "Your List",
-                  style: TextStyle(
-                    color: Theme.of(context).primaryColor,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(context).textTheme.displayLarge,
                 ),
               ),
         ListView.builder(

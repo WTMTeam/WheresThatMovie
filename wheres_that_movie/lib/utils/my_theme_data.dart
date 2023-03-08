@@ -59,7 +59,7 @@ class Styles {
 
       textTheme: TextTheme(
         displayLarge: TextStyle(
-            color: isDarkTheme ? _red : _otherRed,
+            color: isDarkTheme ? _red : _red,
             fontSize: 30.0,
             fontWeight: FontWeight.bold),
         displayMedium: TextStyle(

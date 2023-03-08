@@ -321,7 +321,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                     ),
                     // Add the logged in users name
                     Text(
-                      "WMM",
+                      "WTM",
                       style: Theme.of(context).textTheme.displayLarge,
                     ),
                   ],
