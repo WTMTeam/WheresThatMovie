@@ -29,6 +29,11 @@ class SQLHelper {
         createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
       )
       """);
+    await database.execute("""CREATE TABLE country(
+      id INTEGER PRIMARY KEY NOT NULL,
+      code STRING
+    )""");
+    await database.insert('country', {'id': 1, 'code': 'US'});
   }
 
   static Future<sql.Database> db() async {
@@ -39,6 +44,22 @@ class SQLHelper {
         await createTables(database);
       },
     );
+  }
+
+  static Future<List<Map<String, Object?>>> getCountry() async {
+    final db = await SQLHelper.db();
+    return db.query('country');
+  }
+
+  static Future<int> setCountry(String code) async {
+    final db = await SQLHelper.db();
+    const id = 1;
+    final data = {
+      'code': code,
+    };
+    final result =
+        await db.update('country', data, where: "id = ?", whereArgs: [id]);
+    return result;
   }
 
   // Create new item

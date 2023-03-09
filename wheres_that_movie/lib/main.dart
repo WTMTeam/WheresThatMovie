@@ -33,6 +33,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
 // check this out https://www.youtube.com/watch?v=JkZnP1H0E6E
+// and this https://github.com/YOUSSSOF/Movies-App?ref=flutterawesome.com
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) {

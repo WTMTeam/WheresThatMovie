@@ -15,6 +15,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:tmdb_api/tmdb_api.dart';
 import 'package:wheres_that_movie/database/database_helper.dart';
+import 'package:wheres_that_movie/screens/detailed_page/local_widgets/country_dropdown.dart';
 import 'package:wheres_that_movie/widgets/flash_message.dart';
 import 'package:wheres_that_movie/widgets/my_container.dart';
 
@@ -46,6 +47,7 @@ class _DetailedPageState extends State<DetailedPage> {
   String mediaType = "No mediaType";
   String description = "No description";
   String currentOption = "Stream";
+  String countryCode = "";
 
   bool _isLoading = false;
   bool _wentWrong = false;
@@ -84,6 +86,7 @@ class _DetailedPageState extends State<DetailedPage> {
         showResult = await tmdbWithCustomLogs.v3.tv.getDetails(id);
         providerResult =
             await tmdbWithCustomLogs.v3.tv.getWatchProviders(id.toString());
+        print(providerResult);
       }
 
       setState(() {
@@ -97,23 +100,25 @@ class _DetailedPageState extends State<DetailedPage> {
           posterPath = showResult['poster_path'];
         }
         if (currentOption == "Stream") {
-          if (providerResult['results']["US"]['flatrate'] == null) {
+          if (providerResult['results'][countryCode]['flatrate'] == null) {
             _noSuchMethod = true;
           } else {
             streamingProviders =
-                providerResult['results']["US"]['flatrate'] ?? [];
+                providerResult['results'][countryCode]['flatrate'] ?? [];
           }
         } else if (currentOption == "Buy") {
-          if (providerResult['results']["US"]['buy'] == null) {
+          if (providerResult['results'][countryCode]['buy'] == null) {
             _noSuchMethod = true;
           } else {
-            streamingProviders = providerResult['results']["US"]['buy'] ?? [];
+            streamingProviders =
+                providerResult['results'][countryCode]['buy'] ?? [];
           }
         } else if (currentOption == "Rent") {
-          if (providerResult['results']["US"]['rent'] == null) {
+          if (providerResult['results'][countryCode]['rent'] == null) {
             _noSuchMethod = true;
           } else {
-            streamingProviders = providerResult['results']["US"]['rent'] ?? [];
+            streamingProviders =
+                providerResult['results'][countryCode]['rent'] ?? [];
           }
         }
       });
@@ -258,6 +263,20 @@ class _DetailedPageState extends State<DetailedPage> {
                 getMyList();
               },
             ),
+            Container(
+                margin: const EdgeInsets.symmetric(
+                  vertical: 10.0,
+                  horizontal: 10.0,
+                ),
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(50.0)),
+                child: CountryDropdown(
+                  onChanged: (code) {
+                    countryCode = code;
+                    print("here");
+                    getProviders(widget.id, currentOption);
+                  },
+                )),
             Container(
               margin: const EdgeInsets.symmetric(
                 vertical: 10.0,
