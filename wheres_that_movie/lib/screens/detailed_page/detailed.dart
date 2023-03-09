@@ -86,7 +86,7 @@ class _DetailedPageState extends State<DetailedPage> {
         showResult = await tmdbWithCustomLogs.v3.tv.getDetails(id);
         providerResult =
             await tmdbWithCustomLogs.v3.tv.getWatchProviders(id.toString());
-        print(providerResult);
+        // print(providerResult);
       }
 
       setState(() {
@@ -273,7 +273,7 @@ class _DetailedPageState extends State<DetailedPage> {
                 child: CountryDropdown(
                   onChanged: (code) {
                     countryCode = code;
-                    print("here");
+                    // print("here");
                     getProviders(widget.id, currentOption);
                   },
                 )),

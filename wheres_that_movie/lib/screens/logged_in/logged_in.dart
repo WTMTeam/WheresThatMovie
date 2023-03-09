@@ -131,7 +131,8 @@ class _MyLoggedInState extends State<MyLoggedIn> {
         String imgUrl =
             "https://image.tmdb.org/t/p/w200${showsAndMovies[i]['poster_path']}";
 
-        if (imgUrl == null) {
+        // print("URL: $imgUrl");
+        if (showsAndMovies[i]['poster_path'] == null) {
           imgUrl = "";
         } else {
           // Do nothing
@@ -219,12 +220,17 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                     vertical: 10.0, horizontal: 30.0),
                 child: TextFormField(
                   controller: myController,
+                  textInputAction: TextInputAction.done,
                   decoration: InputDecoration(
                     prefixIcon: Icon(
                       Icons.search_outlined,
                       color: Theme.of(context).primaryColor,
                     ),
                   ),
+                  onFieldSubmitted: (value) {
+                    mySearch();
+                    toTop();
+                  },
                 ),
               ),
               ElevatedButton(
