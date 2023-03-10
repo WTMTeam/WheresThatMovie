@@ -61,14 +61,19 @@ class SearchCarouselCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => DetailedPage(
-              id: id,
-              isMovie: isMovie,
+        double keyboardValue = MediaQuery.of(context).viewInsets.bottom;
+        print(keyboardValue);
+        FocusScope.of(context).unfocus();
+        Future.delayed(Duration(milliseconds: 450), () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => DetailedPage(
+                id: id,
+                isMovie: isMovie,
+              ),
             ),
-          ),
-        );
+          );
+        });
       },
       child: Container(
         decoration: ShapeDecoration(

@@ -175,7 +175,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
     return Scaffold(
       // Used for opening the drawer header
       key: _scaffoldKey,
-
+      resizeToAvoidBottomInset: true,
       // The settings button
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color.fromARGB(0, 0, 0, 0),
@@ -194,96 +194,63 @@ class _MyLoggedInState extends State<MyLoggedIn> {
 
       body: SafeArea(
         bottom: false,
-        child: SingleChildScrollView(
-          controller:
-              scrollController.hasClients ? scrollController : scrollController,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              const Padding(
-                padding: EdgeInsets.all(10.0),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 30.0),
-                child: Text(
-                  "Search for a movie or tv-show",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Theme.of(context).primaryColor,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                  ),
+        child: GestureDetector(
+          onTap: () {
+            FocusScopeNode currentFocus = FocusScope.of(context);
+
+            if (!currentFocus.hasPrimaryFocus) {
+              Future.delayed(Duration(milliseconds: 450), () {
+                currentFocus.unfocus();
+              });
+            }
+          },
+          child: SingleChildScrollView(
+            controller: scrollController.hasClients ? scrollController : null,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                const Padding(
+                  padding: EdgeInsets.all(10.0),
                 ),
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(
-                    vertical: 10.0, horizontal: 30.0),
-                child: TextFormField(
-                  controller: myController,
-                  textInputAction: TextInputAction.done,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(
-                      Icons.search_outlined,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
-                  onFieldSubmitted: (value) {
-                    mySearch();
-                    toTop();
-                  },
-                ),
-              ),
-              ElevatedButton(
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 100.0),
+                Container(
+                  margin: const EdgeInsets.only(top: 30.0),
                   child: Text(
-                    "Search",
+                    "Search for a movie or tv-show",
+                    textAlign: TextAlign.center,
                     style: TextStyle(
+                      color: Theme.of(context).primaryColor,
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-                onPressed: () {
-                  mySearch();
-                  toTop();
-                },
-              ),
-              cards.isEmpty
-                  ? const SizedBox()
-                  : Container(
-                      margin: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-                      child: ExpandablePageView.builder(
-                        controller: carouselController,
-                        // allows our shadow to be displayed outside of widget bounds
-                        clipBehavior: Clip.none,
-                        itemCount: cards.length,
-                        itemBuilder: (_, index) {
-                          if (!carouselController.position.haveDimensions) {
-                            return const SizedBox();
-                          }
-                          return AnimatedBuilder(
-                            animation: carouselController,
-                            builder: (_, __) => Transform.scale(
-                              scale: max(
-                                0.85,
-                                (1 -
-                                    (carouselController.page! - index).abs() /
-                                        2),
-                              ),
-                              child: cards[index],
-                            ),
-                          );
-                        },
+                Container(
+                  margin: const EdgeInsets.symmetric(
+                      vertical: 10.0, horizontal: 30.0),
+                  child: TextFormField(
+                    controller: myController,
+                    textInputAction: TextInputAction.done,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.search_outlined,
+                        color: Theme.of(context).primaryColor,
                       ),
                     ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 10.0),
-                child: ElevatedButton(
+                    onFieldSubmitted: (value) async {
+                      // FocusScopeNode currentFocus = FocusScope.of(context);
+                      // currentFocus.unfocus();
+                      Future.delayed(const Duration(milliseconds: 500), () {
+                        mySearch();
+                        toTop();
+                      });
+                    },
+                  ),
+                ),
+                ElevatedButton(
                   child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 70.0),
+                    padding: EdgeInsets.symmetric(horizontal: 100.0),
                     child: Text(
-                      "See Trending",
+                      "Search",
                       style: TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.bold,
@@ -291,15 +258,92 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                     ),
                   ),
                   onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const MyTrending(),
-                      ),
-                    );
+                    double keyboardValue =
+                        MediaQuery.of(context).viewInsets.bottom;
+                    print(keyboardValue);
+                    FocusScopeNode currentFocus = FocusScope.of(context);
+                    currentFocus.unfocus();
+                    FocusManager.instance.primaryFocus?.unfocus();
+
+                    if (keyboardValue > 0) {
+                      Future.delayed(const Duration(milliseconds: 500), () {
+                        mySearch();
+                        toTop();
+                      });
+                    } else {
+                      mySearch();
+                      toTop();
+                    }
                   },
                 ),
-              ),
-            ],
+                cards.isEmpty
+                    ? const SizedBox()
+                    : Container(
+                        margin: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+                        child: ExpandablePageView.builder(
+                          controller: carouselController,
+                          // allows our shadow to be displayed outside of widget bounds
+                          clipBehavior: Clip.none,
+                          itemCount: cards.length,
+                          itemBuilder: (_, index) {
+                            if (!carouselController.position.haveDimensions) {
+                              return const SizedBox();
+                            } else {
+                              print(cards);
+                            }
+                            return AnimatedBuilder(
+                              animation: carouselController,
+                              builder: (_, __) => Transform.scale(
+                                scale: max(
+                                  0.85,
+                                  (1 -
+                                      (carouselController.page! - index).abs() /
+                                          2),
+                                ),
+                                child: cards[index],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                Container(
+                  margin: const EdgeInsets.only(bottom: 10.0),
+                  child: ElevatedButton(
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 70.0),
+                      child: Text(
+                        "See Trending",
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    onPressed: () {
+                      double keyboardValue =
+                          MediaQuery.of(context).viewInsets.bottom;
+
+                      FocusScope.of(context).unfocus();
+                      if (keyboardValue > 0) {
+                        Future.delayed(const Duration(milliseconds: 450), () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const MyTrending(),
+                            ),
+                          );
+                        });
+                      } else {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const MyTrending(),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
