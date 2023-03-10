@@ -199,6 +199,7 @@ class _DetailedPageState extends State<DetailedPage> {
       );
     } else if (_wentWrong) {
       return Scaffold(
+        // resizeToAvoidBottomInset: false,
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.end,

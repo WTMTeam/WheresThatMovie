@@ -197,6 +197,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
         child: GestureDetector(
           onTap: () {
             FocusScopeNode currentFocus = FocusScope.of(context);
+            // FocusManager.instance.primaryFocus?.unfocus();
 
             if (!currentFocus.hasPrimaryFocus) {
               Future.delayed(Duration(milliseconds: 450), () {
@@ -260,7 +261,6 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                   onPressed: () {
                     double keyboardValue =
                         MediaQuery.of(context).viewInsets.bottom;
-                    print(keyboardValue);
                     FocusScopeNode currentFocus = FocusScope.of(context);
                     currentFocus.unfocus();
                     FocusManager.instance.primaryFocus?.unfocus();
@@ -288,9 +288,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                           itemBuilder: (_, index) {
                             if (!carouselController.position.haveDimensions) {
                               return const SizedBox();
-                            } else {
-                              print(cards);
-                            }
+                            } else {}
                             return AnimatedBuilder(
                               animation: carouselController,
                               builder: (_, __) => Transform.scale(
