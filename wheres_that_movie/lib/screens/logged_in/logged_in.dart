@@ -200,7 +200,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
             // FocusManager.instance.primaryFocus?.unfocus();
 
             if (!currentFocus.hasPrimaryFocus) {
-              Future.delayed(Duration(milliseconds: 450), () {
+              Future.delayed(const Duration(milliseconds: 450), () {
                 currentFocus.unfocus();
               });
             }

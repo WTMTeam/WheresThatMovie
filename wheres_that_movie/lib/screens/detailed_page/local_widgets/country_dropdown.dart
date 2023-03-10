@@ -92,21 +92,6 @@ class _CountryDropdownState extends State<CountryDropdown> {
           showSelectedItems: true,
           showSearchBox: true,
           searchDelay: const Duration(milliseconds: 100),
-          // onDismissed: () {
-          //   print("Dismissed");
-          //   // Future.delayed(const Duration(milliseconds: 4500));
-          //   Future.delayed(const Duration(milliseconds: 4500), () {
-          //     Navigator.of(context).pop();
-          //   });
-          //   print("here");
-          // },
-          // itemBuilder: (context, item, isSelected) {
-          //   // Delay the dismissal of the menu by 4.5 seconds
-          //   Future.delayed(const Duration(milliseconds: 4500), () {
-          //     Navigator.of(context).pop();
-          //   });
-          //   isSelected = isSelected;
-          // },
           menuProps: MenuProps(
             borderRadius: BorderRadius.circular(10.0),
           ),

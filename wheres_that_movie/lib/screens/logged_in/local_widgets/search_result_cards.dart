@@ -61,9 +61,6 @@ class SearchCarouselCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        double keyboardValue = MediaQuery.of(context).viewInsets.bottom;
-        print(keyboardValue);
-        // FocusScope.of(context).unfocus();
         FocusManager.instance.primaryFocus?.unfocus();
         Future.delayed(const Duration(milliseconds: 450), () {
           Navigator.of(context).push(
