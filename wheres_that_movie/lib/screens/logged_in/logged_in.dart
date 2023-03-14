@@ -42,6 +42,9 @@ class _MyLoggedInState extends State<MyLoggedIn> {
   String previousSearch = "";
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final myController = TextEditingController();
+  final carouselController = PageController(viewportFraction: 0.8);
+  final scrollController = ScrollController();
+  int pageCount = 1;
   List searchResults = [];
   List tvShows = [];
   List movies = [];
@@ -156,20 +159,29 @@ class _MyLoggedInState extends State<MyLoggedIn> {
   }
 
   @override
+  void dispose() {
+    myController.dispose();
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final themeState = Provider.of<DarkThemeProvider>(context);
-    final carouselController = PageController(viewportFraction: 0.8);
-    final scrollController = ScrollController();
-
     // Scroll to the start of the carousel
     void toTop() {
-      int animTime = carouselController.offset.round();
-      if (animTime < 600) {
-        animTime = 500;
+      try {
+        int animTime = carouselController.offset.round();
+        if (animTime < 600) {
+          animTime = 500;
+        }
+        // original time 200
+        carouselController.animateTo(0,
+            duration: Duration(milliseconds: animTime),
+            curve: Curves.easeInOut);
+      } catch (e) {
+        // Handle errors here
       }
-      // original time 200
-      carouselController.animateTo(0,
-          duration: Duration(milliseconds: animTime), curve: Curves.easeInOut);
     }
 
     return Scaffold(
@@ -194,64 +206,118 @@ class _MyLoggedInState extends State<MyLoggedIn> {
 
       body: SafeArea(
         bottom: false,
-        child: GestureDetector(
-          onTap: () {
-            FocusScopeNode currentFocus = FocusScope.of(context);
-            // FocusManager.instance.primaryFocus?.unfocus();
-
-            if (!currentFocus.hasPrimaryFocus) {
-              Future.delayed(const Duration(milliseconds: 450), () {
-                currentFocus.unfocus();
-              });
-            }
-          },
-          child: SingleChildScrollView(
-            controller: scrollController.hasClients ? scrollController : null,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                const Padding(
-                  padding: EdgeInsets.all(10.0),
+        child: SingleChildScrollView(
+          controller: scrollController.hasClients ? scrollController : null,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              const Padding(
+                padding: EdgeInsets.all(10.0),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 30.0),
+                child: Text(
+                  "Search for a movie or tv-show",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                Container(
-                  margin: const EdgeInsets.only(top: 30.0),
-                  child: Text(
-                    "Search for a movie or tv-show",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
+              ),
+              Container(
+                margin: const EdgeInsets.symmetric(
+                    vertical: 10.0, horizontal: 30.0),
+                child: TextFormField(
+                  controller: myController,
+                  autofocus: false,
+                  onTapOutside: (event) {
+                    FocusScopeNode currentFocus = FocusScope.of(context);
+                    Future.delayed(const Duration(milliseconds: 300), () {
+                      currentFocus.unfocus();
+                    });
+                  },
+                  textInputAction: TextInputAction.done,
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(
+                      Icons.search_outlined,
                       color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                  onFieldSubmitted: (value) async {
+                    Future.delayed(const Duration(milliseconds: 500), () {
+                      mySearch();
+                      toTop();
+                    });
+                  },
+                ),
+              ),
+              ElevatedButton(
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 100.0),
+                  child: Text(
+                    "Search",
+                    style: TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-                Container(
-                  margin: const EdgeInsets.symmetric(
-                      vertical: 10.0, horizontal: 30.0),
-                  child: TextFormField(
-                    controller: myController,
-                    textInputAction: TextInputAction.done,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        Icons.search_outlined,
-                        color: Theme.of(context).primaryColor,
-                      ),
+                onPressed: () {
+                  double keyboardValue =
+                      MediaQuery.of(context).viewInsets.bottom;
+                  if (keyboardValue > 0) {
+                    Future.delayed(const Duration(milliseconds: 500), () {
+                      mySearch();
+                      toTop();
+                    });
+                  } else {
+                    mySearch();
+                    toTop();
+                  }
+                },
+              ),
+              cards.isEmpty
+                  ? const SizedBox()
+                  : Container(
+                      margin: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+                      child: ExpandablePageView.builder(
+                          controller: carouselController,
+                          // allows our shadow to be displayed outside of widget bounds
+                          clipBehavior: Clip.none,
+                          itemCount: cards.length,
+                          itemBuilder: (_, index) {
+                            if (!carouselController.position.haveDimensions) {
+                              Future.delayed(const Duration(milliseconds: 500));
+                              return const SizedBox();
+                            } else {
+                              return AnimatedBuilder(
+                                animation: carouselController,
+                                builder: (context, child) => Transform.scale(
+                                  scale: max(
+                                    0.85,
+                                    (1 -
+                                        (carouselController.page! - index)
+                                                .abs() /
+                                            2),
+                                  ),
+                                  child: cards[index],
+                                ),
+                              );
+                            }
+                          }
+                          // },
+                          ),
+                      // ),
                     ),
-                    onFieldSubmitted: (value) async {
-                      // FocusScopeNode currentFocus = FocusScope.of(context);
-                      // currentFocus.unfocus();
-                      Future.delayed(const Duration(milliseconds: 500), () {
-                        mySearch();
-                        toTop();
-                      });
-                    },
-                  ),
-                ),
-                ElevatedButton(
+              Container(
+                margin: const EdgeInsets.only(bottom: 10.0),
+                child: ElevatedButton(
                   child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 100.0),
+                    padding: EdgeInsets.symmetric(horizontal: 70.0),
                     child: Text(
-                      "Search",
+                      "See Trending",
                       style: TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.bold,
@@ -261,87 +327,27 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                   onPressed: () {
                     double keyboardValue =
                         MediaQuery.of(context).viewInsets.bottom;
-                    FocusScopeNode currentFocus = FocusScope.of(context);
-                    currentFocus.unfocus();
-                    FocusManager.instance.primaryFocus?.unfocus();
 
+                    FocusScope.of(context).unfocus();
                     if (keyboardValue > 0) {
-                      Future.delayed(const Duration(milliseconds: 500), () {
-                        mySearch();
-                        toTop();
-                      });
-                    } else {
-                      mySearch();
-                      toTop();
-                    }
-                  },
-                ),
-                cards.isEmpty
-                    ? const SizedBox()
-                    : Container(
-                        margin: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-                        child: ExpandablePageView.builder(
-                          controller: carouselController,
-                          // allows our shadow to be displayed outside of widget bounds
-                          clipBehavior: Clip.none,
-                          itemCount: cards.length,
-                          itemBuilder: (_, index) {
-                            if (!carouselController.position.haveDimensions) {
-                              return const SizedBox();
-                            } else {}
-                            return AnimatedBuilder(
-                              animation: carouselController,
-                              builder: (_, __) => Transform.scale(
-                                scale: max(
-                                  0.85,
-                                  (1 -
-                                      (carouselController.page! - index).abs() /
-                                          2),
-                                ),
-                                child: cards[index],
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                Container(
-                  margin: const EdgeInsets.only(bottom: 10.0),
-                  child: ElevatedButton(
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 70.0),
-                      child: Text(
-                        "See Trending",
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    onPressed: () {
-                      double keyboardValue =
-                          MediaQuery.of(context).viewInsets.bottom;
-
-                      FocusScope.of(context).unfocus();
-                      if (keyboardValue > 0) {
-                        Future.delayed(const Duration(milliseconds: 450), () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const MyTrending(),
-                            ),
-                          );
-                        });
-                      } else {
+                      Future.delayed(const Duration(milliseconds: 450), () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => const MyTrending(),
                           ),
                         );
-                      }
-                    },
-                  ),
+                      });
+                    } else {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const MyTrending(),
+                        ),
+                      );
+                    }
+                  },
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
