@@ -93,12 +93,23 @@ class _CountryDropdownState extends State<CountryDropdown> {
           showSearchBox: true,
           searchDelay: const Duration(milliseconds: 100),
           menuProps: MenuProps(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
+              borderRadius: BorderRadius.circular(10.0),
+              // backgroundColor: Colors.red),
+              backgroundColor: Theme.of(context).colorScheme.primaryContainer),
           constraints: const BoxConstraints(maxHeight: 200)),
       items: countryNames,
-      dropdownDecoratorProps: const DropDownDecoratorProps(
+      dropdownDecoratorProps: DropDownDecoratorProps(
           dropdownSearchDecoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Theme.of(context).primaryColor, // Set the border color here
+            width: 2.0, // Set the border width here
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Theme.of(context).primaryColor),
+          borderRadius: BorderRadius.circular(18.0),
+        ),
         labelText: "Select Country",
       )),
       selectedItem: selectedCountry,

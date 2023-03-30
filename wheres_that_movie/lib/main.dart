@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:wheres_that_movie/screens/logged_in/logged_in.dart';
 import 'package:wheres_that_movie/utils/my_theme_data.dart';
@@ -49,7 +50,7 @@ class _MyAppState extends State<MyApp> {
                 : Brightness.light, // iPhone only
           ));
 
-          return MaterialApp(
+          return GetMaterialApp(
             debugShowCheckedModeBanner:
                 false, // removes the little banner in the top
             title: "Where's That Movie",

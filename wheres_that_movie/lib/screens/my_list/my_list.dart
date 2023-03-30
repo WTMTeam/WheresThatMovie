@@ -57,31 +57,67 @@ class _MyListState extends State<MyList> {
       );
     } else {
       return Scaffold(
-          body: SingleChildScrollView(
-        child: Column(children: <Widget>[
-          const SizedBox(
-            height: 50.0,
+          appBar: AppBar(
+            leading: IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            title: myList.isEmpty
+                ? Text(
+                    "Add a Movie or Show",
+                    style: Theme.of(context).textTheme.displayMedium,
+                  )
+                : Text(
+                    "Your List",
+                    style: Theme.of(context).textTheme.displayLarge,
+                  ),
+            backgroundColor: Theme.of(context).canvasColor,
+            elevation: 10.0,
           ),
-          const SizedBox(
-            height: 25.0,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 0.0),
-            child: MyListContainer(
-                myList: myList,
-                myController: myScrollController,
-                refreshList: _refreshList,
-                onRemoved: (itemToRemove) {
-                  setState(() {
-                    _deleteItem(itemToRemove);
-                  });
-                }),
-          ),
-          const SizedBox(
-            height: 25.0,
-          ),
-        ]),
-      ));
+          // floatingActionButton: FloatingActionButton(
+          //     heroTag: "backButton",
+          //     backgroundColor: const Color.fromARGB(0, 0, 0, 0),
+          //     elevation: 0.0,
+          //     onPressed: () {
+          //       Navigator.of(context).pop();
+          //     },
+          //     child: const Icon(
+          //       Icons.arrow_back_ios,
+          //     )),
+          // floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
+          body: SafeArea(
+            bottom: false,
+            child: SingleChildScrollView(
+              child: Column(children: <Widget>[
+                // const SizedBox(
+                //   height: 50.0,
+                // ),
+                // const SizedBox(
+                //   height: 25.0,
+                // ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10.0),
+                  child: MyListContainer(
+                      myList: myList,
+                      myController: myScrollController,
+                      refreshList: _refreshList,
+                      onRemoved: (itemToRemove) {
+                        setState(() {
+                          _deleteItem(itemToRemove);
+                        });
+                      }),
+                ),
+                const SizedBox(
+                  height: 25.0,
+                ),
+              ]),
+            ),
+          ));
     }
   }
 }

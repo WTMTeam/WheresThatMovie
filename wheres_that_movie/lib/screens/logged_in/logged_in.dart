@@ -63,9 +63,11 @@ class _MyLoggedInState extends State<MyLoggedIn> {
       setState(() {
         cards = [];
       });
-    } else if (myController.text == previousSearch) {
-      // Do nothing
-    } else {
+    }
+    // else if (myController.text == previousSearch) {
+    //   // Do nothing
+    // }
+    else {
       final tmdbWithCustomLogs = TMDB(
         //TMDB instance
         ApiKeys(apiKey, readAccessToken), //ApiKeys instance with your keys,
@@ -137,21 +139,20 @@ class _MyLoggedInState extends State<MyLoggedIn> {
         // print("URL: $imgUrl");
         if (showsAndMovies[i]['poster_path'] == null) {
           imgUrl = "";
+          // print("here");
         } else {
-          // Do nothing
+          newCards.add(SearchCarouselCard(
+            id: showsAndMovies[i]['id'],
+            imgUrl: imgUrl,
+            title: showsAndMovies[i]['title'],
+            overview: showsAndMovies[i]['overview'],
+            rating: showsAndMovies[i]['rating'],
+            isMovie: showsAndMovies[i]['isMovie'],
+          ));
+          setState(() {
+            cards = newCards;
+          });
         }
-
-        newCards.add(SearchCarouselCard(
-          id: showsAndMovies[i]['id'],
-          imgUrl: imgUrl,
-          title: showsAndMovies[i]['title'],
-          overview: showsAndMovies[i]['overview'],
-          rating: showsAndMovies[i]['rating'],
-          isMovie: showsAndMovies[i]['isMovie'],
-        ));
-        setState(() {
-          cards = newCards;
-        });
       } catch (e) {
         // print error message
       }
@@ -159,9 +160,16 @@ class _MyLoggedInState extends State<MyLoggedIn> {
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   void dispose() {
+    // print("disposing");
     myController.dispose();
     scrollController.dispose();
+    carouselController.dispose();
     super.dispose();
   }
 
@@ -187,26 +195,47 @@ class _MyLoggedInState extends State<MyLoggedIn> {
     return Scaffold(
       // Used for opening the drawer header
       key: _scaffoldKey,
-      resizeToAvoidBottomInset: true,
+      // resizeToAvoidBottomInset: true,
       // The settings button
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color.fromARGB(0, 0, 0, 0),
-        elevation: 0.0,
-        onPressed: () {
-          _scaffoldKey.currentState?.openDrawer();
-        },
-        child: const Icon(
-          Icons.menu,
-          size: 30.0,
-        ),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   backgroundColor: const Color.fromARGB(0, 0, 0, 0),
+      //   elevation: 0.0,
+      //   onPressed: () {
+      //     _scaffoldKey.currentState?.openDrawer();
+      //   },
+      //   child: const Icon(
+      //     Icons.menu,
+      //     size: 30.0,
+      //   ),
+      // ),
 
-      // Setting the location of the settings button
-      floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
+      // // Setting the location of the settings button
+      // floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            _scaffoldKey.currentState?.openDrawer();
+          },
+          icon: Icon(
+            Icons.menu,
+            color: Theme.of(context).colorScheme.primary,
+            size: 30,
+          ),
+        ),
+        title: Text(
+          "Search Movies and Shows",
+          style: Theme.of(context).textTheme.displayMedium,
+          // maxLines: 2,
+          // overflow: TextOverflow.visible,
+        ),
+        backgroundColor: Theme.of(context).canvasColor,
+        elevation: 10.0,
+      ),
 
       body: SafeArea(
         bottom: false,
         child: SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           controller: scrollController.hasClients ? scrollController : null,
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -214,39 +243,49 @@ class _MyLoggedInState extends State<MyLoggedIn> {
               const Padding(
                 padding: EdgeInsets.all(10.0),
               ),
-              Container(
-                margin: const EdgeInsets.only(top: 30.0),
-                child: Text(
-                  "Search for a movie or tv-show",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Theme.of(context).primaryColor,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+              // Container(
+              //   margin: const EdgeInsets.only(top: 30.0),
+              //   child: Text(
+              //     "Search for a movie or tv-show",
+              //     textAlign: TextAlign.center,
+              //     style: TextStyle(
+              //       color: Theme.of(context).primaryColor,
+              //       fontSize: 20.0,
+              //       fontWeight: FontWeight.bold,
+              //     ),
+              //   ),
+              // ),
               Container(
                 margin: const EdgeInsets.symmetric(
                     vertical: 10.0, horizontal: 30.0),
-                child: TextFormField(
+                child: TextField(
                   controller: myController,
                   autofocus: false,
+                  // focusNode: FocusNode(),
                   onTapOutside: (event) {
+                    // print("here");
                     FocusScopeNode currentFocus = FocusScope.of(context);
-                    Future.delayed(const Duration(milliseconds: 300), () {
-                      currentFocus.unfocus();
-                    });
+                    currentFocus.unfocus();
+
+                    // Future.delayed(const Duration(milliseconds: 300), () {
+                    //   currentFocus.unfocus();
+                    // });
+                    // FocusNode().unfocus();
                   },
-                  textInputAction: TextInputAction.done,
+                  textInputAction: TextInputAction.search,
                   decoration: InputDecoration(
                     prefixIcon: Icon(
                       Icons.search_outlined,
                       color: Theme.of(context).primaryColor,
                     ),
+                    suffixIcon: IconButton(
+                      onPressed: myController.clear,
+                      icon: Icon(Icons.clear),
+                    ),
                   ),
-                  onFieldSubmitted: (value) async {
+                  onSubmitted: (value) async {
                     Future.delayed(const Duration(milliseconds: 500), () {
+                      // FocusNode().unfocus();
                       mySearch();
                       toTop();
                     });
@@ -268,10 +307,20 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                   double keyboardValue =
                       MediaQuery.of(context).viewInsets.bottom;
                   if (keyboardValue > 0) {
-                    Future.delayed(const Duration(milliseconds: 500), () {
-                      mySearch();
-                      toTop();
-                    });
+                    // FocusScope.of(context).unfocus();
+                    // FocusScopeNode currentFocus = FocusScope.of(context);
+                    // if (!currentFocus.hasPrimaryFocus) {
+                    //   currentFocus.focusedChild?.unfocus();
+                    // }
+                    mySearch();
+                    toTop();
+
+                    // Future.delayed(const Duration(milliseconds: 500), () {
+                    //   mySearch();
+                    //   toTop();
+                    // });
+                    // mySearch();
+                    // toTop();
                   } else {
                     mySearch();
                     toTop();
@@ -288,22 +337,89 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                           clipBehavior: Clip.none,
                           itemCount: cards.length,
                           itemBuilder: (_, index) {
+                            // if (!carouselController.position.haveDimensions) {
+                            //   Future.delayed(
+                            //       const Duration(milliseconds: 500), () {
+                            //     print("waiting");
+                            //   });
+                            //   print("waited");
+                            //   return const SizedBox();
+                            //   // return AnimatedBuilder(
+                            //   //   animation: carouselController,
+                            //   //   builder: (context, child) => Transform.scale(
+                            //   //     scale: max(
+                            //   //       0.85,
+                            //   //       (1 -
+                            //   //           (carouselController.page! - index)
+                            //   //                   .abs() /
+                            //   //               2),
+                            //   //     ),
+                            //   //     child: cards[index],
+                            //   //   ),
+                            //   // );
+                            // }
                             if (!carouselController.position.haveDimensions) {
-                              Future.delayed(const Duration(milliseconds: 500));
-                              return const SizedBox();
-                            } else {
-                              return AnimatedBuilder(
-                                animation: carouselController,
-                                builder: (context, child) => Transform.scale(
-                                  scale: max(
-                                    0.85,
-                                    (1 -
-                                        (carouselController.page! - index)
-                                                .abs() /
-                                            2),
-                                  ),
-                                  child: cards[index],
+                              // Wait for the layout to stabilize before attempting to animate the PageController
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                if (carouselController
+                                    .position.haveDimensions) {
+                                  // If the position has dimensions now, rebuild the widget tree to trigger the animation
+                                  setState(() {});
+                                }
+                              });
+                              // return const SizedBox();
+                              return const Center(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 150),
+                                  child: CircularProgressIndicator(),
                                 ),
+                              );
+                            } else {
+                              // AnimatedBuilder(
+                              //   animation: carouselController,
+                              //   builder: (context, child) => Transform.scale(
+                              //     scale: max(
+                              //       0.85,
+                              //       (1 -
+                              //           (carouselController.page! - index)
+                              //                   .abs() /
+                              //               2),
+                              //     ),
+                              //     child: cards[index],
+                              //   ),
+                              // );
+                              // double maxHeight =
+                              //     MediaQuery.of(context).size.height *
+                              //         0.5; // Set a default max height
+                              double maxWidth = 0.0;
+                              return LayoutBuilder(
+                                builder: (BuildContext context,
+                                    BoxConstraints constraints) {
+                                  // Set the maximum height of all cards to the height of the highest card
+                                  if (maxWidth < constraints.maxWidth) {
+                                    maxWidth = constraints.maxWidth;
+                                  }
+                                  // print(maxWidth);
+                                  return SizedBox(
+                                    // width: maxWidth,
+                                    child: AnimatedBuilder(
+                                      animation: carouselController,
+                                      builder: (context, child) {
+                                        return Transform.scale(
+                                          scale: max(
+                                            0.85,
+                                            (1 -
+                                                (carouselController.page! -
+                                                            index)
+                                                        .abs() /
+                                                    2),
+                                          ),
+                                          child: cards[index],
+                                        );
+                                      },
+                                    ),
+                                  );
+                                },
                               );
                             }
                           }

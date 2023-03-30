@@ -46,6 +46,8 @@ dependencies:
     flutter_rating_bar: ^4.0.1
     flutter_native_splash: ^2.2.19
     dropdown_search: ^5.0.6
+    url_launcher: ^6.1.10
+    get: ^4.6.5
 
 flutter_native_splash:
     color: "#0d253f"

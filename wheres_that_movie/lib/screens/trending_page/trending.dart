@@ -78,8 +78,8 @@ class _MyTrendingState extends State<MyTrending> {
         // if title returns null, then try name instead
         String title = trendingMovies[i]["title"] ?? trendingMovies[i]['name'];
         // ignore: prefer_interpolation_to_compose_strings
-        String imgUrl = 'https://image.tmdb.org/t/p/w500' +
-            trendingMovies[i]['poster_path'];
+        String imgUrl =
+            "https://image.tmdb.org/t/p/w500${trendingMovies[i]['poster_path']}";
         String overview = trendingMovies[i]['overview'];
         double vote = trendingMovies[i]["vote_average"];
         int id = trendingMovies[i]["id"];
@@ -135,32 +135,82 @@ class _MyTrendingState extends State<MyTrending> {
       );
     } else if (!isHorizontal) {
       return Scaffold(
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: const Color.fromARGB(0, 0, 0, 0),
-          elevation: 0.0,
-          onPressed: () {
-            isHorizontal ? isHorizontal = false : isHorizontal = true;
-            makeCardList();
-          },
-          child: isHorizontal
-              ? const Icon(
-                  Icons.swap_vert,
-                )
-              : const Icon(
-                  Icons.swap_horiz,
-                ),
+        appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+          title: Text(
+            "Trending",
+            style: Theme.of(context).textTheme.displayLarge,
+          ),
+          actions: <Widget>[
+            IconButton(
+              onPressed: () {
+                isHorizontal ? isHorizontal = false : isHorizontal = true;
+                makeCardList();
+              },
+              icon: isHorizontal
+                  ? Icon(
+                      Icons.swap_vert,
+                      color: Theme.of(context).colorScheme.primary,
+                    )
+                  : Icon(
+                      Icons.swap_horiz,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+            ),
+          ],
+          backgroundColor: Theme.of(context).canvasColor,
+          elevation: 10.0,
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
         body: SafeArea(
           bottom: false,
           child: Column(children: <Widget>[
-            SizedBox(
-              height: 50.0,
-              child: Text(
-                "Trending",
-                style: Theme.of(context).textTheme.displayLarge,
-              ),
-            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: [
+            //     FloatingActionButton(
+            //         heroTag: "backButton",
+            //         backgroundColor: const Color.fromARGB(0, 0, 0, 0),
+            //         elevation: 0.0,
+            //         onPressed: () {
+            //           Navigator.of(context).pop();
+            //         },
+            //         child: const Icon(
+            //           Icons.arrow_back_ios,
+            //         )),
+            //     SizedBox(
+            //       height: 50.0,
+            //       child: Text(
+            //         "Trending",
+            //         style: Theme.of(context).textTheme.displayLarge,
+            //       ),
+            //     ),
+            //     FloatingActionButton(
+            //       heroTag: "swapButton",
+            //       backgroundColor: const Color.fromARGB(0, 0, 0, 0),
+            //       elevation: 0.0,
+            //       onPressed: () {
+            //         isHorizontal ? isHorizontal = false : isHorizontal = true;
+            //         makeCardList();
+            //       },
+            //       child: isHorizontal
+            //           ? const Icon(
+            //               Icons.swap_vert,
+            //             )
+            //           : const Icon(
+            //               Icons.swap_horiz,
+            //             ),
+            //     ),
+            //     // floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+            //   ],
+            // ),
             SizedBox(
               width: screenWidth,
               height: screenHeight / 1.2,
@@ -180,7 +230,19 @@ class _MyTrendingState extends State<MyTrending> {
                             itemCount: cards.length,
                             itemBuilder: (_, index) {
                               if (!carouselController.position.haveDimensions) {
-                                return const SizedBox();
+                                // Wait for the layout to stabilize before attempting to animate the PageController
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  if (carouselController
+                                      .position.haveDimensions) {
+                                    // If the position has dimensions now, rebuild the widget tree to trigger the animation
+                                    setState(() {});
+                                  }
+                                });
+                                // return const SizedBox();
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
                               }
                               return AnimatedBuilder(
                                 animation: carouselController,
@@ -209,28 +271,62 @@ class _MyTrendingState extends State<MyTrending> {
       );
     } else {
       return Scaffold(
-          floatingActionButton: FloatingActionButton(
-            backgroundColor: const Color.fromARGB(0, 0, 0, 0),
-            elevation: 0.0,
-            onPressed: () {
-              isHorizontal ? isHorizontal = false : isHorizontal = true;
-              makeCardList();
-            },
-            child: isHorizontal
-                ? const Icon(Icons.swap_vert)
-                : const Icon(Icons.swap_horiz),
+          appBar: AppBar(
+            leading: IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            title: Text(
+              "Trending",
+              style: Theme.of(context).textTheme.displayLarge,
+            ),
+            actions: <Widget>[
+              IconButton(
+                onPressed: () {
+                  isHorizontal ? isHorizontal = false : isHorizontal = true;
+                  makeCardList();
+                },
+                icon: isHorizontal
+                    ? Icon(
+                        Icons.swap_vert,
+                        color: Theme.of(context).colorScheme.primary,
+                      )
+                    : Icon(
+                        Icons.swap_horiz,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+              ),
+            ],
+            backgroundColor: Theme.of(context).canvasColor,
+            elevation: 10.0,
           ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+          // floatingActionButton: FloatingActionButton(
+          //   backgroundColor: const Color.fromARGB(0, 0, 0, 0),
+          //   elevation: 0.0,
+          //   onPressed: () {
+          //     isHorizontal ? isHorizontal = false : isHorizontal = true;
+          //     makeCardList();
+          //   },
+          //   child: isHorizontal
+          //       ? const Icon(Icons.swap_vert)
+          //       : const Icon(Icons.swap_horiz),
+          // ),
+          // floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
           body: SafeArea(
             bottom: false,
             child: Column(children: <Widget>[
-              SizedBox(
-                height: 50.0,
-                child: Text(
-                  "Trending",
-                  style: Theme.of(context).textTheme.displayLarge,
-                ),
-              ),
+              // SizedBox(
+              //   height: 50.0,
+              //   child: Text(
+              //     "Trending",
+              //     style: Theme.of(context).textTheme.displayLarge,
+              //   ),
+              // ),
               SizedBox(
                 height: screenHeight / 1.2,
                 width: screenWidth,
@@ -247,9 +343,25 @@ class _MyTrendingState extends State<MyTrending> {
                             clipBehavior: Clip.none,
                             itemCount: cards.length,
                             itemBuilder: (_, index) {
+                              // if (!carouselController2
+                              //     .position.haveDimensions) {
+                              //   return const SizedBox();
+                              // }
                               if (!carouselController2
                                   .position.haveDimensions) {
-                                return const SizedBox();
+                                // Wait for the layout to stabilize before attempting to animate the PageController
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  if (carouselController2
+                                      .position.haveDimensions) {
+                                    // If the position has dimensions now, rebuild the widget tree to trigger the animation
+                                    setState(() {});
+                                  }
+                                });
+                                // return const SizedBox();
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
                               }
                               return AnimatedBuilder(
                                 animation: carouselController2,

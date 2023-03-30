@@ -26,7 +26,6 @@ class MyCustomErrorMessage extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(16),
           margin: const EdgeInsets.symmetric(horizontal: 10),
-          height: 90,
           decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.tertiary,
               borderRadius: const BorderRadius.all(Radius.circular(20))),
@@ -35,18 +34,19 @@ class MyCustomErrorMessage extends StatelessWidget {
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  "Oh Snap!",
-                  style: TextStyle(fontSize: 18, color: Colors.white),
-                ),
-                const Spacer(),
+                // const Text(
+                //   "Oh Snap!",
+                //   style: TextStyle(fontSize: 18, color: Colors.white),
+                // ),
+                // const Spacer(),
                 Text(
                   isMovie
-                      ? "It looks like this movie is not available for ${errorText}ing"
-                      : "It looks like this show is not available for ${errorText}ing",
-                  style: const TextStyle(color: Colors.white, fontSize: 12),
-                  maxLines: 2,
+                      ? "It looks like this movie is not available for ${errorText}ing in your region"
+                      : "It looks like this show is not available for ${errorText}ing in your region",
+                  style: const TextStyle(color: Colors.white, fontSize: 20),
+                  maxLines: 3,
                   overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
                 )
               ],
             ))

@@ -13,6 +13,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:get/get.dart';
 import 'package:wheres_that_movie/screens/detailed_page/detailed.dart';
 
 class CarouselCard extends StatelessWidget {
@@ -58,22 +59,34 @@ class CarouselCard extends StatelessWidget {
     );
   }
 
+  // bool _isZoomed = false;
   @override
   Widget build(BuildContext context) {
+    // print(imgUrl);
     double screenWidth = MediaQuery.of(context).size.width;
     if (!isHorizontal) {
       return InkWell(
         onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => DetailedPage(
-                id: id,
-                isMovie: isMovie,
-              ),
-            ),
-          );
+          // Navigator.of(context).push(
+          //   MaterialPageRoute(
+          //     builder: (context) => DetailedPage(
+          //       id: id,
+          //       isMovie: isMovie,
+          //     ),
+          //   ),
+          // );
+          // setState(() {
+          //   _isZoomed = true;
+          //   _zoomLevel = 2.0;
+          // });
+          // Future.delayed(Duration(milliseconds: 500));
+          Get.to(() => DetailedPage(id: id, isMovie: isMovie),
+              transition: Transition.zoom);
         },
         child: Container(
+          // duration: const Duration(milliseconds: 500),
+          // curve: Curves.easeInOut,
+          // transform: Matrix4.identity()..scale(_zoomLevel),
           decoration: ShapeDecoration(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
@@ -118,6 +131,14 @@ class CarouselCard extends StatelessWidget {
                 child: CachedNetworkImage(
                   imageUrl: imgUrl,
                   width: screenWidth / 1.33,
+                  errorWidget: (context, url, error) => Container(
+                    height: 300,
+                    child: const Icon(Icons.no_photography_outlined, size: 200),
+                    // padding: EdgeInsets.symmetric(
+                    //   vertical: (imageHeight - 300 / 1.5) /
+                    //       2, // add padding to top and bottom
+                    // ),
+                  ),
                 ),
               ),
               const Flexible(child: SizedBox(height: 12)),
@@ -131,14 +152,15 @@ class CarouselCard extends StatelessWidget {
     } else {
       return InkWell(
         onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => DetailedPage(
-                id: id,
-                isMovie: isMovie,
-              ),
-            ),
-          );
+          // Navigator.of(context).push(
+          //   MaterialPageRoute(
+          //     builder: (context) => DetailedPage(
+          //       id: id,
+          //       isMovie: isMovie,
+          //     ),
+          //   ),
+          Get.to(() => DetailedPage(id: id, isMovie: isMovie),
+              transition: Transition.zoom);
         },
         child: Container(
           decoration: ShapeDecoration(
@@ -171,7 +193,11 @@ class CarouselCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(title, style: Theme.of(context).textTheme.displaySmall),
+              Text(
+                title,
+                style: Theme.of(context).textTheme.displaySmall,
+                textAlign: TextAlign.center,
+              ),
               const SizedBox(height: 12),
               CachedNetworkImage(
                 imageUrl: imgUrl,

@@ -12,6 +12,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:get/get.dart';
 
 import '../../detailed_page/detailed.dart';
 
@@ -59,21 +60,35 @@ class SearchCarouselCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double textHeight =
+        Theme.of(context).textTheme.displaySmall!.fontSize! * 1.5;
+// Calculate the height of the Text widget based on the number of lines of text
+    if (title != null && title.contains('\n')) {
+      // If the title has multiple lines, multiply the text height by the number of lines
+      textHeight *= (title.split('\n').length + 1);
+    }
+    // print("textHeight $textHeight");
+    double imageHeight = 300;
+    double totalHeight = (textHeight + imageHeight + 10) * 1.25;
+
     return InkWell(
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
         Future.delayed(const Duration(milliseconds: 450), () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => DetailedPage(
-                id: id,
-                isMovie: isMovie,
-              ),
-            ),
-          );
+          // Navigator.of(context).push(
+          //   MaterialPageRoute(
+          //     builder: (context) => DetailedPage(
+          //       id: id,
+          //       isMovie: isMovie,
+          //     ),
+          //   ),
+          // );
+          Get.to(() => DetailedPage(id: id, isMovie: isMovie),
+              transition: Transition.zoom);
         });
       },
       child: Container(
+        height: totalHeight,
         decoration: ShapeDecoration(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
@@ -100,21 +115,55 @@ class SearchCarouselCard extends StatelessWidget {
             ),
           ],
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 25),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(title,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.displaySmall),
-            const SizedBox(height: 12),
-            CachedNetworkImage(
-              imageUrl: imgUrl,
-              errorWidget: (context, url, error) =>
-                  const Icon(Icons.no_photography_outlined),
+            Expanded(
+              child: Center(
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 0, top: 12),
+                  child: Text(title,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.displaySmall),
+                ),
+              ),
             ),
-            const SizedBox(height: 12),
-            myRatingBar(),
+            // const SizedBox(height: 12),
+            // const Spacer(),
+
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: SizedBox(
+                  height: 300,
+                  child: CachedNetworkImage(
+                    imageUrl: imgUrl,
+                    errorWidget: (context, imgUrl, error) => Container(
+                      height: 300,
+                      child:
+                          const Icon(Icons.no_photography_outlined, size: 200),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+            // const SizedBox(height: 12),
+            // const Spacer(),
+
+            // myRatingBar(),
+            // Row(
+            //   children: [
+            //     Flexible(flex: 1, child: Container()),
+            //     Flexible(flex: 2, child: Center(child: myRatingBar())),
+            //     Flexible(flex: 1, child: Container()),
+            //   ],
+            // ),
+            Expanded(
+              child: Center(
+                child: myRatingBar(),
+              ),
+            ),
           ],
         ),
       ),

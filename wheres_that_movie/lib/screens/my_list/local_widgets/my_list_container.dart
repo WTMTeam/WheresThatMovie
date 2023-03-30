@@ -13,6 +13,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:wheres_that_movie/screens/detailed_page/detailed.dart';
+import 'package:wheres_that_movie/screens/my_list/my_list.dart';
 import '../../../widgets/my_container.dart';
 
 class MyListContainer extends StatefulWidget {
@@ -39,21 +40,21 @@ class _MyListContainerState extends State<MyListContainer> {
     return Column(
       children: <Widget>[
         // Check if myList is empty
-        widget.myList.isEmpty
-            ? Text(
-                "Add a Movie or Show",
-                style: Theme.of(context).textTheme.displayLarge,
-              )
-            : Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 2.0,
-                  horizontal: 8.0,
-                ),
-                child: Text(
-                  "Your List",
-                  style: Theme.of(context).textTheme.displayLarge,
-                ),
-              ),
+        // widget.myList.isEmpty
+        //     ? Text(
+        //         "Add a Movie or Show",
+        //         style: Theme.of(context).textTheme.displayLarge,
+        //       )
+        //     : Padding(
+        //         padding: const EdgeInsets.symmetric(
+        //           vertical: 2.0,
+        //           horizontal: 8.0,
+        //         ),
+        //         child: Text(
+        //           "Your List",
+        //           style: Theme.of(context).textTheme.displayLarge,
+        //         ),
+        //       ),
         ListView.builder(
           padding: EdgeInsets.zero,
           shrinkWrap: true,
