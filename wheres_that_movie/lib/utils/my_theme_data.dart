@@ -63,7 +63,7 @@ class Styles {
             fontSize: 30.0,
             fontWeight: FontWeight.bold),
         displayMedium: TextStyle(
-            color: isDarkTheme ? _red : _otherRed,
+            color: isDarkTheme ? _red : _red,
             fontSize: 20.0,
             fontWeight: FontWeight.bold),
         displaySmall: TextStyle(
@@ -140,8 +140,7 @@ class Styles {
       inputDecorationTheme: InputDecorationTheme(
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20.0),
-          borderSide:
-              BorderSide(color: isDarkTheme ? _redOpacity : _redOpacity),
+          borderSide: BorderSide(color: isDarkTheme ? _red : _red),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20.0),

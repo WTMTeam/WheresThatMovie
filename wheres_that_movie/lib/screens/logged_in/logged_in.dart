@@ -12,6 +12,8 @@
 //    (03/07/2023)(SR): Removed dead code.
 //    (03/07/2023)(SR): Changed deprecated headlines and imageUrl to
 //                      use interpolation.
+//    (04/07/2023)(SR): The appBar is now implemented, cards disappearing
+//                      is now handled.
 //
 
 import 'dart:math';
@@ -84,13 +86,13 @@ class _MyLoggedInState extends State<MyLoggedIn> {
       });
       for (int i = 0; i < searchResults.length; i++) {
         if (searchResults[i]['media_type'] == "movie") {
-          List movie = [];
-          movie.add(searchResults[i]['id']);
-          movie.add(searchResults[i]['title']);
-          movie.add(searchResults[i]['overview']);
-          movie.add(searchResults[i]['vote_average']);
-          movie.add(searchResults[i]['poster_path']);
-          movies.add(movie);
+          // List movie = [];
+          // movie.add(searchResults[i]['id']);
+          // movie.add(searchResults[i]['title']);
+          // movie.add(searchResults[i]['overview']);
+          // movie.add(searchResults[i]['vote_average']);
+          // movie.add(searchResults[i]['poster_path']);
+          // movies.add(movie);
 
           var thisMovie = {
             'id': searchResults[i]['id'],
@@ -102,13 +104,13 @@ class _MyLoggedInState extends State<MyLoggedIn> {
           };
           showsAndMovies.add(thisMovie);
         } else if (searchResults[i]['media_type'] == "tv") {
-          List show = [];
-          show.add(searchResults[i]['id']);
-          show.add(searchResults[i]['name']);
-          show.add(searchResults[i]['overview']);
-          show.add(searchResults[i]['vote_average']);
-          show.add(searchResults[i]['poster_path']);
-          tvShows.add(show);
+          // List show = [];
+          // show.add(searchResults[i]['id']);
+          // show.add(searchResults[i]['name']);
+          // show.add(searchResults[i]['overview']);
+          // show.add(searchResults[i]['vote_average']);
+          // show.add(searchResults[i]['poster_path']);
+          // tvShows.add(show);
 
           var thisShow = {
             'id': searchResults[i]['id'],
@@ -166,7 +168,6 @@ class _MyLoggedInState extends State<MyLoggedIn> {
 
   @override
   void dispose() {
-    // print("disposing");
     myController.dispose();
     scrollController.dispose();
     carouselController.dispose();
@@ -195,22 +196,6 @@ class _MyLoggedInState extends State<MyLoggedIn> {
     return Scaffold(
       // Used for opening the drawer header
       key: _scaffoldKey,
-      // resizeToAvoidBottomInset: true,
-      // The settings button
-      // floatingActionButton: FloatingActionButton(
-      //   backgroundColor: const Color.fromARGB(0, 0, 0, 0),
-      //   elevation: 0.0,
-      //   onPressed: () {
-      //     _scaffoldKey.currentState?.openDrawer();
-      //   },
-      //   child: const Icon(
-      //     Icons.menu,
-      //     size: 30.0,
-      //   ),
-      // ),
-
-      // // Setting the location of the settings button
-      // floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
@@ -225,10 +210,9 @@ class _MyLoggedInState extends State<MyLoggedIn> {
         title: Text(
           "Search Movies and Shows",
           style: Theme.of(context).textTheme.displayMedium,
-          // maxLines: 2,
-          // overflow: TextOverflow.visible,
         ),
         backgroundColor: Theme.of(context).canvasColor,
+        shadowColor: Theme.of(context).colorScheme.secondary,
         elevation: 10.0,
       ),
 
@@ -243,34 +227,15 @@ class _MyLoggedInState extends State<MyLoggedIn> {
               const Padding(
                 padding: EdgeInsets.all(10.0),
               ),
-              // Container(
-              //   margin: const EdgeInsets.only(top: 30.0),
-              //   child: Text(
-              //     "Search for a movie or tv-show",
-              //     textAlign: TextAlign.center,
-              //     style: TextStyle(
-              //       color: Theme.of(context).primaryColor,
-              //       fontSize: 20.0,
-              //       fontWeight: FontWeight.bold,
-              //     ),
-              //   ),
-              // ),
               Container(
                 margin: const EdgeInsets.symmetric(
                     vertical: 10.0, horizontal: 30.0),
                 child: TextField(
                   controller: myController,
                   autofocus: false,
-                  // focusNode: FocusNode(),
                   onTapOutside: (event) {
-                    // print("here");
                     FocusScopeNode currentFocus = FocusScope.of(context);
                     currentFocus.unfocus();
-
-                    // Future.delayed(const Duration(milliseconds: 300), () {
-                    //   currentFocus.unfocus();
-                    // });
-                    // FocusNode().unfocus();
                   },
                   textInputAction: TextInputAction.search,
                   decoration: InputDecoration(
@@ -279,7 +244,11 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                       color: Theme.of(context).primaryColor,
                     ),
                     suffixIcon: IconButton(
-                      onPressed: myController.clear,
+                      onPressed: () {
+                        myController.clear();
+                        mySearch();
+                        toTop();
+                      },
                       icon: Icon(Icons.clear),
                     ),
                   ),
@@ -304,27 +273,8 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                   ),
                 ),
                 onPressed: () {
-                  double keyboardValue =
-                      MediaQuery.of(context).viewInsets.bottom;
-                  if (keyboardValue > 0) {
-                    // FocusScope.of(context).unfocus();
-                    // FocusScopeNode currentFocus = FocusScope.of(context);
-                    // if (!currentFocus.hasPrimaryFocus) {
-                    //   currentFocus.focusedChild?.unfocus();
-                    // }
-                    mySearch();
-                    toTop();
-
-                    // Future.delayed(const Duration(milliseconds: 500), () {
-                    //   mySearch();
-                    //   toTop();
-                    // });
-                    // mySearch();
-                    // toTop();
-                  } else {
-                    mySearch();
-                    toTop();
-                  }
+                  mySearch();
+                  toTop();
                 },
               ),
               cards.isEmpty
@@ -337,27 +287,6 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                           clipBehavior: Clip.none,
                           itemCount: cards.length,
                           itemBuilder: (_, index) {
-                            // if (!carouselController.position.haveDimensions) {
-                            //   Future.delayed(
-                            //       const Duration(milliseconds: 500), () {
-                            //     print("waiting");
-                            //   });
-                            //   print("waited");
-                            //   return const SizedBox();
-                            //   // return AnimatedBuilder(
-                            //   //   animation: carouselController,
-                            //   //   builder: (context, child) => Transform.scale(
-                            //   //     scale: max(
-                            //   //       0.85,
-                            //   //       (1 -
-                            //   //           (carouselController.page! - index)
-                            //   //                   .abs() /
-                            //   //               2),
-                            //   //     ),
-                            //   //     child: cards[index],
-                            //   //   ),
-                            //   // );
-                            // }
                             if (!carouselController.position.haveDimensions) {
                               // Wait for the layout to stabilize before attempting to animate the PageController
                               WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -375,22 +304,6 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                                 ),
                               );
                             } else {
-                              // AnimatedBuilder(
-                              //   animation: carouselController,
-                              //   builder: (context, child) => Transform.scale(
-                              //     scale: max(
-                              //       0.85,
-                              //       (1 -
-                              //           (carouselController.page! - index)
-                              //                   .abs() /
-                              //               2),
-                              //     ),
-                              //     child: cards[index],
-                              //   ),
-                              // );
-                              // double maxHeight =
-                              //     MediaQuery.of(context).size.height *
-                              //         0.5; // Set a default max height
                               double maxWidth = 0.0;
                               return LayoutBuilder(
                                 builder: (BuildContext context,
@@ -399,9 +312,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                                   if (maxWidth < constraints.maxWidth) {
                                     maxWidth = constraints.maxWidth;
                                   }
-                                  // print(maxWidth);
                                   return SizedBox(
-                                    // width: maxWidth,
                                     child: AnimatedBuilder(
                                       animation: carouselController,
                                       builder: (context, child) {
@@ -422,10 +333,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                                 },
                               );
                             }
-                          }
-                          // },
-                          ),
-                      // ),
+                          }),
                     ),
               Container(
                 margin: const EdgeInsets.only(bottom: 10.0),

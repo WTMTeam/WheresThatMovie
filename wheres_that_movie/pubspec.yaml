@@ -50,8 +50,8 @@ dependencies:
     get: ^4.6.5
 
 flutter_native_splash:
-    color: "#0d253f"
-    image: assets/FullPNGBigger.png
+    color: "#141414"
+    image: assets/logo3.png
 
 dev_dependencies:
     flutter_test:

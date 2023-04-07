@@ -9,6 +9,8 @@
 //    (03/07/2023)(SR): Removed dead code.
 //    (03/07/2023)(SR): Changed deprecated headlines and interpolation
 //                      for the image path for the icons.
+//    (04/07/2023)(SR): AppBar added and styling changes, netflix route works
+//                      when the netflix app is installed.
 //
 
 // ! check out Hero widget
@@ -246,12 +248,6 @@ class _DetailedPageState extends State<DetailedPage> {
     } else {
       return Scaffold(
           appBar: AppBar(
-            // flexibleSpace: FlexibleSpaceBar(
-            //   title: Text(
-            //     'This is a very long title that will wrap to multiple lines based on available space',
-            //     style: TextStyle(fontSize: 20),
-            //   ),
-            // ),
             leading: IconButton(
               onPressed: () {
                 Navigator.of(context).pop();
@@ -279,39 +275,6 @@ class _DetailedPageState extends State<DetailedPage> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  // Stack(
-                  //   // crossAxisAlignment: CrossAxisAlignment.center,
-                  //   // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  //   children: [
-                  //     Positioned(
-                  //       top: -5.0,
-                  //       left: 5.0,
-                  //       child: FloatingActionButton(
-                  //           heroTag: "backButton",
-                  //           backgroundColor: const Color.fromARGB(0, 0, 0, 0),
-                  //           elevation: 0.0,
-                  //           onPressed: () {
-                  //             Navigator.of(context).pop();
-                  //           },
-                  //           child: const Icon(
-                  //             Icons.arrow_back_ios,
-                  //           )),
-                  //     ),
-                  //     Padding(
-                  //       padding: const EdgeInsets.only(left: 40.0, right: 40.0),
-                  //       child: Center(
-                  //         child: Text(
-                  //           overflow: TextOverflow.clip,
-                  //           textAlign: TextAlign.center,
-                  //           title,
-                  //           style: Theme.of(context).textTheme.displayLarge,
-                  //         ),
-                  //       ),
-                  //     ),
-                  //     // ),
-                  //     // const Spacer()
-                  //   ],
-                  // ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 10.0, vertical: 10.0),
