@@ -141,7 +141,7 @@ class _MyTrendingState extends State<MyTrending> {
               Navigator.of(context).pop();
             },
             icon: Icon(
-              Icons.arrow_back_ios,
+              Icons.keyboard_arrow_down_sharp,
               color: Theme.of(context).colorScheme.primary,
             ),
           ),

@@ -48,6 +48,7 @@ dependencies:
     dropdown_search: ^5.0.6
     url_launcher: ^6.1.10
     get: ^4.6.5
+    device_apps: ^2.2.0
 
 flutter_native_splash:
     color: "#141414"

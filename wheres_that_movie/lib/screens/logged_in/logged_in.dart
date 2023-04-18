@@ -25,6 +25,7 @@ import 'package:wheres_that_movie/screens/trending_page/trending.dart';
 import 'package:wheres_that_movie/utils/provider/dark_theme_provider.dart';
 import 'package:tmdb_api/tmdb_api.dart';
 import 'local_widgets/search_result_cards.dart';
+import 'package:get/get.dart';
 
 class MyLoggedIn extends StatefulWidget {
   const MyLoggedIn({Key? key}) : super(key: key);
@@ -355,18 +356,22 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                     FocusScope.of(context).unfocus();
                     if (keyboardValue > 0) {
                       Future.delayed(const Duration(milliseconds: 450), () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const MyTrending(),
-                          ),
-                        );
+                        // Navigator.of(context).push(
+                        //   MaterialPageRoute(
+                        //     builder: (context) => const MyTrending(),
+                        //   ),
+                        // );
+                        Get.to(() => const MyTrending(),
+                            transition: Transition.downToUp);
                       });
                     } else {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const MyTrending(),
-                        ),
-                      );
+                      // Navigator.of(context).push(
+                      //   MaterialPageRoute(
+                      //     builder: (context) => const MyTrending(),
+                      //   ),
+                      // );
+                      Get.to(() => const MyTrending(),
+                          transition: Transition.downToUp);
                     }
                   },
                 ),
