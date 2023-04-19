@@ -1,29 +1,7 @@
-# Where's That Movie?
+# Where's That Movie (WTM)
+Repository for an Android/iOS app using the Flutter framework.
 
-Repository for an iOS app using the Flutter framework.  
+Where's That Movie is an application where users can search for movies and see where they are available for streaming, renting and purchasing.
 
-The purpose of this application is to easily be able to find where a movie or tv-show is available for streaming.  
+The app is currently in testing and will hopefully be released on the stores soon.
 
-
-
-
-
-
-
-
-
-
-### Links for API and Attribution
-https://www.themoviedb.org/about/logos-attribution
-https://api.themoviedb.org/3/movie/744/watch/providers?api_key=dbffa0d16fb8dc2873531156a5c5f41a&locale=US
-
-Hi @yurirp4, you can make a call to the /watch/providers method to see where it is streaming:
-
-https://api.themoviedb.org/3/tv/88396/watch/providers?api_key=###
-You can use append_to_response with this call as well:
-
-https://api.themoviedb.org/3/tv/88396?api_key=###&append_to_response=watch/providers
-You can also use discover to query details by provider and country:
-
-https://api.themoviedb.org/3/discover/tv?api_key=###&with_watch_providers=337&watch_region=CA
-To find Disney+ content in Canada, for example.
