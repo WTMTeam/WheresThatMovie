@@ -212,6 +212,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
           "Search Movies and Shows",
           style: Theme.of(context).textTheme.displayMedium,
         ),
+        centerTitle: true,
         backgroundColor: Theme.of(context).canvasColor,
         shadowColor: Theme.of(context).colorScheme.secondary,
         elevation: 10.0,

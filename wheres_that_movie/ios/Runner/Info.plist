@@ -51,6 +51,7 @@
         <string>primevideo</string>
         <string>disneyplus</string>
         <string>paramountplus</string>
+        <string>hulu</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>

@@ -72,11 +72,13 @@ class _MyListState extends State<MyList> {
                 ? Text(
                     "Add a Movie or Show",
                     style: Theme.of(context).textTheme.displayMedium,
+                    textAlign: TextAlign.center,
                   )
                 : Text(
                     "Your List",
                     style: Theme.of(context).textTheme.displayLarge,
                   ),
+            centerTitle: true,
             backgroundColor: Theme.of(context).canvasColor,
             elevation: 10.0,
           ),

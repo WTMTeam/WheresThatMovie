@@ -149,6 +149,7 @@ class _MyTrendingState extends State<MyTrending> {
             "Trending",
             style: Theme.of(context).textTheme.displayLarge,
           ),
+          centerTitle: true,
           actions: <Widget>[
             IconButton(
               onPressed: () {
@@ -285,6 +286,7 @@ class _MyTrendingState extends State<MyTrending> {
               "Trending",
               style: Theme.of(context).textTheme.displayLarge,
             ),
+            centerTitle: true,
             actions: <Widget>[
               IconButton(
                 onPressed: () {

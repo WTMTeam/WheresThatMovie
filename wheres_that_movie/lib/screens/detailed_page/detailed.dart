@@ -56,6 +56,7 @@ class _DetailedPageState extends State<DetailedPage> {
     'Disney Plus',
     'Paramount Plus',
     'Amazon Prime Video',
+    'Hulu',
   ];
 
   String title = "No title";
@@ -78,6 +79,7 @@ class _DetailedPageState extends State<DetailedPage> {
   // Function to get the different providers for the
   // current movie or show
   getProviders(int id, String currentOption) async {
+    print(id);
     _isLoading = true;
     _noSuchMethod = false;
 
@@ -190,14 +192,42 @@ class _DetailedPageState extends State<DetailedPage> {
   //   }
   // }
 
-  void openApp(String scheme) async {
+  // final String huluUrl = "hulu://search?query=$title";
+// await launchUrl(huluUrl);
+
+  void openApp(String scheme, String title) async {
     Uri appScheme = Uri.parse(scheme);
     if (Platform.isIOS) {
       // iOS-specific implementation
-      print("IOS");
       if (await canLaunchUrl(appScheme)) {
-        print("canlaunchUrl");
-        await launchUrl(appScheme);
+        print("Can Launch Url");
+        if (scheme == 'nflx://') {
+          Uri specific = Uri.parse("nflx://www.netflix.com/search?q=$title");
+          await launchUrl(specific);
+        } else {
+          await launchUrl(appScheme);
+        }
+        // switch (scheme) {
+        //   case 'nflx://':
+        //     //"nflx://www.netflix.com/search?q=$title"),
+        //     Uri specific = Uri.parse("nflx://www.netflix.com/search?q=$title");
+        //     await launchUrl(specific);
+        //     break;
+        //   case 'primevideo://':
+        //     //www.amazon.com/s?k=$title&i=instant-video
+        //     //https://watch.amazon.com/detail?gti=amzn1.dv.gti.b4abfc06-d318-41cb-3d55-d014ea806a7d&territory=US&ref_=share_ios_movie&r=web
+        //     //'intent://search?query=$movieTitle#Intent;scheme=amazon;i.a=B00N288L3Y;end';
+        //     final encodedTitle = Uri.encodeComponent(title);
+        //     //final url = 'primevideo://search?phrase=$encodedTitle';
+        //     // Uri specific = Uri.parse('primevideo://search?q=$encodedTitle');
+        //     Uri specific = Uri.parse('primevideo://s?k=$title');
+        //     // Uri specific =
+        //     //     Uri.parse("primevideo://watch.amazon.com/search?q=$title");
+        //     await launchUrl(specific);
+
+        //     break;
+        //   default:
+        // }
       } else {
         print("opening app in app store");
         switch (scheme) {
@@ -216,6 +246,10 @@ class _DetailedPageState extends State<DetailedPage> {
           case 'primevideo://':
             await launchUrl(Uri.parse(
                 'https://itunes.apple.com/us/app/amazon-prime-video/id545519333'));
+            break;
+          case 'hulu://':
+            await launchUrl(Uri.parse(
+                'https://itunes.apple.com/app/hulu-watch-tv-shows-movies/id376510438'));
             break;
           default:
         }
@@ -343,6 +377,7 @@ class _DetailedPageState extends State<DetailedPage> {
                     title,
                     style: Theme.of(context).textTheme.displayLarge,
                   ),
+            centerTitle: true,
             backgroundColor: Theme.of(context).canvasColor,
             elevation: 10.0,
           ),
@@ -507,11 +542,11 @@ class _DetailedPageState extends State<DetailedPage> {
 
                                               // _launchInWebViewOrVC(Uri.parse(
                                               //     "https://www.netflix.com/watch/$widget.id"));
-                                              openApp('nflx://');
+                                              openApp('nflx://', title);
                                             } else if (streamingProviders[index]
                                                     ['provider_name'] ==
                                                 "Disney Plus") {
-                                              openApp('disneyplus://');
+                                              openApp('disneyplus://', title);
                                               // _launchInWebViewOrVC(
                                               //     Uri.parse("disneyplus://"),
                                               //     streamingProviders[index]
@@ -519,7 +554,8 @@ class _DetailedPageState extends State<DetailedPage> {
                                             } else if (streamingProviders[index]
                                                     ['provider_name'] ==
                                                 "Paramount Plus") {
-                                              openApp('paramountplus://');
+                                              openApp(
+                                                  'paramountplus://', title);
                                               // Search link https://www.paramountplus.com/search/
                                               // _launchInWebViewOrVC(
                                               //     Uri.parse(
@@ -530,7 +566,11 @@ class _DetailedPageState extends State<DetailedPage> {
                                             } else if (streamingProviders[index]
                                                     ['provider_name'] ==
                                                 "Amazon Prime Video") {
-                                              openApp('primevideo://');
+                                              openApp('primevideo://', title);
+                                            } else if (streamingProviders[index]
+                                                    ['provider_name'] ==
+                                                "Hulu") {
+                                              openApp('hulu://', title);
                                             }
                                           },
                                         )
