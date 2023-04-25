@@ -52,6 +52,8 @@
         <string>disneyplus</string>
         <string>paramountplus</string>
         <string>hulu</string>
+        <string>fuboTV</string>
+        <string>aapl</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>

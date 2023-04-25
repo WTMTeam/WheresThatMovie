@@ -57,6 +57,8 @@ class _DetailedPageState extends State<DetailedPage> {
     'Paramount Plus',
     'Amazon Prime Video',
     'Hulu',
+    'fuboTV',
+    'Apple TV Plus',
   ];
 
   String title = "No title";
@@ -79,7 +81,7 @@ class _DetailedPageState extends State<DetailedPage> {
   // Function to get the different providers for the
   // current movie or show
   getProviders(int id, String currentOption) async {
-    print(id);
+    // print(id);
     _isLoading = true;
     _noSuchMethod = false;
 
@@ -197,14 +199,22 @@ class _DetailedPageState extends State<DetailedPage> {
 
   void openApp(String scheme, String title) async {
     Uri appScheme = Uri.parse(scheme);
+    // print("AppScheme: $appScheme");
     if (Platform.isIOS) {
       // iOS-specific implementation
       if (await canLaunchUrl(appScheme)) {
-        print("Can Launch Url");
+        // print("Can Launch Url");
         if (scheme == 'nflx://') {
           Uri specific = Uri.parse("nflx://www.netflix.com/search?q=$title");
           await launchUrl(specific);
-        } else {
+        }
+        // else if (scheme == 'videos://') {
+        //   print(Uri.parse("videos://search?term=$title"));
+        //   Uri specific = Uri.parse("videos://search?term=$title");
+        //   await launchUrl(specific);
+        // }
+        else {
+          // print("Opening $appScheme");
           await launchUrl(appScheme);
         }
         // switch (scheme) {
@@ -229,7 +239,7 @@ class _DetailedPageState extends State<DetailedPage> {
         //   default:
         // }
       } else {
-        print("opening app in app store");
+        // print("opening app in app store");
         switch (scheme) {
           case 'nflx://':
             await launchUrl(
@@ -251,6 +261,18 @@ class _DetailedPageState extends State<DetailedPage> {
             await launchUrl(Uri.parse(
                 'https://itunes.apple.com/app/hulu-watch-tv-shows-movies/id376510438'));
             break;
+          case 'fuboTV://':
+            await launchUrl(Uri.parse(
+                'https://itunes.apple.com/us/app/fubotv-watch-live-sports-tv/id905401434'));
+            break;
+          case 'videos://':
+            await launchUrl(Uri.parse(
+                'https://apps.apple.com/us/app/apple-tv/id1174078549'));
+            break;
+          // case 'hbomax://':
+          //   await launchUrl(Uri.parse(
+          //       'https://apps.apple.com/us/app/apple-tv/id1174078549'));
+          //   break;
           default:
         }
 // url = Uri.parse('https://itunes.apple.com/app/id363590051');
@@ -492,7 +514,7 @@ class _DetailedPageState extends State<DetailedPage> {
                           itemCount: streamingProviders.length,
                           controller: _myController,
                           itemBuilder: ((context, index) {
-                            print(streamingProviders[index]['provider_name']);
+                            // print(streamingProviders[index]['provider_name']);
                             String imgUrl =
                                 "https://image.tmdb.org/t/p/w45${streamingProviders[index]['logo_path']}";
                             return Padding(
@@ -571,6 +593,14 @@ class _DetailedPageState extends State<DetailedPage> {
                                                     ['provider_name'] ==
                                                 "Hulu") {
                                               openApp('hulu://', title);
+                                            } else if (streamingProviders[index]
+                                                    ['provider_name'] ==
+                                                "fuboTV") {
+                                              openApp('fuboTV://', title);
+                                            } else if (streamingProviders[index]
+                                                    ['provider_name'] ==
+                                                "Apple TV Plus") {
+                                              openApp('videos://', title);
                                             }
                                           },
                                         )
