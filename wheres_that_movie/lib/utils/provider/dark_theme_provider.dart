@@ -5,7 +5,7 @@ import 'package:wheres_that_movie/utils/services/dark_theme_prefs.dart';
 class DarkThemeProvider with ChangeNotifier {
   DarkThemePrefs darkThemePrefs = DarkThemePrefs();
 
-  bool _darkTheme = false;
+  bool _darkTheme = true;
   bool get getDarkTheme => _darkTheme;
 
   set setDarkTheme(bool value) {

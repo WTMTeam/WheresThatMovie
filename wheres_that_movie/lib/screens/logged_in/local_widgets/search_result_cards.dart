@@ -63,7 +63,7 @@ class SearchCarouselCard extends StatelessWidget {
     double textHeight =
         Theme.of(context).textTheme.displaySmall!.fontSize! * 1.5;
 // Calculate the height of the Text widget based on the number of lines of text
-    if (title != null && title.contains('\n')) {
+    if (title.contains('\n')) {
       // If the title has multiple lines, multiply the text height by the number of lines
       textHeight *= (title.split('\n').length + 1);
     }
