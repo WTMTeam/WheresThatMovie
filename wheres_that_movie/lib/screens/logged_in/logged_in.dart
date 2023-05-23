@@ -62,7 +62,11 @@ class _MyLoggedInState extends State<MyLoggedIn> {
     movies = [];
     people = [];
     showsAndMovies = [];
+    setState(() {
+      cards = [];
+    });
 
+    // ? Redundant?
     if (myController.text.isEmpty) {
       setState(() {
         cards = [];
@@ -127,6 +131,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
           people.add(searchResults[i]['name']);
         }
       }
+
       makeCardList();
     }
   }
@@ -135,6 +140,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
   makeCardList() {
     // reset the cards list
     List newCards = [];
+
     for (int i = 0; i < showsAndMovies.length; i++) {
       try {
         String imgUrl =
@@ -180,7 +186,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
   Widget build(BuildContext context) {
     final themeState = Provider.of<DarkThemeProvider>(context);
     // Scroll to the start of the carousel
-    void toTop() {
+    int toTop() {
       try {
         int animTime = carouselController.offset.round();
         if (animTime < 600) {
@@ -190,7 +196,9 @@ class _MyLoggedInState extends State<MyLoggedIn> {
         carouselController.animateTo(0,
             duration: Duration(milliseconds: animTime),
             curve: Curves.easeInOut);
+        return animTime;
       } catch (e) {
+        return 0;
         // Handle errors here
       }
     }
@@ -249,17 +257,32 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                     suffixIcon: IconButton(
                       onPressed: () {
                         myController.clear();
-                        mySearch();
                         toTop();
+
+                        mySearch();
                       },
                       icon: Icon(Icons.clear),
                     ),
                   ),
-                  onSubmitted: (value) async {
-                    Future.delayed(const Duration(milliseconds: 500), () {
-                      // FocusNode().unfocus();
+                  onChanged: (value) async {
+                    if (myController.text.isEmpty) {
+                      print("Empty text");
                       mySearch();
                       toTop();
+                    }
+                  },
+                  onSubmitted: (value) async {
+                    int waitTime = toTop();
+                    Future.delayed(Duration(milliseconds: waitTime), () {
+                      // FocusNode().unfocus();
+                      // toTop();
+
+                      // setState(() {
+                      //   cards = [];
+                      // });
+                      // toTop();
+
+                      mySearch();
                     });
                   },
                 ),
@@ -276,8 +299,20 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                   ),
                 ),
                 onPressed: () {
-                  mySearch();
-                  toTop();
+                  // mySearch();
+                  int waitTime = toTop();
+
+                  Future.delayed(Duration(milliseconds: waitTime), () {
+                    // FocusNode().unfocus();
+                    // toTop();
+
+                    // setState(() {
+                    //   cards = [];
+                    // });
+                    // carouselController.toTop();
+
+                    mySearch();
+                  });
                 },
               ),
               cards.isEmpty
