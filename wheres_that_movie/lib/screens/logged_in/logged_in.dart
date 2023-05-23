@@ -20,6 +20,7 @@ import 'dart:math';
 import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wheres_that_movie/screens/credits/credits.dart';
 import 'package:wheres_that_movie/screens/my_list/my_list.dart';
 import 'package:wheres_that_movie/screens/trending_page/trending.dart';
 import 'package:wheres_that_movie/utils/provider/dark_theme_provider.dart';
@@ -455,6 +456,24 @@ class _MyLoggedInState extends State<MyLoggedIn> {
               ],
             ),
           ),
+          Container(
+            padding:
+                const EdgeInsets.only(bottom: 50.0, left: 10.0, right: 10.0),
+            child: Card(
+              child: ListTile(
+                title: Text(
+                  "Credits",
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
+                leading: const Icon(Icons.info_outline),
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const Credits(),
+                  ));
+                },
+              ),
+            ),
+          )
         ],
       )),
     );
