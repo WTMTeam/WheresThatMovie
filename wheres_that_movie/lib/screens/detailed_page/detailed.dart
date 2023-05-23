@@ -347,13 +347,13 @@ class _DetailedPageState extends State<DetailedPage> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
+    // double screenWidth = MediaQuery.of(context).size.width;
     if (_isLoading) {
-      return Scaffold(
+      return const Scaffold(
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.end,
-          children: const <Widget>[
+          children: <Widget>[
             Center(
               child: CircularProgressIndicator(),
             ),

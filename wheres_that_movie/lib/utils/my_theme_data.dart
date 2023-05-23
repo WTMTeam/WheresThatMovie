@@ -26,8 +26,8 @@ class Styles {
 
   // Both theme variables
   static const Color _red = Color.fromARGB(255, 164, 10, 10);
-  static const Color _otherRed = Color.fromARGB(255, 203, 11, 11);
-  static const Color _redOpacity = Color.fromARGB(100, 255, 0, 0);
+  // static const Color _otherRed = Color.fromARGB(255, 203, 11, 11);
+  // static const Color _redOpacity = Color.fromARGB(100, 255, 0, 0);
 
   static ThemeData themeData(bool isDarkTheme, BuildContext context) {
     return ThemeData(
