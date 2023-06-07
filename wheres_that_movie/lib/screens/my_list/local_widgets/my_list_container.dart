@@ -38,22 +38,6 @@ class _MyListContainerState extends State<MyListContainer> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        // Check if myList is empty
-        // widget.myList.isEmpty
-        //     ? Text(
-        //         "Add a Movie or Show",
-        //         style: Theme.of(context).textTheme.displayLarge,
-        //       )
-        //     : Padding(
-        //         padding: const EdgeInsets.symmetric(
-        //           vertical: 2.0,
-        //           horizontal: 8.0,
-        //         ),
-        //         child: Text(
-        //           "Your List",
-        //           style: Theme.of(context).textTheme.displayLarge,
-        //         ),
-        //       ),
         ListView.builder(
           padding: EdgeInsets.zero,
           shrinkWrap: true,

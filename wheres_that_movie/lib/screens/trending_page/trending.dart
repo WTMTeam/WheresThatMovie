@@ -77,7 +77,6 @@ class _MyTrendingState extends State<MyTrending> {
       try {
         // if title returns null, then try name instead
         String title = trendingMovies[i]["title"] ?? trendingMovies[i]['name'];
-        // ignore: prefer_interpolation_to_compose_strings
         String imgUrl =
             "https://image.tmdb.org/t/p/w500${trendingMovies[i]['poster_path']}";
         String overview = trendingMovies[i]['overview'];
@@ -122,11 +121,11 @@ class _MyTrendingState extends State<MyTrending> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     if (_isLoading) {
-      return Scaffold(
+      return const Scaffold(
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.end,
-          children: const <Widget>[
+          children: <Widget>[
             Center(
               child: CircularProgressIndicator(),
             ),
@@ -307,28 +306,9 @@ class _MyTrendingState extends State<MyTrending> {
             backgroundColor: Theme.of(context).canvasColor,
             elevation: 10.0,
           ),
-          // floatingActionButton: FloatingActionButton(
-          //   backgroundColor: const Color.fromARGB(0, 0, 0, 0),
-          //   elevation: 0.0,
-          //   onPressed: () {
-          //     isHorizontal ? isHorizontal = false : isHorizontal = true;
-          //     makeCardList();
-          //   },
-          //   child: isHorizontal
-          //       ? const Icon(Icons.swap_vert)
-          //       : const Icon(Icons.swap_horiz),
-          // ),
-          // floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
           body: SafeArea(
             bottom: false,
             child: Column(children: <Widget>[
-              // SizedBox(
-              //   height: 50.0,
-              //   child: Text(
-              //     "Trending",
-              //     style: Theme.of(context).textTheme.displayLarge,
-              //   ),
-              // ),
               SizedBox(
                 height: screenHeight / 1.2,
                 width: screenWidth,
@@ -345,10 +325,6 @@ class _MyTrendingState extends State<MyTrending> {
                             clipBehavior: Clip.none,
                             itemCount: cards.length,
                             itemBuilder: (_, index) {
-                              // if (!carouselController2
-                              //     .position.haveDimensions) {
-                              //   return const SizedBox();
-                              // }
                               if (!carouselController2
                                   .position.haveDimensions) {
                                 // Wait for the layout to stabilize before attempting to animate the PageController

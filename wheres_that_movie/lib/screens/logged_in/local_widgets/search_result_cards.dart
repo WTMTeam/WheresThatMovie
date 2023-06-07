@@ -20,7 +20,9 @@ class SearchCarouselCard extends StatelessWidget {
   final String imgUrl;
   final String title;
   final String overview;
+
   final double rating;
+
   final bool isMovie;
 
   final int id;
@@ -67,7 +69,6 @@ class SearchCarouselCard extends StatelessWidget {
       // If the title has multiple lines, multiply the text height by the number of lines
       textHeight *= (title.split('\n').length + 1);
     }
-    // print("textHeight $textHeight");
     double imageHeight = 300;
     double totalHeight = (textHeight + imageHeight + 10) * 1.25;
 
@@ -75,14 +76,6 @@ class SearchCarouselCard extends StatelessWidget {
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
         Future.delayed(const Duration(milliseconds: 450), () {
-          // Navigator.of(context).push(
-          //   MaterialPageRoute(
-          //     builder: (context) => DetailedPage(
-          //       id: id,
-          //       isMovie: isMovie,
-          //     ),
-          //   ),
-          // );
           Get.to(() => DetailedPage(id: id, isMovie: isMovie),
               transition: Transition.zoom);
         });
@@ -121,16 +114,13 @@ class SearchCarouselCard extends StatelessWidget {
             Expanded(
               child: Center(
                 child: Padding(
-                  padding: EdgeInsets.only(bottom: 0, top: 12),
+                  padding: const EdgeInsets.only(bottom: 0, top: 12),
                   child: Text(title,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.displaySmall),
                 ),
               ),
             ),
-            // const SizedBox(height: 12),
-            // const Spacer(),
-
             Center(
               child: Padding(
                 padding: const EdgeInsets.only(top: 10),
@@ -147,18 +137,6 @@ class SearchCarouselCard extends StatelessWidget {
                 ),
               ),
             ),
-
-            // const SizedBox(height: 12),
-            // const Spacer(),
-
-            // myRatingBar(),
-            // Row(
-            //   children: [
-            //     Flexible(flex: 1, child: Container()),
-            //     Flexible(flex: 2, child: Center(child: myRatingBar())),
-            //     Flexible(flex: 1, child: Container()),
-            //   ],
-            // ),
             Expanded(
               child: Center(
                 child: myRatingBar(),

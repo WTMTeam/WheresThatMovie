@@ -10,7 +10,6 @@
 // Modification Log:
 
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -68,9 +67,6 @@ class _CountryDropdownState extends State<CountryDropdown> {
     final data = json.decode(response);
 
     for (final country in data) {
-      // print("Country: $country");
-      // print("Country: ${country['iso_3166_1']}");
-      // print("Country: ${country['english_name']}");
       countryCodes.add(country['iso_3166_1'].toString());
       countryNames.add(country['english_name'].toString());
     }
@@ -94,7 +90,6 @@ class _CountryDropdownState extends State<CountryDropdown> {
           searchDelay: const Duration(milliseconds: 100),
           menuProps: MenuProps(
               borderRadius: BorderRadius.circular(10.0),
-              // backgroundColor: Colors.red),
               backgroundColor: Theme.of(context).colorScheme.primaryContainer),
           constraints: const BoxConstraints(maxHeight: 200)),
       items: countryNames,

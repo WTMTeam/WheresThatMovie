@@ -14,6 +14,7 @@
 //                      use interpolation.
 //    (04/07/2023)(SR): The appBar is now implemented, cards disappearing
 //                      is now handled.
+//    (05/25/2023)(SR): Added Credits to the Drawer menu.
 //
 
 import 'dart:math';
@@ -84,22 +85,18 @@ class _MyLoggedInState extends State<MyLoggedIn> {
           showErrorLogs: true,
         ),
       );
+
       String query = myController.text;
+
       Map result = await tmdbWithCustomLogs.v3.search.queryMulti(query);
+
       setState(() {
         previousSearch = myController.text;
         searchResults = result['results'];
       });
+
       for (int i = 0; i < searchResults.length; i++) {
         if (searchResults[i]['media_type'] == "movie") {
-          // List movie = [];
-          // movie.add(searchResults[i]['id']);
-          // movie.add(searchResults[i]['title']);
-          // movie.add(searchResults[i]['overview']);
-          // movie.add(searchResults[i]['vote_average']);
-          // movie.add(searchResults[i]['poster_path']);
-          // movies.add(movie);
-
           var thisMovie = {
             'id': searchResults[i]['id'],
             'title': searchResults[i]['title'],
@@ -108,16 +105,9 @@ class _MyLoggedInState extends State<MyLoggedIn> {
             'poster_path': searchResults[i]['poster_path'],
             'isMovie': true,
           };
+
           showsAndMovies.add(thisMovie);
         } else if (searchResults[i]['media_type'] == "tv") {
-          // List show = [];
-          // show.add(searchResults[i]['id']);
-          // show.add(searchResults[i]['name']);
-          // show.add(searchResults[i]['overview']);
-          // show.add(searchResults[i]['vote_average']);
-          // show.add(searchResults[i]['poster_path']);
-          // tvShows.add(show);
-
           var thisShow = {
             'id': searchResults[i]['id'],
             'title': searchResults[i]['name'],
@@ -126,6 +116,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
             'poster_path': searchResults[i]['poster_path'],
             'isMovie': false,
           };
+
           showsAndMovies.add(thisShow);
         } else if (searchResults[i]['media_type'] == "person") {
           people.add(searchResults[i]['name']);
@@ -146,10 +137,8 @@ class _MyLoggedInState extends State<MyLoggedIn> {
         String imgUrl =
             "https://image.tmdb.org/t/p/w200${showsAndMovies[i]['poster_path']}";
 
-        // print("URL: $imgUrl");
         if (showsAndMovies[i]['poster_path'] == null) {
           imgUrl = "";
-          // print("here");
         } else {
           newCards.add(SearchCarouselCard(
             id: showsAndMovies[i]['id'],
@@ -266,7 +255,6 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                   ),
                   onChanged: (value) async {
                     if (myController.text.isEmpty) {
-                      print("Empty text");
                       mySearch();
                       toTop();
                     }
@@ -274,14 +262,6 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                   onSubmitted: (value) async {
                     int waitTime = toTop();
                     Future.delayed(Duration(milliseconds: waitTime), () {
-                      // FocusNode().unfocus();
-                      // toTop();
-
-                      // setState(() {
-                      //   cards = [];
-                      // });
-                      // toTop();
-
                       mySearch();
                     });
                   },
@@ -299,18 +279,8 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                   ),
                 ),
                 onPressed: () {
-                  // mySearch();
                   int waitTime = toTop();
-
                   Future.delayed(Duration(milliseconds: waitTime), () {
-                    // FocusNode().unfocus();
-                    // toTop();
-
-                    // setState(() {
-                    //   cards = [];
-                    // });
-                    // carouselController.toTop();
-
                     mySearch();
                   });
                 },
@@ -393,20 +363,10 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                     FocusScope.of(context).unfocus();
                     if (keyboardValue > 0) {
                       Future.delayed(const Duration(milliseconds: 450), () {
-                        // Navigator.of(context).push(
-                        //   MaterialPageRoute(
-                        //     builder: (context) => const MyTrending(),
-                        //   ),
-                        // );
                         Get.to(() => const MyTrending(),
                             transition: Transition.downToUp);
                       });
                     } else {
-                      // Navigator.of(context).push(
-                      //   MaterialPageRoute(
-                      //     builder: (context) => const MyTrending(),
-                      //   ),
-                      // );
                       Get.to(() => const MyTrending(),
                           transition: Transition.downToUp);
                     }
@@ -460,9 +420,6 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                     ),
                     leading: const Icon(Icons.list),
                     onTap: () {
-                      // Update the state of the app
-                      // ...
-                      // Then close the drawer
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => const MyList(),
                       ));

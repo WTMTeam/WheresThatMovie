@@ -46,6 +46,7 @@ class _DetailedPageState extends State<DetailedPage> {
   final String apiKey = 'dbffa0d16fb8dc2873531156a5c5f41a';
   final String readAccessToken =
       'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmZmYTBkMTZmYjhkYzI4NzM1MzExNTZhNWM1ZjQxYSIsInN1YiI6IjYzODYzNzE0MDM5OGFiMDBjODM5MTJkOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.qQjwnSQLDfVNAuinpsM-ATK400-dnwuWUVirc7_AiQY';
+
   List streamingProviders = [];
   List logoPaths = [];
   List purchaseProviders = [];
@@ -81,7 +82,6 @@ class _DetailedPageState extends State<DetailedPage> {
   // Function to get the different providers for the
   // current movie or show
   getProviders(int id, String currentOption) async {
-    // print(id);
     _isLoading = true;
     _noSuchMethod = false;
 
@@ -107,7 +107,6 @@ class _DetailedPageState extends State<DetailedPage> {
         showResult = await tmdbWithCustomLogs.v3.tv.getDetails(id);
         providerResult =
             await tmdbWithCustomLogs.v3.tv.getWatchProviders(id.toString());
-        // print(providerResult);
       }
 
       setState(() {
@@ -126,7 +125,6 @@ class _DetailedPageState extends State<DetailedPage> {
           } else {
             streamingProviders =
                 providerResult['results'][countryCode]['flatrate'] ?? [];
-            // print("link: ${providerResult['results'][countryCode]['link']}");
           }
         } else if (currentOption == "Buy") {
           if (providerResult['results'][countryCode]['buy'] == null) {
@@ -144,6 +142,7 @@ class _DetailedPageState extends State<DetailedPage> {
           }
         }
       });
+
       _isLoading = false;
     } on NoSuchMethodError {
       setState(() {
@@ -183,25 +182,11 @@ class _DetailedPageState extends State<DetailedPage> {
 
   final ScrollController _myController = ScrollController();
 
-  // void launchNetflix(String movieId) async {
-  //   final netflixScheme = 'nflx://www.netflix.com/title/$movieId';
-  //   final webUrl = 'https://www.netflix.com/title/$movieId';
-  //   // print("Web URL: $webUrl");
-  //   if (await canLaunchUrl(Uri.parse(netflixScheme))) {
-  //     await launchUrl(Uri.parse(netflixScheme));
-  //   } else {
-  //     await launchUrl(Uri.parse(webUrl));
-  //   }
-  // }
-
-  // final String huluUrl = "hulu://search?query=$title";
-// await launchUrl(huluUrl);
-
   void openApp(String scheme, String title) async {
     Uri appScheme = Uri.parse(scheme);
-    // print("AppScheme: $appScheme");
+
+    // iOS-specific implementation
     if (Platform.isIOS) {
-      // iOS-specific implementation
       if (await canLaunchUrl(appScheme)) {
         // print("Can Launch Url");
         if (scheme == 'nflx://') {
@@ -239,7 +224,6 @@ class _DetailedPageState extends State<DetailedPage> {
         //   default:
         // }
       } else {
-        // print("opening app in app store");
         switch (scheme) {
           case 'nflx://':
             await launchUrl(
@@ -275,12 +259,10 @@ class _DetailedPageState extends State<DetailedPage> {
           //   break;
           default:
         }
-// url = Uri.parse('https://itunes.apple.com/app/id363590051');
-        // await launchUrl(Uri.parse('https://itunes.apple.com/app/id363590051'));
-        // throw 'Could not launch Netflix.';
       }
-    } else {
-      // Android-specific implementation
+    }
+    // Android-specific implementation
+    else {
       //! Implement the rest of these
       const String appPackageName = 'com.netflix.mediaclient';
       if (await DeviceApps.isAppInstalled(appPackageName)) {
@@ -291,40 +273,7 @@ class _DetailedPageState extends State<DetailedPage> {
     }
   }
 
-  // Future<void> _launchInWebViewOrVC(Uri url, String provider) async {
-  //   final netflixUrl =
-  //       'https://itunes.apple.com/us/app/netflix/id363590051?mt=8';
-
-  //   try {
-  //     if (!await launchUrl(
-  //       url,
-  //       mode: LaunchMode.platformDefault,
-  //       webViewConfiguration: const WebViewConfiguration(
-  //           headers: <String, String>{'my_header_key': 'my_header_value'}),
-  //     )) {
-  //       throw Exception('Could not launch $url');
-  //     }
-  //   } catch (error) {
-  //     // url for disney plus
-  //     // url = Uri.parse('https://itunes.apple.com/app/id363590051');
-  //     if (provider == "Netflix") {
-  //       url = Uri.parse('https://itunes.apple.com/app/id363590051');
-  //     } else if (provider == "Disney Plus") {
-  //       url = Uri.parse('https://itunes.apple.com/app/id1446075923');
-  //     } else if (provider == "Paramount Plus") {
-  //       url = Uri.parse(
-  //           'https://itunes.apple.com/us/app/cbs-all-access-stream-tv/id530168168');
-  //     }
-  //     if (!await launchUrl(
-  //       url,
-  //       mode: LaunchMode.platformDefault,
-  //       webViewConfiguration: const WebViewConfiguration(
-  //           headers: <String, String>{'my_header_key': 'my_header_value'}),
-  //     )) {}
-  //   }
-  // }
-
-  // Insert a new journal to the database
+  // Insert a new movie or show to the database
   Future<void> _addItem(
       int movieId, String movieTitle, String moviePath, bool isMovie) async {
     int isMovieInt = 0;
@@ -362,8 +311,6 @@ class _DetailedPageState extends State<DetailedPage> {
       );
     } else if (_wentWrong) {
       return Scaffold(
-        // resizeToAvoidBottomInset: false,
-
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -453,7 +400,6 @@ class _DetailedPageState extends State<DetailedPage> {
                       child: CountryDropdown(
                         onChanged: (code) {
                           countryCode = code;
-                          // print("here");
                           getProviders(widget.id, currentOption);
                         },
                       )),
@@ -463,15 +409,11 @@ class _DetailedPageState extends State<DetailedPage> {
                     alignment: Alignment.bottomLeft,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(18.0),
-                        // border: Border.all(color: Colors.red)),
                         border:
                             Border.all(color: Theme.of(context).primaryColor)),
                     constraints: const BoxConstraints(maxHeight: 55.0),
-
-                    // child: MyContainer(
                     child: Container(
-                      // width: screenWidth - 100,
-                      margin: EdgeInsets.symmetric(horizontal: 15.0),
+                      margin: const EdgeInsets.symmetric(horizontal: 15.0),
                       child: DropdownButton(
                         isExpanded: true,
                         underline: Container(),
@@ -514,9 +456,9 @@ class _DetailedPageState extends State<DetailedPage> {
                           itemCount: streamingProviders.length,
                           controller: _myController,
                           itemBuilder: ((context, index) {
-                            // print(streamingProviders[index]['provider_name']);
                             String imgUrl =
                                 "https://image.tmdb.org/t/p/w45${streamingProviders[index]['logo_path']}";
+
                             return Padding(
                               padding: const EdgeInsets.symmetric(
                                   vertical: 10.0, horizontal: 10.0),
@@ -533,16 +475,6 @@ class _DetailedPageState extends State<DetailedPage> {
                                   ),
                                   title: Text(streamingProviders[index]
                                       ['provider_name']),
-                                  // trailing: streamingProviders[index]
-                                  //                 ['provider_name'] ==
-                                  //             "Netflix" ||
-                                  //         streamingProviders[index]
-                                  //                 ['provider_name'] ==
-                                  //             "Disney Plus" ||
-                                  //         streamingProviders[index]
-                                  //                 ['provider_name'] ==
-                                  //             "Paramount Plus"
-
                                   trailing: supportedProviders.contains(
                                           streamingProviders[index]
                                               ['provider_name'])
@@ -552,39 +484,16 @@ class _DetailedPageState extends State<DetailedPage> {
                                             if (streamingProviders[index]
                                                     ['provider_name'] ==
                                                 "Netflix") {
-                                              // launchNetflix(widget.id.toString());
-                                              // print(widget.id);
-
-                                              // _launchInWebViewOrVC(
-                                              //     Uri.parse(
-                                              //         //  dynamic providerName = streamingProviders[index]['provider_name'];
-                                              //         "nflx://www.netflix.com/search?q=$title"),
-                                              //     streamingProviders[index]
-                                              //         ['provider_name']);
-
-                                              // _launchInWebViewOrVC(Uri.parse(
-                                              //     "https://www.netflix.com/watch/$widget.id"));
                                               openApp('nflx://', title);
                                             } else if (streamingProviders[index]
                                                     ['provider_name'] ==
                                                 "Disney Plus") {
                                               openApp('disneyplus://', title);
-                                              // _launchInWebViewOrVC(
-                                              //     Uri.parse("disneyplus://"),
-                                              //     streamingProviders[index]
-                                              //         ['provider_name']);
                                             } else if (streamingProviders[index]
                                                     ['provider_name'] ==
                                                 "Paramount Plus") {
                                               openApp(
                                                   'paramountplus://', title);
-                                              // Search link https://www.paramountplus.com/search/
-                                              // _launchInWebViewOrVC(
-                                              //     Uri.parse(
-                                              //         // "paramountplus://www.paramountplus.com/search/"));
-                                              //         "paramountplus://"),
-                                              //     streamingProviders[index]
-                                              //         ['provider_name']);
                                             } else if (streamingProviders[index]
                                                     ['provider_name'] ==
                                                 "Amazon Prime Video") {

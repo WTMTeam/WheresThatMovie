@@ -34,11 +34,6 @@ class MyCustomErrorMessage extends StatelessWidget {
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // const Text(
-                //   "Oh Snap!",
-                //   style: TextStyle(fontSize: 18, color: Colors.white),
-                // ),
-                // const Spacer(),
                 Text(
                   isMovie
                       ? "It looks like this movie is not available for ${errorText}ing in your region"
