@@ -5,6 +5,6 @@ Where's That Movie is an application where users can search for movies and see w
 
 The app is currently in testing and will hopefully be released on the stores soon.
 
-More information about the app can be found in the [Wiki](../../wiki)
+More information about the app can be found in the [Wiki](../../wiki) and on [wtmteam.github.io](https://wtmteam.github.io/)
 
 
