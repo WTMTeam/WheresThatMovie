@@ -9,7 +9,6 @@
 //    (03/07/2023)(SR):
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class Credits extends StatelessWidget {
   const Credits({super.key});

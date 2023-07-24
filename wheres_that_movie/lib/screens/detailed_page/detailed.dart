@@ -479,7 +479,7 @@ class _DetailedPageState extends State<DetailedPage> {
                                           streamingProviders[index]
                                               ['provider_name'])
                                       ? IconButton(
-                                          icon: Icon(Icons.open_in_new),
+                                          icon: const Icon(Icons.open_in_new),
                                           onPressed: () {
                                             if (streamingProviders[index]
                                                     ['provider_name'] ==
