@@ -17,14 +17,16 @@
 //    (05/25/2023)(SR): Added Credits to the Drawer menu.
 //    (07/24/2023)(SR): Added CircularProgressIndicator for loading search results.
 //                      Added clear as an optional parameter to mySearch, with default value
-//                      of false.
+//                      of false. Added navigation to the suggestions screen.
 
 import 'dart:math';
 import 'package:expandable_page_view/expandable_page_view.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wheres_that_movie/screens/credits/credits.dart';
 import 'package:wheres_that_movie/screens/my_list/my_list.dart';
+import 'package:wheres_that_movie/screens/suggestions/suggestions.dart';
 import 'package:wheres_that_movie/screens/trending_page/trending.dart';
 import 'package:wheres_that_movie/utils/provider/dark_theme_provider.dart';
 import 'package:tmdb_api/tmdb_api.dart';
@@ -437,6 +439,22 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => const MyList(),
+                      ));
+                    },
+                  ),
+                ),
+
+                Card(
+                  child: ListTile(
+                    title: Text(
+                      "Magic",
+                      style: Theme.of(context).textTheme.labelMedium,
+                    ),
+                    // leading: const Icon(CupertinoIcons.shuffle_medium),
+                    leading: const Icon(CupertinoIcons.wand_rays),
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const Suggestions(),
                       ));
                     },
                   ),
