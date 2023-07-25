@@ -8,7 +8,7 @@
 // Modification Log:
 //    (03/07/2023)(SR): Removed dead code.
 //    (03/07/2023)(SR): Changed deprecated headlines
-//
+//    (07/24/2023)(SR): Added placeholders in case the images are not loaded.
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -115,9 +115,12 @@ class CarouselCard extends StatelessWidget {
                 child: CachedNetworkImage(
                   imageUrl: imgUrl,
                   width: screenWidth / 1.33,
-                  errorWidget: (context, url, error) => Container(
+                  placeholder: (context, imgUrl) => const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                  errorWidget: (context, url, error) => const SizedBox(
                     height: 300,
-                    child: const Icon(Icons.no_photography_outlined, size: 200),
+                    child: Icon(Icons.no_photography_outlined, size: 200),
                   ),
                 ),
               ),
@@ -174,6 +177,13 @@ class CarouselCard extends StatelessWidget {
               const SizedBox(height: 12),
               CachedNetworkImage(
                 imageUrl: imgUrl,
+                placeholder: (context, imgUrl) => const Center(
+                  child: CircularProgressIndicator(),
+                ),
+                errorWidget: (context, url, error) => const SizedBox(
+                  height: 300,
+                  child: Icon(Icons.no_photography_outlined, size: 200),
+                ),
               ),
               const SizedBox(height: 12),
               myRatingBar(),

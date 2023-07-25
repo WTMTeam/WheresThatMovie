@@ -131,10 +131,9 @@ class SearchCarouselCard extends StatelessWidget {
                     placeholder: (context, imgUrl) => const Center(
                       child: CircularProgressIndicator(),
                     ),
-                    errorWidget: (context, imgUrl, error) => Container(
+                    errorWidget: (context, imgUrl, error) => const SizedBox(
                       height: 300,
-                      child:
-                          const Icon(Icons.no_photography_outlined, size: 200),
+                      child: Icon(Icons.no_photography_outlined, size: 200),
                     ),
                   ),
                 ),
