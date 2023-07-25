@@ -6,7 +6,7 @@
 //    have been important to the project and to TMDB.
 //
 // Modification Log:
-//    (03/07/2023)(SR):
+//    (07/24/2023)(SR): Added JustWatch attribution under TMDB.
 
 import 'package:flutter/material.dart';
 
@@ -92,7 +92,7 @@ class Credits extends StatelessWidget {
                       padding: const EdgeInsets.only(
                           left: 18.0, right: 8.0, bottom: 8.0),
                       child: Text(
-                        "This product uses the TMDB API but is not endorsed or certified by TMDB.",
+                        "This product uses the TMDB API but is not endorsed or certified by TMDB. The provider data is from JustWatch.",
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),
                     ),
