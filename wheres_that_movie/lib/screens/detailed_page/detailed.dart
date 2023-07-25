@@ -24,7 +24,7 @@ import 'package:flutter/material.dart';
 import 'package:tmdb_api/tmdb_api.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wheres_that_movie/database/database_helper.dart';
-import 'package:wheres_that_movie/screens/detailed_page/local_widgets/country_dropdown.dart';
+import 'package:wheres_that_movie/widgets/country_dropdown.dart';
 import 'package:wheres_that_movie/widgets/flash_message.dart';
 import 'package:wheres_that_movie/widgets/my_container.dart';
 
