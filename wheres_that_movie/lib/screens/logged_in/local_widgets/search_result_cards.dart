@@ -7,7 +7,7 @@
 // Modification Log:
 //    (03/07/2023)(SR): Removed dead code.
 //    (03/07/2023)(SR): Changed deprecated headlines
-//
+//    (07/24/2023)(SR): Added CircularProgressIndicator for loading images.
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -128,6 +128,9 @@ class SearchCarouselCard extends StatelessWidget {
                   height: 300,
                   child: CachedNetworkImage(
                     imageUrl: imgUrl,
+                    placeholder: (context, imgUrl) => const Center(
+                      child: CircularProgressIndicator(),
+                    ),
                     errorWidget: (context, imgUrl, error) => Container(
                       height: 300,
                       child:
