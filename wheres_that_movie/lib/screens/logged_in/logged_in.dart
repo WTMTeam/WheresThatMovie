@@ -15,7 +15,9 @@
 //    (04/07/2023)(SR): The appBar is now implemented, cards disappearing
 //                      is now handled.
 //    (05/25/2023)(SR): Added Credits to the Drawer menu.
-//
+//    (07/24/2023)(SR): Added CircularProgressIndicator for loading search results.
+//                      Added clear as an optional parameter to mySearch, with default value
+//                      of false.
 
 import 'dart:math';
 import 'package:expandable_page_view/expandable_page_view.dart';
@@ -57,7 +59,9 @@ class _MyLoggedInState extends State<MyLoggedIn> {
   List cards = [];
   List showsAndMovies = [];
 
-  mySearch() async {
+  bool loadingSearchResults = false;
+
+  mySearch({clear = false}) async {
     searchResults = [];
     tvShows = [];
     movies = [];
@@ -65,6 +69,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
     showsAndMovies = [];
     setState(() {
       cards = [];
+      loadingSearchResults = !clear;
     });
 
     // ? Redundant?
@@ -150,6 +155,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
           ));
           setState(() {
             cards = newCards;
+            loadingSearchResults = false;
           });
         }
       } catch (e) {
@@ -248,14 +254,14 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                         myController.clear();
                         toTop();
 
-                        mySearch();
+                        mySearch(clear: true);
                       },
                       icon: Icon(Icons.clear),
                     ),
                   ),
                   onChanged: (value) async {
                     if (myController.text.isEmpty) {
-                      mySearch();
+                      mySearch(clear: true);
                       toTop();
                     }
                   },
@@ -285,64 +291,73 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                   });
                 },
               ),
-              cards.isEmpty
-                  ? const SizedBox()
-                  : Container(
-                      margin: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-                      child: ExpandablePageView.builder(
-                          controller: carouselController,
-                          // allows our shadow to be displayed outside of widget bounds
-                          clipBehavior: Clip.none,
-                          itemCount: cards.length,
-                          itemBuilder: (_, index) {
-                            if (!carouselController.position.haveDimensions) {
-                              // Wait for the layout to stabilize before attempting to animate the PageController
-                              WidgetsBinding.instance.addPostFrameCallback((_) {
-                                if (carouselController
+              loadingSearchResults
+                  ? const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 200.0),
+                      child: CircularProgressIndicator(),
+                    )
+                  : cards.isEmpty
+                      ? const SizedBox()
+                      : Container(
+                          margin:
+                              const EdgeInsets.only(top: 10.0, bottom: 10.0),
+                          child: ExpandablePageView.builder(
+                              controller: carouselController,
+                              // allows our shadow to be displayed outside of widget bounds
+                              clipBehavior: Clip.none,
+                              itemCount: cards.length,
+                              itemBuilder: (_, index) {
+                                if (!carouselController
                                     .position.haveDimensions) {
-                                  // If the position has dimensions now, rebuild the widget tree to trigger the animation
-                                  setState(() {});
-                                }
-                              });
-                              // return const SizedBox();
-                              return const Center(
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 150),
-                                  child: CircularProgressIndicator(),
-                                ),
-                              );
-                            } else {
-                              double maxWidth = 0.0;
-                              return LayoutBuilder(
-                                builder: (BuildContext context,
-                                    BoxConstraints constraints) {
-                                  // Set the maximum height of all cards to the height of the highest card
-                                  if (maxWidth < constraints.maxWidth) {
-                                    maxWidth = constraints.maxWidth;
-                                  }
-                                  return SizedBox(
-                                    child: AnimatedBuilder(
-                                      animation: carouselController,
-                                      builder: (context, child) {
-                                        return Transform.scale(
-                                          scale: max(
-                                            0.85,
-                                            (1 -
-                                                (carouselController.page! -
-                                                            index)
-                                                        .abs() /
-                                                    2),
-                                          ),
-                                          child: cards[index],
-                                        );
-                                      },
+                                  // Wait for the layout to stabilize before attempting to animate the PageController
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((_) {
+                                    if (carouselController
+                                        .position.haveDimensions) {
+                                      // If the position has dimensions now, rebuild the widget tree to trigger the animation
+                                      setState(() {});
+                                    }
+                                  });
+                                  // return const SizedBox();
+                                  return const Center(
+                                    child: Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 150),
+                                      child: CircularProgressIndicator(),
                                     ),
                                   );
-                                },
-                              );
-                            }
-                          }),
-                    ),
+                                } else {
+                                  double maxWidth = 0.0;
+                                  return LayoutBuilder(
+                                    builder: (BuildContext context,
+                                        BoxConstraints constraints) {
+                                      // Set the maximum height of all cards to the height of the highest card
+                                      if (maxWidth < constraints.maxWidth) {
+                                        maxWidth = constraints.maxWidth;
+                                      }
+                                      return SizedBox(
+                                        child: AnimatedBuilder(
+                                          animation: carouselController,
+                                          builder: (context, child) {
+                                            return Transform.scale(
+                                              scale: max(
+                                                0.85,
+                                                (1 -
+                                                    (carouselController.page! -
+                                                                index)
+                                                            .abs() /
+                                                        2),
+                                              ),
+                                              child: cards[index],
+                                            );
+                                          },
+                                        ),
+                                      );
+                                    },
+                                  );
+                                }
+                              }),
+                        ),
               Container(
                 margin: const EdgeInsets.only(bottom: 10.0),
                 child: ElevatedButton(
