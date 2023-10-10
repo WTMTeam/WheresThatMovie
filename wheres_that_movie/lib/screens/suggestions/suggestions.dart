@@ -7,6 +7,8 @@
 //   streaming services and one or more genres of movies
 //   and get a suggestion of what to watch.
 //
+// Todo:
+// * See #17
 // Modification Log:
 //    (xx/xx/xxxx)(SR):
 
