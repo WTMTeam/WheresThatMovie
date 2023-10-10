@@ -20,6 +20,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:device_apps/device_apps.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tmdb_api/tmdb_api.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -332,7 +333,8 @@ class _DetailedPageState extends State<DetailedPage> {
                 Navigator.of(context).pop();
               },
               icon: Icon(
-                Icons.arrow_back_ios,
+                // Icons.arrow_back_ios,
+                CupertinoIcons.arrow_down_right_arrow_up_left,
                 color: Theme.of(context).colorScheme.primary,
               ),
             ),
