@@ -135,6 +135,12 @@ class _MyTrendingState extends State<MyTrending> {
       );
     } else if (!isHorizontal) {
       return Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Text(''),
+          backgroundColor: Theme.of(context).canvasColor,
+          toolbarHeight: 0.1,
+        ),
         // appBar: AppBar(
         //   leading: IconButton(
         //     onPressed: () {
@@ -175,13 +181,18 @@ class _MyTrendingState extends State<MyTrending> {
           child: Stack(children: <Widget>[
             SizedBox(
               width: screenWidth,
-              height: screenHeight / 1.2,
+              // height: screenHeight / 1.2,
+              height: screenHeight - MediaQuery.of(context).padding.top,
+
               child: CustomScrollView(
                 slivers: [
                   SliverToBoxAdapter(
                     child: Container(
+                      // margin: EdgeInsets.only(top: 50.0),
                       width: screenWidth,
-                      height: screenHeight / 1.2,
+                      // height: screenHeight / 1.1,
+                      height: screenHeight - MediaQuery.of(context).padding.top,
+
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
