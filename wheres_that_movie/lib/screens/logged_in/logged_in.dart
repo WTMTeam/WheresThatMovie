@@ -247,9 +247,10 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                   },
                   textInputAction: TextInputAction.search,
                   decoration: InputDecoration(
-                    prefixIcon: Icon(
+                    hintText: "Search for a movie or show",
+                    prefixIcon: const Icon(
                       Icons.search_outlined,
-                      color: Theme.of(context).primaryColor,
+                      // color: Theme.of(context).primaryColor,
                     ),
                     suffixIcon: IconButton(
                       onPressed: () {
@@ -268,10 +269,14 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                     }
                   },
                   onSubmitted: (value) async {
-                    int waitTime = toTop();
-                    Future.delayed(Duration(milliseconds: waitTime), () {
-                      mySearch();
-                    });
+                    if (myController.text.isEmpty) {
+                      print("Empty Search");
+                    } else {
+                      int waitTime = toTop();
+                      Future.delayed(Duration(milliseconds: waitTime), () {
+                        mySearch();
+                      });
+                    }
                   },
                 ),
               ),
@@ -287,10 +292,14 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                   ),
                 ),
                 onPressed: () {
-                  int waitTime = toTop();
-                  Future.delayed(Duration(milliseconds: waitTime), () {
-                    mySearch();
-                  });
+                  if (myController.text.isEmpty) {
+                    print("Empty Search");
+                  } else {
+                    int waitTime = toTop();
+                    Future.delayed(Duration(milliseconds: waitTime), () {
+                      mySearch();
+                    });
+                  }
                 },
               ),
               loadingSearchResults
