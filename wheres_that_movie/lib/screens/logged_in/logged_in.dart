@@ -259,7 +259,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
 
                         mySearch(clear: true);
                       },
-                      icon: Icon(Icons.clear),
+                      icon: const Icon(Icons.clear),
                     ),
                   ),
                   onChanged: (value) async {
@@ -270,7 +270,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                   },
                   onSubmitted: (value) async {
                     if (myController.text.isEmpty) {
-                      print("Empty Search");
+                      // Do nothing
                     } else {
                       int waitTime = toTop();
                       Future.delayed(Duration(milliseconds: waitTime), () {
@@ -293,7 +293,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                 ),
                 onPressed: () {
                   if (myController.text.isEmpty) {
-                    print("Empty Search");
+                    // Do nothing
                   } else {
                     int waitTime = toTop();
                     Future.delayed(Duration(milliseconds: waitTime), () {
