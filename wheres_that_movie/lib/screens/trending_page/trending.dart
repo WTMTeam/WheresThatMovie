@@ -172,64 +172,7 @@ class _MyTrendingState extends State<MyTrending> {
         // ),
         body: SafeArea(
           bottom: false,
-          child: Column(children: <Widget>[
-            MyCustomAppBar(
-              title: "Trending",
-              onBackButtonPressed: () {
-                Navigator.of(context).pop();
-              },
-              onSwipeDown: () {
-                print("Swipe down");
-                Navigator.of(context).pop();
-              },
-              makeCardList: makeCardList(),
-              direction: isHorizontal,
-              onIsHorizontalChanged: (newIsHorizontal) {
-                setState(() {
-                  isHorizontal = newIsHorizontal;
-                  makeCardList();
-                });
-              },
-            ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: [
-            //     FloatingActionButton(
-            //         heroTag: "backButton",
-            //         backgroundColor: const Color.fromARGB(0, 0, 0, 0),
-            //         elevation: 0.0,
-            //         onPressed: () {
-            //           Navigator.of(context).pop();
-            //         },
-            //         child: const Icon(
-            //           Icons.arrow_back_ios,
-            //         )),
-            //     SizedBox(
-            //       height: 50.0,
-            //       child: Text(
-            //         "Trending",
-            //         style: Theme.of(context).textTheme.displayLarge,
-            //       ),
-            //     ),
-            //     FloatingActionButton(
-            //       heroTag: "swapButton",
-            //       backgroundColor: const Color.fromARGB(0, 0, 0, 0),
-            //       elevation: 0.0,
-            //       onPressed: () {
-            //         isHorizontal ? isHorizontal = false : isHorizontal = true;
-            //         makeCardList();
-            //       },
-            //       child: isHorizontal
-            //           ? const Icon(
-            //               Icons.swap_vert,
-            //             )
-            //           : const Icon(
-            //               Icons.swap_horiz,
-            //             ),
-            //     ),
-            //     // floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-            //   ],
-            // ),
+          child: Stack(children: <Widget>[
             SizedBox(
               width: screenWidth,
               height: screenHeight / 1.2,
@@ -284,6 +227,24 @@ class _MyTrendingState extends State<MyTrending> {
                   ),
                 ],
               ),
+            ),
+            MyCustomAppBar(
+              title: "Trending",
+              onBackButtonPressed: () {
+                Navigator.of(context).pop();
+              },
+              onSwipeDown: () {
+                print("Swipe down");
+                Navigator.of(context).pop();
+              },
+              makeCardList: makeCardList(),
+              direction: isHorizontal,
+              onIsHorizontalChanged: (newIsHorizontal) {
+                setState(() {
+                  isHorizontal = newIsHorizontal;
+                  makeCardList();
+                });
+              },
             ),
           ]),
         ),
