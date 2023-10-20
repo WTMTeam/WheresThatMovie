@@ -15,6 +15,7 @@ import 'dart:math';
 import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tmdb_api/tmdb_api.dart';
+import 'package:wheres_that_movie/screens/trending_page/trending_appbar.dart';
 import 'package:wheres_that_movie/screens/trending_page/trending_card.dart';
 
 // carousel https://itnext.io/dynamically-sized-animated-carousel-in-flutter-8a88b005be74
@@ -134,44 +135,62 @@ class _MyTrendingState extends State<MyTrending> {
       );
     } else if (!isHorizontal) {
       return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            icon: Icon(
-              Icons.keyboard_arrow_down_sharp,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          ),
-          title: Text(
-            "Trending",
-            style: Theme.of(context).textTheme.displayLarge,
-          ),
-          centerTitle: true,
-          actions: <Widget>[
-            IconButton(
-              onPressed: () {
-                isHorizontal ? isHorizontal = false : isHorizontal = true;
-                makeCardList();
-              },
-              icon: isHorizontal
-                  ? Icon(
-                      Icons.swap_vert,
-                      color: Theme.of(context).colorScheme.primary,
-                    )
-                  : Icon(
-                      Icons.swap_horiz,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-            ),
-          ],
-          backgroundColor: Theme.of(context).canvasColor,
-          elevation: 10.0,
-        ),
+        // appBar: AppBar(
+        //   leading: IconButton(
+        //     onPressed: () {
+        //       Navigator.of(context).pop();
+        //     },
+        //     icon: Icon(
+        //       Icons.keyboard_arrow_down_sharp,
+        //       color: Theme.of(context).colorScheme.primary,
+        //     ),
+        //   ),
+        //   title: Text(
+        //     "Trending",
+        //     style: Theme.of(context).textTheme.displayLarge,
+        //   ),
+        //   centerTitle: true,
+        //   actions: <Widget>[
+        //     IconButton(
+        //       onPressed: () {
+        //         isHorizontal ? isHorizontal = false : isHorizontal = true;
+        //         makeCardList();
+        //       },
+        //       icon: isHorizontal
+        //           ? Icon(
+        //               Icons.swap_vert,
+        //               color: Theme.of(context).colorScheme.primary,
+        //             )
+        //           : Icon(
+        //               Icons.swap_horiz,
+        //               color: Theme.of(context).colorScheme.primary,
+        //             ),
+        //     ),
+        //   ],
+        //   backgroundColor: Theme.of(context).canvasColor,
+        //   elevation: 10.0,
+        // ),
         body: SafeArea(
           bottom: false,
           child: Column(children: <Widget>[
+            MyCustomAppBar(
+              title: "Trending",
+              onBackButtonPressed: () {
+                Navigator.of(context).pop();
+              },
+              onSwipeDown: () {
+                print("Swipe down");
+                Navigator.of(context).pop();
+              },
+              makeCardList: makeCardList(),
+              direction: isHorizontal,
+              onIsHorizontalChanged: (newIsHorizontal) {
+                setState(() {
+                  isHorizontal = newIsHorizontal;
+                  makeCardList();
+                });
+              },
+            ),
             // Row(
             //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
             //   children: [
@@ -271,99 +290,114 @@ class _MyTrendingState extends State<MyTrending> {
       );
     } else {
       return Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              icon: Icon(
-                Icons.arrow_back_ios,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-            ),
-            title: Text(
-              "Trending",
-              style: Theme.of(context).textTheme.displayLarge,
-            ),
-            centerTitle: true,
-            actions: <Widget>[
-              IconButton(
-                onPressed: () {
-                  isHorizontal ? isHorizontal = false : isHorizontal = true;
-                  makeCardList();
-                },
-                icon: isHorizontal
-                    ? Icon(
-                        Icons.swap_vert,
-                        color: Theme.of(context).colorScheme.primary,
-                      )
-                    : Icon(
-                        Icons.swap_horiz,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-              ),
-            ],
-            backgroundColor: Theme.of(context).canvasColor,
-            elevation: 10.0,
-          ),
+
+          // appBar: AppBar(
+          //   leading: IconButton(
+          //     onPressed: () {
+          //       Navigator.of(context).pop();
+          //     },
+          //     icon: Icon(
+          //       Icons.keyboard_arrow_down_sharp,
+          //       color: Theme.of(context).colorScheme.primary,
+          //     ),
+          //   ),
+          //   title: Text(
+          //     "Trending",
+          //     style: Theme.of(context).textTheme.displayLarge,
+          //   ),
+          //   centerTitle: true,
+          //   actions: <Widget>[
+          //     IconButton(
+          //       onPressed: () {
+          //         isHorizontal ? isHorizontal = false : isHorizontal = true;
+          //         makeCardList();
+          //       },
+          //       icon: isHorizontal
+          //           ? Icon(
+          //               Icons.swap_vert,
+          //               color: Theme.of(context).colorScheme.primary,
+          //             )
+          //           : Icon(
+          //               Icons.swap_horiz,
+          //               color: Theme.of(context).colorScheme.primary,
+          //             ),
+          //     ),
+          //   ],
+          //   backgroundColor: Theme.of(context).canvasColor,
+          //   elevation: 10.0,
+          // ),
           body: SafeArea(
-            bottom: false,
-            child: Column(children: <Widget>[
-              SizedBox(
-                height: screenHeight / 1.2,
-                width: screenWidth,
-                child: CustomScrollView(
-                  slivers: [
-                    SliverFillRemaining(
-                      hasScrollBody: false,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ExpandablePageView.builder(
-                            controller: carouselController2,
-                            // allows our shadow to be displayed outside of widget bounds
-                            clipBehavior: Clip.none,
-                            itemCount: cards.length,
-                            itemBuilder: (_, index) {
-                              if (!carouselController2
-                                  .position.haveDimensions) {
-                                // Wait for the layout to stabilize before attempting to animate the PageController
-                                WidgetsBinding.instance
-                                    .addPostFrameCallback((_) {
-                                  if (carouselController2
-                                      .position.haveDimensions) {
-                                    // If the position has dimensions now, rebuild the widget tree to trigger the animation
-                                    setState(() {});
-                                  }
-                                });
-                                // return const SizedBox();
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
+        bottom: false,
+        child: Column(children: <Widget>[
+          MyCustomAppBar(
+            title: "Trending",
+            onBackButtonPressed: () {
+              Navigator.of(context).pop();
+            },
+            onSwipeDown: () {
+              print("Swipe down");
+              Navigator.of(context).pop();
+            },
+            makeCardList: makeCardList(),
+            direction: isHorizontal,
+            onIsHorizontalChanged: (newIsHorizontal) {
+              setState(() {
+                isHorizontal = newIsHorizontal;
+                makeCardList();
+              });
+            },
+          ),
+          SizedBox(
+            height: screenHeight / 1.2,
+            width: screenWidth,
+            child: CustomScrollView(
+              slivers: [
+                SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ExpandablePageView.builder(
+                        controller: carouselController2,
+                        // allows our shadow to be displayed outside of widget bounds
+                        clipBehavior: Clip.none,
+                        itemCount: cards.length,
+                        itemBuilder: (_, index) {
+                          if (!carouselController2.position.haveDimensions) {
+                            // Wait for the layout to stabilize before attempting to animate the PageController
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              if (carouselController2.position.haveDimensions) {
+                                // If the position has dimensions now, rebuild the widget tree to trigger the animation
+                                setState(() {});
                               }
-                              return AnimatedBuilder(
-                                animation: carouselController2,
-                                builder: (_, __) => Transform.scale(
-                                  scale: max(
-                                    0.85,
-                                    (1 -
-                                        (carouselController2.page! - index)
-                                                .abs() /
-                                            2),
-                                  ),
-                                  child: cards[index],
-                                ),
-                              );
-                            },
-                          ),
-                        ],
+                            });
+                            // return const SizedBox();
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          return AnimatedBuilder(
+                            animation: carouselController2,
+                            builder: (_, __) => Transform.scale(
+                              scale: max(
+                                0.85,
+                                (1 -
+                                    (carouselController2.page! - index).abs() /
+                                        2),
+                              ),
+                              child: cards[index],
+                            ),
+                          );
+                        },
                       ),
-                    )
-                  ],
-                ),
-              ),
-            ]),
-          ));
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        ]),
+      ));
     }
   }
 }
