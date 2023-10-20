@@ -31,7 +31,8 @@ class MyCustomAppBar extends StatelessWidget {
         }
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
+        // margin: const EdgeInsets.only(bottom: 10.0),
         decoration: BoxDecoration(
           color: Theme.of(context).canvasColor,
           boxShadow: [
