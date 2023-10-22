@@ -355,175 +355,185 @@ class _DetailedPageState extends State<DetailedPage> {
           body: SafeArea(
             bottom: false,
             child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10.0, vertical: 10.0),
-                    child: MyContainer(
-                        child: Text(description,
-                            style: Theme.of(context).textTheme.bodyLarge)),
-                  ),
-                  ElevatedButton(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 50.0),
-                      child: itemExists
-                          ? const Text(
-                              "Remove from My List",
-                              style: TextStyle(
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            )
-                          : const Text(
-                              "Add to My List",
-                              style: TextStyle(
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+              child: GestureDetector(
+                onScaleUpdate: (details) {
+                  print("Details: $details");
+                  if (details.pointerCount > 1 && details.scale < 1.0) {
+                    Navigator.of(context).pop();
+                  }
+                },
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10.0, vertical: 10.0),
+                      child: MyContainer(
+                          child: Text(description,
+                              style: Theme.of(context).textTheme.bodyLarge)),
                     ),
-                    onPressed: () {
-                      if (itemExists) {
-                        _deleteItem(widget.id);
-                      } else {
-                        _addItem(widget.id, title, posterPath, widget.isMovie);
-                      }
-                      getMyList();
-                    },
-                  ),
-                  Container(
-                      margin: const EdgeInsets.symmetric(
-                        vertical: 15.0,
-                        horizontal: 10.0,
-                      ),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50.0)),
-                      child: CountryDropdown(
-                        onChanged: (code) {
-                          countryCode = code;
-                          getProviders(widget.id, currentOption);
-                        },
-                      )),
-                  Container(
-                    margin: const EdgeInsets.only(
-                        top: 5.0, bottom: 5.0, left: 10.0, right: 10.0),
-                    alignment: Alignment.bottomLeft,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(18.0),
-                        border:
-                            Border.all(color: Theme.of(context).primaryColor)),
-                    constraints: const BoxConstraints(maxHeight: 55.0),
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 15.0),
-                      child: DropdownButton(
-                        isExpanded: true,
-                        underline: Container(),
-                        borderRadius: BorderRadius.circular(10.0),
-                        dropdownColor:
-                            Theme.of(context).colorScheme.primaryContainer,
-                        value: currentOption,
-                        items: options
-                            .map<DropdownMenuItem<String>>(
-                              (e) => DropdownMenuItem(
-                                value: e,
-                                child: Text(
-                                  e,
-                                  style: Theme.of(context).textTheme.bodyLarge,
+                    ElevatedButton(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                        child: itemExists
+                            ? const Text(
+                                "Remove from My List",
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            : const Text(
+                                "Add to My List",
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            )
-                            .toList(),
-                        onChanged: (String? value) => setState(
-                          () {
-                            if (value != null) currentOption = value;
+                      ),
+                      onPressed: () {
+                        if (itemExists) {
+                          _deleteItem(widget.id);
+                        } else {
+                          _addItem(
+                              widget.id, title, posterPath, widget.isMovie);
+                        }
+                        getMyList();
+                      },
+                    ),
+                    Container(
+                        margin: const EdgeInsets.symmetric(
+                          vertical: 15.0,
+                          horizontal: 10.0,
+                        ),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50.0)),
+                        child: CountryDropdown(
+                          onChanged: (code) {
+                            countryCode = code;
                             getProviders(widget.id, currentOption);
                           },
+                        )),
+                    Container(
+                      margin: const EdgeInsets.only(
+                          top: 5.0, bottom: 5.0, left: 10.0, right: 10.0),
+                      alignment: Alignment.bottomLeft,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(18.0),
+                          border: Border.all(
+                              color: Theme.of(context).primaryColor)),
+                      constraints: const BoxConstraints(maxHeight: 55.0),
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 15.0),
+                        child: DropdownButton(
+                          isExpanded: true,
+                          underline: Container(),
+                          borderRadius: BorderRadius.circular(10.0),
+                          dropdownColor:
+                              Theme.of(context).colorScheme.primaryContainer,
+                          value: currentOption,
+                          items: options
+                              .map<DropdownMenuItem<String>>(
+                                (e) => DropdownMenuItem(
+                                  value: e,
+                                  child: Text(
+                                    e,
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                          onChanged: (String? value) => setState(
+                            () {
+                              if (value != null) currentOption = value;
+                              getProviders(widget.id, currentOption);
+                            },
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  // ),
-                  _noSuchMethod
-                      ? Padding(
-                          padding: const EdgeInsets.only(top: 5.0),
-                          child: MyCustomErrorMessage(
-                            errorText: currentOption,
-                            isMovie: widget.isMovie,
-                          ),
-                        )
-                      : ListView.builder(
-                          padding: const EdgeInsets.only(top: 10),
-                          shrinkWrap: true,
-                          itemCount: streamingProviders.length,
-                          controller: _myController,
-                          itemBuilder: ((context, index) {
-                            String imgUrl =
-                                "https://image.tmdb.org/t/p/w45${streamingProviders[index]['logo_path']}";
+                    // ),
+                    _noSuchMethod
+                        ? Padding(
+                            padding: const EdgeInsets.only(top: 5.0),
+                            child: MyCustomErrorMessage(
+                              errorText: currentOption,
+                              isMovie: widget.isMovie,
+                            ),
+                          )
+                        : ListView.builder(
+                            padding: const EdgeInsets.only(top: 10),
+                            shrinkWrap: true,
+                            itemCount: streamingProviders.length,
+                            controller: _myController,
+                            itemBuilder: ((context, index) {
+                              String imgUrl =
+                                  "https://image.tmdb.org/t/p/w45${streamingProviders[index]['logo_path']}";
 
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 10.0, horizontal: 10.0),
-                              child: MyContainer(
-                                child: ListTile(
-                                  contentPadding: const EdgeInsets.all(5),
-                                  leading: CachedNetworkImage(
-                                    imageUrl: imgUrl,
-                                    width: 50.0,
-                                    errorWidget: (context, imgUrl, error) =>
-                                        const Icon(
-                                            Icons.no_photography_outlined,
-                                            size: 50),
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10.0, horizontal: 10.0),
+                                child: MyContainer(
+                                  child: ListTile(
+                                    contentPadding: const EdgeInsets.all(5),
+                                    leading: CachedNetworkImage(
+                                      imageUrl: imgUrl,
+                                      width: 50.0,
+                                      errorWidget: (context, imgUrl, error) =>
+                                          const Icon(
+                                              Icons.no_photography_outlined,
+                                              size: 50),
+                                    ),
+                                    title: Text(streamingProviders[index]
+                                        ['provider_name']),
+                                    trailing: supportedProviders.contains(
+                                            streamingProviders[index]
+                                                ['provider_name'])
+                                        ? IconButton(
+                                            icon: const Icon(Icons.open_in_new),
+                                            onPressed: () {
+                                              if (streamingProviders[index]
+                                                      ['provider_name'] ==
+                                                  "Netflix") {
+                                                openApp('nflx://', title);
+                                              } else if (streamingProviders[
+                                                      index]['provider_name'] ==
+                                                  "Disney Plus") {
+                                                openApp('disneyplus://', title);
+                                              } else if (streamingProviders[
+                                                      index]['provider_name'] ==
+                                                  "Paramount Plus") {
+                                                openApp(
+                                                    'paramountplus://', title);
+                                              } else if (streamingProviders[
+                                                      index]['provider_name'] ==
+                                                  "Amazon Prime Video") {
+                                                openApp('primevideo://', title);
+                                              } else if (streamingProviders[
+                                                      index]['provider_name'] ==
+                                                  "Hulu") {
+                                                openApp('hulu://', title);
+                                              } else if (streamingProviders[
+                                                      index]['provider_name'] ==
+                                                  "fuboTV") {
+                                                openApp('fuboTV://', title);
+                                              } else if (streamingProviders[
+                                                      index]['provider_name'] ==
+                                                  "Apple TV Plus") {
+                                                openApp('videos://', title);
+                                              }
+                                            },
+                                          )
+                                        : null,
                                   ),
-                                  title: Text(streamingProviders[index]
-                                      ['provider_name']),
-                                  trailing: supportedProviders.contains(
-                                          streamingProviders[index]
-                                              ['provider_name'])
-                                      ? IconButton(
-                                          icon: const Icon(Icons.open_in_new),
-                                          onPressed: () {
-                                            if (streamingProviders[index]
-                                                    ['provider_name'] ==
-                                                "Netflix") {
-                                              openApp('nflx://', title);
-                                            } else if (streamingProviders[index]
-                                                    ['provider_name'] ==
-                                                "Disney Plus") {
-                                              openApp('disneyplus://', title);
-                                            } else if (streamingProviders[index]
-                                                    ['provider_name'] ==
-                                                "Paramount Plus") {
-                                              openApp(
-                                                  'paramountplus://', title);
-                                            } else if (streamingProviders[index]
-                                                    ['provider_name'] ==
-                                                "Amazon Prime Video") {
-                                              openApp('primevideo://', title);
-                                            } else if (streamingProviders[index]
-                                                    ['provider_name'] ==
-                                                "Hulu") {
-                                              openApp('hulu://', title);
-                                            } else if (streamingProviders[index]
-                                                    ['provider_name'] ==
-                                                "fuboTV") {
-                                              openApp('fuboTV://', title);
-                                            } else if (streamingProviders[index]
-                                                    ['provider_name'] ==
-                                                "Apple TV Plus") {
-                                              openApp('videos://', title);
-                                            }
-                                          },
-                                        )
-                                      : null,
                                 ),
-                              ),
-                            );
-                          })),
-                  const SizedBox(
-                    height: 15.0,
-                  ),
-                ],
+                              );
+                            })),
+                    const SizedBox(
+                      height: 15.0,
+                    ),
+                  ],
+                ),
               ),
             ),
           ));
