@@ -139,7 +139,8 @@ class _MyTrendingState extends State<MyTrending> {
           automaticallyImplyLeading: false,
           title: Text(''),
           backgroundColor: Theme.of(context).canvasColor,
-          toolbarHeight: 0.1,
+          toolbarHeight: 0,
+          elevation: 0.0,
         ),
         // appBar: AppBar(
         //   leading: IconButton(
@@ -247,6 +248,14 @@ class _MyTrendingState extends State<MyTrending> {
               onSwipeDown: () {
                 print("Swipe down");
                 Navigator.of(context).pop();
+                print("here");
+
+                // Get.to(
+                //   () => const MyLoggedIn(),
+                //   transition: Transition.upToDown,
+                //   // duration: Duration(milliseconds: 5000),
+                //   // popGesture: true
+                // );
               },
               makeCardList: makeCardList(),
               direction: isHorizontal,
