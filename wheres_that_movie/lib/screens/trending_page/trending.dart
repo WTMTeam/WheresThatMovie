@@ -246,16 +246,7 @@ class _MyTrendingState extends State<MyTrending> {
                 Navigator.of(context).pop();
               },
               onSwipeDown: () {
-                print("Swipe down");
                 Navigator.of(context).pop();
-                print("here");
-
-                // Get.to(
-                //   () => const MyLoggedIn(),
-                //   transition: Transition.upToDown,
-                //   // duration: Duration(milliseconds: 5000),
-                //   // popGesture: true
-                // );
               },
               makeCardList: makeCardList(),
               direction: isHorizontal,
@@ -316,7 +307,6 @@ class _MyTrendingState extends State<MyTrending> {
               Navigator.of(context).pop();
             },
             onSwipeDown: () {
-              print("Swipe down");
               Navigator.of(context).pop();
             },
             makeCardList: makeCardList(),

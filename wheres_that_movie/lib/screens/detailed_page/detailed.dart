@@ -357,7 +357,6 @@ class _DetailedPageState extends State<DetailedPage> {
             child: SingleChildScrollView(
               child: GestureDetector(
                 onScaleUpdate: (details) {
-                  print("Details: $details");
                   if (details.pointerCount > 1 && details.scale < 1.0) {
                     Navigator.of(context).pop();
                   }
