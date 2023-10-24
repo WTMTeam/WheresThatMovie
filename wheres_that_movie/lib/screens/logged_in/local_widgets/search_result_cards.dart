@@ -28,14 +28,14 @@ class SearchCarouselCard extends StatelessWidget {
   final int id;
 
   const SearchCarouselCard({
-    Key? key,
+    super.key,
     required this.id,
     required this.imgUrl,
     required this.title,
     required this.overview,
     required this.rating,
     required this.isMovie,
-  }) : super(key: key);
+  });
 
   Widget myRatingBar() {
     return RatingBar(

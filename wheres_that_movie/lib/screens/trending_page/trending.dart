@@ -21,7 +21,7 @@ import 'package:wheres_that_movie/screens/trending_page/trending_card.dart';
 // carousel https://itnext.io/dynamically-sized-animated-carousel-in-flutter-8a88b005be74
 
 class MyTrending extends StatefulWidget {
-  const MyTrending({Key? key}) : super(key: key);
+  const MyTrending({super.key});
 
   @override
   State<MyTrending> createState() => _MyTrendingState();

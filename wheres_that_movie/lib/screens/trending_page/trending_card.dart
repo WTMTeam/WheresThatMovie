@@ -26,7 +26,7 @@ class CarouselCard extends StatelessWidget {
   final bool isMovie;
 
   const CarouselCard({
-    Key? key,
+    super.key,
     required this.id,
     required this.imgUrl,
     required this.title,
@@ -34,7 +34,7 @@ class CarouselCard extends StatelessWidget {
     required this.rating,
     required this.isHorizontal,
     required this.isMovie,
-  }) : super(key: key);
+  });
 
   Widget myRatingBar() {
     return RatingBar(

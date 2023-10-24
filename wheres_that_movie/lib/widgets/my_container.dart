@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 class MyContainer extends StatelessWidget {
   final Widget child;
 
-  const MyContainer({Key? key, required this.child}) : super(key: key);
+  const MyContainer({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {

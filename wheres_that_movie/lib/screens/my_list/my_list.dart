@@ -15,7 +15,7 @@ import 'package:wheres_that_movie/database/database_helper.dart';
 import 'package:wheres_that_movie/screens/my_list/local_widgets/my_list_container.dart';
 
 class MyList extends StatefulWidget {
-  const MyList({Key? key}) : super(key: key);
+  const MyList({super.key});
 
   @override
   State<MyList> createState() => _MyListState();
