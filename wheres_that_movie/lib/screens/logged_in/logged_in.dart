@@ -34,7 +34,7 @@ import 'local_widgets/search_result_cards.dart';
 import 'package:get/get.dart';
 
 class MyLoggedIn extends StatefulWidget {
-  const MyLoggedIn({Key? key}) : super(key: key);
+  const MyLoggedIn({super.key});
 
   @override
   State<MyLoggedIn> createState() => _MyLoggedInState();

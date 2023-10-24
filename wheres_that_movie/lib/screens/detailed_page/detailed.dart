@@ -34,10 +34,10 @@ class DetailedPage extends StatefulWidget {
   final bool isMovie;
 
   const DetailedPage({
-    Key? key,
+    super.key,
     required this.id,
     required this.isMovie,
-  }) : super(key: key);
+  });
 
   @override
   State<DetailedPage> createState() => _DetailedPageState();

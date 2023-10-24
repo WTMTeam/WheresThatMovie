@@ -22,12 +22,12 @@ class MyListContainer extends StatefulWidget {
 
   final Function(int) onRemoved;
   MyListContainer({
-    Key? key,
+    super.key,
     required this.myList,
     required this.onRemoved,
     required this.myController,
     required this.refreshList,
-  }) : super(key: key);
+  });
 
   @override
   State<MyListContainer> createState() => _MyListContainerState();
