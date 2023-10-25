@@ -146,66 +146,71 @@ class _MyTrendingState extends State<MyTrending> {
         body: SafeArea(
           bottom: false,
           child: Stack(children: <Widget>[
-            SizedBox(
-              width: screenWidth,
-              // height: screenHeight / 1.2,
-              height: screenHeight - MediaQuery.of(context).padding.top,
-              child: CustomScrollView(
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: Container(
-                      // margin: EdgeInsets.only(top: 50.0),
-                      width: screenWidth,
-                      // height: screenHeight / 1.1,
-                      height: screenHeight - MediaQuery.of(context).padding.top,
+            Padding(
+              padding: const EdgeInsets.only(top: 80.0),
+              child: SizedBox(
+                width: screenWidth,
+                height: screenHeight / 1.2,
+                // height: screenHeight - MediaQuery.of(context).padding.top,
+                child: CustomScrollView(
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: Container(
+                        // padding: const EdgeInsets.only(top: 100.0),
+                        // margin: EdgeInsets.only(top: 50.0),
+                        width: screenWidth,
+                        height: screenHeight / 1.2,
+                        // height: screenHeight - MediaQuery.of(context).padding.top,
 
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ExpandablePageView.builder(
-                            scrollDirection: Axis.vertical,
-                            controller: carouselController,
-                            clipBehavior: Clip.none,
-                            itemCount: cards.length,
-                            itemBuilder: (_, index) {
-                              if (!carouselController.position.haveDimensions) {
-                                // Wait for the layout to stabilize before attempting to animate the PageController
-                                WidgetsBinding.instance
-                                    .addPostFrameCallback((_) {
-                                  if (carouselController
-                                      .position.haveDimensions) {
-                                    // If the position has dimensions now, rebuild the widget tree to trigger the animation
-                                    setState(() {});
-                                  }
-                                });
-                                // return const SizedBox();
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              }
-                              return Visibility(
-                                visible: cardsVisible,
-                                child: AnimatedBuilder(
-                                  animation: carouselController,
-                                  builder: (_, __) => Transform.scale(
-                                    scale: max(
-                                      0.85,
-                                      (1 -
-                                          (carouselController.page! - index)
-                                                  .abs() /
-                                              2),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ExpandablePageView.builder(
+                              scrollDirection: Axis.vertical,
+                              controller: carouselController,
+                              clipBehavior: Clip.none,
+                              itemCount: cards.length,
+                              itemBuilder: (_, index) {
+                                if (!carouselController
+                                    .position.haveDimensions) {
+                                  // Wait for the layout to stabilize before attempting to animate the PageController
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((_) {
+                                    if (carouselController
+                                        .position.haveDimensions) {
+                                      // If the position has dimensions now, rebuild the widget tree to trigger the animation
+                                      setState(() {});
+                                    }
+                                  });
+                                  // return const SizedBox();
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+                                return Visibility(
+                                  visible: cardsVisible,
+                                  child: AnimatedBuilder(
+                                    animation: carouselController,
+                                    builder: (_, __) => Transform.scale(
+                                      scale: max(
+                                        0.85,
+                                        (1 -
+                                            (carouselController.page! - index)
+                                                    .abs() /
+                                                2),
+                                      ),
+                                      child: cards[index],
                                     ),
-                                    child: cards[index],
                                   ),
-                                ),
-                              );
-                            },
-                          ),
-                        ],
+                                );
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             MyCustomAppBar(
@@ -220,6 +225,7 @@ class _MyTrendingState extends State<MyTrending> {
                 setState(() {
                   cardsVisible = false;
                 });
+                cardsVisible = false;
                 Navigator.of(context).pop();
               },
               makeCardList: makeCardList(),
@@ -236,42 +242,6 @@ class _MyTrendingState extends State<MyTrending> {
       );
     } else {
       return Scaffold(
-
-          // appBar: AppBar(
-          //   leading: IconButton(
-          //     onPressed: () {
-          //       Navigator.of(context).pop();
-          //     },
-          //     icon: Icon(
-          //       Icons.keyboard_arrow_down_sharp,
-          //       color: Theme.of(context).colorScheme.primary,
-          //     ),
-          //   ),
-          //   title: Text(
-          //     "Trending",
-          //     style: Theme.of(context).textTheme.displayLarge,
-          //   ),
-          //   centerTitle: true,
-          //   actions: <Widget>[
-          //     IconButton(
-          //       onPressed: () {
-          //         isHorizontal ? isHorizontal = false : isHorizontal = true;
-          //         makeCardList();
-          //       },
-          //       icon: isHorizontal
-          //           ? Icon(
-          //               Icons.swap_vert,
-          //               color: Theme.of(context).colorScheme.primary,
-          //             )
-          //           : Icon(
-          //               Icons.swap_horiz,
-          //               color: Theme.of(context).colorScheme.primary,
-          //             ),
-          //     ),
-          //   ],
-          //   backgroundColor: Theme.of(context).canvasColor,
-          //   elevation: 10.0,
-          // ),
           body: SafeArea(
         bottom: false,
         child: Column(children: <Widget>[
