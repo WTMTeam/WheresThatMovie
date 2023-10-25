@@ -124,7 +124,7 @@ class CarouselCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const Flexible(child: SizedBox(height: 12)),
+              const Flexible(child: SizedBox(height: 20)),
               Flexible(
                 child: myRatingBar(),
               )
