@@ -37,6 +37,7 @@ class _MyTrendingState extends State<MyTrending> {
   List cards = [];
   bool _isLoading = false;
   bool isHorizontal = false;
+  bool cardsVisible = true;
   final carouselController = PageController(viewportFraction: 0.8);
   final carouselController2 = PageController(viewportFraction: 0.8);
 
@@ -142,41 +143,6 @@ class _MyTrendingState extends State<MyTrending> {
           toolbarHeight: 0,
           elevation: 0.0,
         ),
-        // appBar: AppBar(
-        //   leading: IconButton(
-        //     onPressed: () {
-        //       Navigator.of(context).pop();
-        //     },
-        //     icon: Icon(
-        //       Icons.keyboard_arrow_down_sharp,
-        //       color: Theme.of(context).colorScheme.primary,
-        //     ),
-        //   ),
-        //   title: Text(
-        //     "Trending",
-        //     style: Theme.of(context).textTheme.displayLarge,
-        //   ),
-        //   centerTitle: true,
-        //   actions: <Widget>[
-        //     IconButton(
-        //       onPressed: () {
-        //         isHorizontal ? isHorizontal = false : isHorizontal = true;
-        //         makeCardList();
-        //       },
-        //       icon: isHorizontal
-        //           ? Icon(
-        //               Icons.swap_vert,
-        //               color: Theme.of(context).colorScheme.primary,
-        //             )
-        //           : Icon(
-        //               Icons.swap_horiz,
-        //               color: Theme.of(context).colorScheme.primary,
-        //             ),
-        //     ),
-        //   ],
-        //   backgroundColor: Theme.of(context).canvasColor,
-        //   elevation: 10.0,
-        // ),
         body: SafeArea(
           bottom: false,
           child: Stack(children: <Widget>[
@@ -184,7 +150,6 @@ class _MyTrendingState extends State<MyTrending> {
               width: screenWidth,
               // height: screenHeight / 1.2,
               height: screenHeight - MediaQuery.of(context).padding.top,
-
               child: CustomScrollView(
                 slivers: [
                   SliverToBoxAdapter(
@@ -218,17 +183,20 @@ class _MyTrendingState extends State<MyTrending> {
                                   child: CircularProgressIndicator(),
                                 );
                               }
-                              return AnimatedBuilder(
-                                animation: carouselController,
-                                builder: (_, __) => Transform.scale(
-                                  scale: max(
-                                    0.85,
-                                    (1 -
-                                        (carouselController.page! - index)
-                                                .abs() /
-                                            2),
+                              return Visibility(
+                                visible: cardsVisible,
+                                child: AnimatedBuilder(
+                                  animation: carouselController,
+                                  builder: (_, __) => Transform.scale(
+                                    scale: max(
+                                      0.85,
+                                      (1 -
+                                          (carouselController.page! - index)
+                                                  .abs() /
+                                              2),
+                                    ),
+                                    child: cards[index],
                                   ),
-                                  child: cards[index],
                                 ),
                               );
                             },
@@ -243,9 +211,15 @@ class _MyTrendingState extends State<MyTrending> {
             MyCustomAppBar(
               title: "Trending",
               onBackButtonPressed: () {
+                setState(() {
+                  cardsVisible = false;
+                });
                 Navigator.of(context).pop();
               },
               onSwipeDown: () {
+                setState(() {
+                  cardsVisible = false;
+                });
                 Navigator.of(context).pop();
               },
               makeCardList: makeCardList(),
