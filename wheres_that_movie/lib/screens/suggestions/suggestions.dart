@@ -24,10 +24,10 @@ class Suggestions extends StatefulWidget {
 
 class _SuggestionsState extends State<Suggestions> {
   final List<String> providers = ['Netflix', 'Apple TV', 'Disney'];
-  final List<String> otherOptions = ['Option 1.1', 'Option 2.1', 'Option 3.1'];
+  final List<String> genres = ['Comedy', 'Horror', 'Thriller'];
   final List<String> otherOptions2 = ['Option 1.2', 'Option 2.2', 'Option 3.2'];
-  String currentProvider = 'Option 1';
-  String currentOption2 = 'Option 1.1';
+  String currentProvider = 'Choose Provider';
+  String currentGenre = 'Choose Genre';
   String currentOption3 = 'Option 1.2';
 
   void setProviders(dynamic option) {
@@ -36,9 +36,9 @@ class _SuggestionsState extends State<Suggestions> {
     });
   }
 
-  void setCurrentOption2(dynamic option) {
+  void setGenre(dynamic option) {
     setState(() {
-      currentOption2 = option;
+      currentGenre = option;
     });
   }
 
@@ -83,14 +83,14 @@ class _SuggestionsState extends State<Suggestions> {
           ),
           ElevatedButton(
             onPressed: () {
-              _showOptionsDialog(context, otherOptions2, setCurrentOption2);
+              _showOptionsDialog(context, genres, setGenre);
             },
             style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30.0),
               ),
             ),
-            child: Text(currentOption2),
+            child: Text(currentGenre),
           ),
         ],
       ),
