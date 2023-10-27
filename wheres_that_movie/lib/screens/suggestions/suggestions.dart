@@ -13,6 +13,7 @@
 //    (xx/xx/xxxx)(SR):
 
 import 'package:flutter/material.dart';
+import 'package:wheres_that_movie/screens/suggestions/options_dialog.dart';
 
 class Suggestions extends StatefulWidget {
   const Suggestions({super.key});
@@ -22,8 +23,77 @@ class Suggestions extends StatefulWidget {
 }
 
 class _SuggestionsState extends State<Suggestions> {
+  final List<String> options = ['Option 1', 'Option 2', 'Option 3'];
+  final List<String> otherOptions = ['Option 1.1', 'Option 2.1', 'Option 3.1'];
+  final List<String> otherOptions2 = ['Option 1.2', 'Option 2.2', 'Option 3.2'];
+  String currentOption = 'Option 1';
+  String currentOption2 = 'Option 1.1';
+  String currentOption3 = 'Option 1.2';
+
+  void setCurrentOption(dynamic option) {
+    setState(() {
+      currentOption = option;
+    });
+  }
+
+  void setCurrentOption2(dynamic option) {
+    setState(() {
+      currentOption2 = option;
+    });
+  }
+
+  void setCurrentOption3(dynamic option) {
+    setState(() {
+      currentOption3 = option;
+    });
+  }
+
+  void _showOptionsDialog(BuildContext context, List<String> options,
+      Function(dynamic) setCurrentOption) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return OptionsDialog(
+          options: options,
+          onOptionSelected: (option) {
+            setCurrentOption(option);
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+        body: SafeArea(
+            child: SingleChildScrollView(
+      child: Column(
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              _showOptionsDialog(context, options, setCurrentOption);
+            },
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+            ),
+            child: Text(currentOption),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              _showOptionsDialog(context, otherOptions2, setCurrentOption2);
+            },
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+            ),
+            child: Text(currentOption2),
+          ),
+        ],
+      ),
+    )));
   }
 }
