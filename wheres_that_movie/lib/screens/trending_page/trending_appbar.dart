@@ -8,7 +8,8 @@ class MyCustomAppBar extends StatelessWidget {
   final bool direction;
   final Function(bool) onIsHorizontalChanged;
 
-  MyCustomAppBar({
+  const MyCustomAppBar({
+    super.key,
     required this.title,
     this.onBackButtonPressed,
     this.onSwipeDown,
@@ -34,9 +35,9 @@ class MyCustomAppBar extends StatelessWidget {
         // margin: const EdgeInsets.only(bottom: 10.0),
         decoration: BoxDecoration(
           color: Theme.of(context).canvasColor,
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
-              color: const Color.fromARGB(100, 0, 0, 0),
+              color: Color.fromARGB(100, 0, 0, 0),
               blurRadius: 2.0,
               offset: Offset(0,
                   4), // Set the offset to (0, 4) to create a shadow only at the bottom
