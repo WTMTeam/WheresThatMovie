@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class OptionsDialog extends StatelessWidget {
@@ -15,7 +14,7 @@ class OptionsDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     // List options = [];
     return AlertDialog(
-      title: Text('Select an Option'),
+      title: const Text('Select an Option'),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: options

@@ -21,7 +21,7 @@ class MyListContainer extends StatefulWidget {
   final VoidCallback refreshList;
 
   final Function(int) onRemoved;
-  MyListContainer({
+  const MyListContainer({
     super.key,
     required this.myList,
     required this.onRemoved,

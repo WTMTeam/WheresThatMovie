@@ -138,7 +138,7 @@ class _MyTrendingState extends State<MyTrending> {
       return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          title: Text(''),
+          title: const Text(''),
           backgroundColor: Theme.of(context).canvasColor,
           toolbarHeight: 0,
           elevation: 0.0,
@@ -155,7 +155,7 @@ class _MyTrendingState extends State<MyTrending> {
                 child: CustomScrollView(
                   slivers: [
                     SliverToBoxAdapter(
-                      child: Container(
+                      child: SizedBox(
                         // padding: const EdgeInsets.only(top: 100.0),
                         // margin: EdgeInsets.only(top: 50.0),
                         width: screenWidth,
