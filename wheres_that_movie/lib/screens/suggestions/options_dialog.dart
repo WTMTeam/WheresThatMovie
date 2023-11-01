@@ -14,13 +14,13 @@ class OptionsDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+    // double screenHeight = MediaQuery.of(context).size.height;
 
     String alertTitle = "";
     if (options[0] == "Netflix") {
-      alertTitle = "Choose a Streaming Service";
+      alertTitle = "Streaming Service";
     } else if (options[0] == "Comedy") {
-      alertTitle = "Choose a Genre";
+      alertTitle = "Genre";
     }
 
     return AlertDialog(
@@ -34,65 +34,41 @@ class OptionsDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Row(
-            //   crossAxisAlignment: CrossAxisAlignment.start,
-            //   mainAxisAlignment: MainAxisAlignment.end,
-            //   children: [
-            //     IconButton(
-            //       visualDensity: VisualDensity.compact,
-            //       splashRadius: 15,
-            //       // splashColor: Colors.green,
-            //       icon: Icon(
-            //         CupertinoIcons.xmark_circle,
-            //         color: Theme.of(context).primaryColor, // Specify the color
-            //       ),
-            //       onPressed: () {
-            //         Navigator.pop(context);
-            //       },
-            //     ),
-            //   ],
-            // ),
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0, right: 0.0),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Expanded(
-                    child: Text(
-                      alertTitle,
-                      style: Theme.of(context).textTheme.displayLarge,
-                      textAlign: TextAlign.center,
-
-                      // textAlign: TextAlign.left,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                SizedBox(
+                  height: 15,
+                  child: IconButton(
+                    alignment: const Alignment(0.75, 0.1),
+                    splashRadius: 1,
+                    padding: const EdgeInsets.all(0.0),
+                    icon: Icon(
+                      CupertinoIcons.xmark_circle,
+                      // size: 25,
+                      color: Theme.of(context).primaryColor,
                     ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                   ),
-                  // const Spacer(),
-                  Container(
-                    // padding: EdgeInsets.only(right: .0),
-                    // alignment: Alignment.topRight,
-                    // padding: const EdgeInsets.only(bottom: 10.0),
-                    height: screenHeight / 20,
-
-                    child: IconButton(
-                      alignment: const Alignment(0.5, -0.5),
-                      visualDensity: VisualDensity.compact,
-                      splashRadius: 15,
-                      padding: EdgeInsets.all(0.0),
-                      // splashColor: Colors.green,
-                      icon: Icon(
-                        CupertinoIcons.xmark_circle,
-                        color:
-                            Theme.of(context).primaryColor, // Specify the color
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
+
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Expanded(
+                  child: Text(
+                    alertTitle,
+                    style: Theme.of(context).textTheme.displayLarge,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
+
             const Padding(
               padding: EdgeInsets.only(left: 8.0, right: 8.0),
               child: Divider(
