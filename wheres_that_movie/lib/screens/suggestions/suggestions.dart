@@ -12,6 +12,11 @@
 // Modification Log:
 //    (xx/xx/xxxx)(SR):
 
+import 'dart:convert';
+import 'dart:math';
+
+import 'package:http/http.dart' as http;
+
 // GENRE CODES
 //https://www.themoviedb.org/talk/5daf6eb0ae36680011d7e6ee
 // MOVIE
@@ -59,6 +64,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wheres_that_movie/api/constants.dart';
 import 'package:wheres_that_movie/screens/suggestions/options_dialog.dart';
 import 'package:wheres_that_movie/screens/suggestions/suggestion_apis.dart';
 
@@ -138,6 +144,35 @@ class _SuggestionsState extends State<Suggestions> {
     super.initState();
     // loadUsers();
     futureUsers = UserService().getUser();
+    getAllFilms();
+  }
+
+  Future<List<dynamic>> getAllFilms() async {
+    print("here");
+    final Map<String, String> headers = {
+      'accept': 'application/json',
+      'Authorization':
+          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmZmYTBkMTZmYjhkYzI4NzM1MzExNTZhNWM1ZjQxYSIsInN1YiI6IjYzODYzNzE0MDM5OGFiMDBjODM5MTJkOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.qQjwnSQLDfVNAuinpsM-ATK400-dnwuWUVirc7_AiQY',
+    };
+    var response = await http.get(
+        Uri.parse(ApiEndPoint().getMovieStreamingProviderInfo),
+        headers: headers);
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      debugPrint("Data: $data");
+
+      // final List<User> userList = [];
+
+      // for (var i = 0; i < data['results'].length; i++) {
+      //   final entry = data['results'][i];
+      //   userList.add(User.fromJson(entry));
+      // }
+      // return userList;
+    } else {
+      throw Exception('HTTP FAILED with status code: ${response.statusCode}');
+    }
+
+    throw Exception("Test Failed");
   }
 
   @override
