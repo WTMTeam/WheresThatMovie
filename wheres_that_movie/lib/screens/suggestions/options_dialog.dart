@@ -21,6 +21,10 @@ class OptionsDialog extends StatelessWidget {
       alertTitle = "Streaming Service";
     } else if (options[0] == "Comedy") {
       alertTitle = "Genre";
+    } else if (options[0] == "Movie") {
+      alertTitle = "Movie or TV-Show";
+    } else if (options[0] == "<30min") {
+      alertTitle = "Choose Length";
     }
 
     return AlertDialog(
@@ -34,26 +38,22 @@ class OptionsDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                SizedBox(
-                  height: 15,
-                  child: IconButton(
-                    alignment: const Alignment(0.75, 0.1),
-                    splashRadius: 1,
-                    padding: const EdgeInsets.all(0.0),
-                    icon: Icon(
-                      CupertinoIcons.xmark_circle,
-                      // size: 25,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
+            Align(
+              heightFactor: 0.35,
+              // alignment: Alignment.topRight,
+              alignment: const Alignment(1.1, -0.1),
+              child: IconButton(
+                splashRadius: 10,
+                padding: const EdgeInsets.all(0.0),
+                icon: Icon(
+                  CupertinoIcons.xmark_circle,
+                  size: 30,
+                  color: Theme.of(context).primaryColor,
                 ),
-              ],
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
             ),
 
             Row(
@@ -70,7 +70,7 @@ class OptionsDialog extends StatelessWidget {
             ),
 
             const Padding(
-              padding: EdgeInsets.only(left: 8.0, right: 8.0),
+              padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
               child: Divider(
                 thickness: 5.0,
                 // color: Colors.red,
