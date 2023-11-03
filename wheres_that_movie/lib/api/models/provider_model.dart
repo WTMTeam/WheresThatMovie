@@ -1,0 +1,86 @@
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+import 'package:wheres_that_movie/api/constants.dart';
+
+class Provider {
+  final int providerID;
+  final String providerName;
+  final String logoPath;
+
+  const Provider({
+    required this.providerID,
+    required this.providerName,
+    required this.logoPath,
+  });
+
+  factory Provider.fromJson(Map<String, dynamic> json) {
+    return Provider(
+      providerID: json['provider_id'],
+      providerName: json['provider_name'],
+      logoPath: json['logo_path'],
+    );
+  }
+}
+
+class ProviderService {
+  Future<List<Provider>> getProviders() async {
+    // final response =
+    //     await http.get(Uri.parse('https://randomuser.me/api?results=20'));
+    print("here");
+    final Map<String, String> headers = {
+      'accept': 'application/json',
+      'Authorization':
+          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmZmYTBkMTZmYjhkYzI4NzM1MzExNTZhNWM1ZjQxYSIsInN1YiI6IjYzODYzNzE0MDM5OGFiMDBjODM5MTJkOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.qQjwnSQLDfVNAuinpsM-ATK400-dnwuWUVirc7_AiQY',
+    };
+    var response = await http.get(
+        Uri.parse(ApiEndPoint().getMovieStreamingProviderInfo),
+        headers: headers);
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      print('Here 2');
+
+      final List<Provider> providerList = [];
+
+      for (var i = 0; i < data['results'].length; i++) {
+        final entry = data['results'][i];
+        print(entry);
+        print(Provider.fromJson(entry));
+        print("here 3");
+        providerList.add(Provider.fromJson(entry));
+      }
+      return providerList;
+    } else {
+      throw Exception('HTTP FAILED with status code: ${response.statusCode}');
+    }
+  }
+}
+
+// Future<List<dynamic>> getAllFilms() async {
+//     print("here");
+//     final Map<String, String> headers = {
+//       'accept': 'application/json',
+//       'Authorization':
+//           'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmZmYTBkMTZmYjhkYzI4NzM1MzExNTZhNWM1ZjQxYSIsInN1YiI6IjYzODYzNzE0MDM5OGFiMDBjODM5MTJkOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.qQjwnSQLDfVNAuinpsM-ATK400-dnwuWUVirc7_AiQY',
+//     };
+//     var response = await http.get(
+//         Uri.parse(ApiEndPoint().getMovieStreamingProviderInfo),
+//         headers: headers);
+//     if (response.statusCode == 200) {
+//       final data = jsonDecode(response.body);
+//       log("Data: $data");
+
+//       // final List<User> userList = [];
+
+//       // for (var i = 0; i < data['results'].length; i++) {
+//       //   final entry = data['results'][i];
+//       //   userList.add(User.fromJson(entry));
+//       // }
+//       // return userList;
+//     } else {
+//       throw Exception('HTTP FAILED with status code: ${response.statusCode}');
+//     }
+
+//     throw Exception("Test Failed");
+//   }
