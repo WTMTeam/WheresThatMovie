@@ -13,9 +13,10 @@
 //    (xx/xx/xxxx)(SR):
 
 import 'dart:convert';
-import 'dart:math';
+// import 'dart:math';
 
 import 'package:http/http.dart' as http;
+import 'dart:developer';
 
 // GENRE CODES
 //https://www.themoviedb.org/talk/5daf6eb0ae36680011d7e6ee
@@ -65,6 +66,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wheres_that_movie/api/constants.dart';
+import 'package:wheres_that_movie/api/models/provider_model.dart';
 import 'package:wheres_that_movie/screens/suggestions/options_dialog.dart';
 import 'package:wheres_that_movie/screens/suggestions/suggestion_apis.dart';
 
@@ -76,7 +78,8 @@ class Suggestions extends StatefulWidget {
 }
 
 class _SuggestionsState extends State<Suggestions> {
-  late Future<List<User>> futureUsers;
+  // late Future<List<User>> futureUsers;
+  late Future<List<Provider>> futureProviders;
   final List<String> providers = ['Netflix', 'Apple TV', 'Disney'];
   final List<String> genres = ['Comedy', 'Horror', 'Thriller'];
   final List<String> movieOrShow = ['Movie', 'TV-Show'];
@@ -143,37 +146,38 @@ class _SuggestionsState extends State<Suggestions> {
   void initState() {
     super.initState();
     // loadUsers();
-    futureUsers = UserService().getUser();
-    getAllFilms();
+    // futureUsers = UserService().getUser();
+    // getAllFilms();
+    futureProviders = ProviderService().getProviders();
   }
 
-  Future<List<dynamic>> getAllFilms() async {
-    print("here");
-    final Map<String, String> headers = {
-      'accept': 'application/json',
-      'Authorization':
-          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmZmYTBkMTZmYjhkYzI4NzM1MzExNTZhNWM1ZjQxYSIsInN1YiI6IjYzODYzNzE0MDM5OGFiMDBjODM5MTJkOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.qQjwnSQLDfVNAuinpsM-ATK400-dnwuWUVirc7_AiQY',
-    };
-    var response = await http.get(
-        Uri.parse(ApiEndPoint().getMovieStreamingProviderInfo),
-        headers: headers);
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      debugPrint("Data: $data");
+  // Future<List<dynamic>> getAllFilms() async {
+  //   print("here");
+  //   final Map<String, String> headers = {
+  //     'accept': 'application/json',
+  //     'Authorization':
+  //         'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmZmYTBkMTZmYjhkYzI4NzM1MzExNTZhNWM1ZjQxYSIsInN1YiI6IjYzODYzNzE0MDM5OGFiMDBjODM5MTJkOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.qQjwnSQLDfVNAuinpsM-ATK400-dnwuWUVirc7_AiQY',
+  //   };
+  //   var response = await http.get(
+  //       Uri.parse(ApiEndPoint().getMovieStreamingProviderInfo),
+  //       headers: headers);
+  //   if (response.statusCode == 200) {
+  //     final data = jsonDecode(response.body);
+  //     log("Data: $data");
 
-      // final List<User> userList = [];
+  //     // final List<User> userList = [];
 
-      // for (var i = 0; i < data['results'].length; i++) {
-      //   final entry = data['results'][i];
-      //   userList.add(User.fromJson(entry));
-      // }
-      // return userList;
-    } else {
-      throw Exception('HTTP FAILED with status code: ${response.statusCode}');
-    }
+  //     // for (var i = 0; i < data['results'].length; i++) {
+  //     //   final entry = data['results'][i];
+  //     //   userList.add(User.fromJson(entry));
+  //     // }
+  //     // return userList;
+  //   } else {
+  //     throw Exception('HTTP FAILED with status code: ${response.statusCode}');
+  //   }
 
-    throw Exception("Test Failed");
-  }
+  //   throw Exception("Test Failed");
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -269,16 +273,16 @@ class _SuggestionsState extends State<Suggestions> {
               ),
               Expanded(
                 child: Center(
-                  child: FutureBuilder<List<User>>(
-                    future: futureUsers,
+                  child: FutureBuilder<List<Provider>>(
+                    future: futureProviders,
                     builder: ((context, AsyncSnapshot snapshot) {
                       if (snapshot.hasData) {
                         return ListView.separated(
                             itemBuilder: (context, index) {
-                              User user = snapshot.data?[index];
+                              Provider provider = snapshot.data?[index];
                               return ListTile(
-                                title: Text(user.email),
-                                subtitle: Text(user.name.first),
+                                title: Text(provider.providerName),
+                                subtitle: Text(provider.providerID.toString()),
                                 trailing:
                                     const Icon(Icons.chevron_right_outlined),
                               );
