@@ -1,15 +1,32 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wheres_that_movie/api/models/provider_model.dart';
 
-class OptionsDialog extends StatelessWidget {
-  final List<String> options;
+class OptionsDialog extends StatefulWidget {
   final Function(String) onOptionSelected;
-
+  final String button;
   const OptionsDialog({
     super.key,
-    required this.options,
     required this.onOptionSelected,
+    required this.button,
   });
+
+  @override
+  State<OptionsDialog> createState() => _OptionsDialogState();
+}
+
+class _OptionsDialogState extends State<OptionsDialog> {
+  late Future<List<Provider>> futureProviders;
+
+  @override
+  void initState() {
+    super.initState();
+    // loadUsers();
+    // futureUsers = UserService().getUser();
+    // getAllFilms();
+    futureProviders = ProviderService().getProviders();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,13 +34,13 @@ class OptionsDialog extends StatelessWidget {
     // double screenHeight = MediaQuery.of(context).size.height;
 
     String alertTitle = "";
-    if (options[0] == "Netflix") {
+    if (widget.button == "Provider") {
       alertTitle = "Streaming Service";
-    } else if (options[0] == "Comedy") {
+    } else if (widget.button == "Genre") {
       alertTitle = "Genre";
-    } else if (options[0] == "Movie") {
+    } else if (widget.button == "movieOrShow") {
       alertTitle = "Movie or TV-Show";
-    } else if (options[0] == "<30min") {
+    } else if (widget.button == "length") {
       alertTitle = "Choose Length";
     }
 
@@ -79,13 +96,53 @@ class OptionsDialog extends StatelessWidget {
 
             // Convert the iterable to a list of widgets
             // Padding(padding: EdgeInsets.only(left: 8.0, right: 8.0, b))
-            ...options.map((option) => ListTile(
-                  title: Text(option),
-                  onTap: () {
-                    onOptionSelected(option);
-                    Navigator.pop(context);
-                  },
-                )),
+
+            // ...options.map((option) => ListTile(
+            //       title: Text(option),
+            //       onTap: () {
+            //         onOptionSelected(option);
+            //         Navigator.pop(context);
+            //       },
+            //     )),
+            // * If the Provider Button was pressed
+            // ! Not working
+            (widget.button == "Provider")
+                ? FutureBuilder<List<Provider>>(
+                    future: futureProviders,
+                    builder: ((context, AsyncSnapshot snapshot) {
+                      if (snapshot.hasData) {
+                        return ListView.separated(
+                            itemBuilder: (context, index) {
+                              Provider provider = snapshot.data?[index];
+                              String imgUrl =
+                                  "https://image.tmdb.org/t/p/w45${provider.logoPath}";
+                              return ListTile(
+                                title: Text(provider.providerName),
+                                subtitle:
+                                    Text(provider.displayPriority.toString()),
+                                trailing: CachedNetworkImage(
+                                  imageUrl: imgUrl,
+                                  width: 50.0,
+                                  errorWidget: (context, imgUrl, error) =>
+                                      const Icon(Icons.no_photography_outlined,
+                                          size: 50),
+                                ),
+                              );
+                            },
+                            separatorBuilder: (context, index) {
+                              return const Divider(
+                                color: Colors.amberAccent,
+                              );
+                            },
+                            itemCount: 20);
+                        // itemCount: snapshot.data!.length);
+                      } else if (snapshot.hasError) {
+                        return Text("Error: ${snapshot.error}");
+                      }
+                      return const CircularProgressIndicator();
+                    }),
+                  )
+                : const Text("test")
           ],
         ),
       ),

@@ -7,18 +7,21 @@ class Provider {
   final int providerID;
   final String providerName;
   final String logoPath;
+  final int displayPriority;
 
-  const Provider({
-    required this.providerID,
-    required this.providerName,
-    required this.logoPath,
-  });
+  const Provider(
+      {required this.providerID,
+      required this.providerName,
+      required this.logoPath,
+      required this.displayPriority});
 
   factory Provider.fromJson(Map<String, dynamic> json) {
     return Provider(
       providerID: json['provider_id'],
       providerName: json['provider_name'],
       logoPath: json['logo_path'],
+      displayPriority: json['display_priority'],
+      // regions: json['display_priorities'],
     );
   }
 }
@@ -45,11 +48,32 @@ class ProviderService {
 
       for (var i = 0; i < data['results'].length; i++) {
         final entry = data['results'][i];
-        print(entry);
-        print(Provider.fromJson(entry));
-        print("here 3");
-        providerList.add(Provider.fromJson(entry));
+        // print(entry);
+        // print(Provider.fromJson(entry));
+        try {
+          // print("\nDISPLAY PRIORITIES!!!!\n");
+          // print(entry['display_priorities']);
+
+          Map<String, dynamic> countryData = entry['display_priorities'];
+          bool isUSInMap = countryData.containsKey('US');
+          int displayPriority2 = entry['display_priority'];
+          // print("here 3");
+          if (isUSInMap) {
+            // print("Entry Inside: $entry");
+            print("Country Data: $countryData");
+            print(entry['provider_name']);
+            print("Display Priority: $displayPriority2");
+
+            providerList.add(Provider.fromJson(entry));
+          }
+        } catch (e) {
+          print("Exception: $e");
+        }
       }
+      // Sort the providerList based on displayPriority
+      providerList
+          .sort((a, b) => a.displayPriority.compareTo(b.displayPriority));
+
       return providerList;
     } else {
       throw Exception('HTTP FAILED with status code: ${response.statusCode}');

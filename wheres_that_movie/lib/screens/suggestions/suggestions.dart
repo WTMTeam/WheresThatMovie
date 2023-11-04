@@ -15,6 +15,7 @@
 import 'dart:convert';
 // import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:http/http.dart' as http;
 import 'dart:developer';
 
@@ -119,13 +120,16 @@ class _SuggestionsState extends State<Suggestions> {
     });
   }
 
-  void _showOptionsDialog(BuildContext context, List<String> options,
-      Function(dynamic) setCurrentOption) {
+  void _showOptionsDialog(
+    BuildContext context,
+    Function(dynamic) setCurrentOption,
+    button,
+  ) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return OptionsDialog(
-          options: options,
+          button: button,
           onOptionSelected: (option) {
             setCurrentOption(option);
           },
@@ -214,7 +218,7 @@ class _SuggestionsState extends State<Suggestions> {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          _showOptionsDialog(context, providers, setProviders);
+                          _showOptionsDialog(context, setProviders, "Provider");
                         },
                         style: ElevatedButton.styleFrom(
                             minimumSize: const Size(175, 40),
@@ -228,7 +232,7 @@ class _SuggestionsState extends State<Suggestions> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          _showOptionsDialog(context, genres, setGenre);
+                          _showOptionsDialog(context, setGenre, "Genre");
                         },
                         style: ElevatedButton.styleFrom(
                             minimumSize: const Size(175, 40),
@@ -244,7 +248,7 @@ class _SuggestionsState extends State<Suggestions> {
                       ElevatedButton(
                         onPressed: () {
                           _showOptionsDialog(
-                              context, movieOrShow, setMovieOrShow);
+                              context, setMovieOrShow, "movieOrShow");
                         },
                         style: ElevatedButton.styleFrom(
                             minimumSize: const Size(175, 40),
@@ -258,7 +262,7 @@ class _SuggestionsState extends State<Suggestions> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          _showOptionsDialog(context, lengths, setLength);
+                          _showOptionsDialog(context, setLength, "length");
                         },
                         style: ElevatedButton.styleFrom(
                             minimumSize: const Size(175, 40),
@@ -280,11 +284,19 @@ class _SuggestionsState extends State<Suggestions> {
                         return ListView.separated(
                             itemBuilder: (context, index) {
                               Provider provider = snapshot.data?[index];
+                              String imgUrl =
+                                  "https://image.tmdb.org/t/p/w45${provider.logoPath}";
                               return ListTile(
                                 title: Text(provider.providerName),
-                                subtitle: Text(provider.providerID.toString()),
-                                trailing:
-                                    const Icon(Icons.chevron_right_outlined),
+                                subtitle:
+                                    Text(provider.displayPriority.toString()),
+                                trailing: CachedNetworkImage(
+                                  imageUrl: imgUrl,
+                                  width: 50.0,
+                                  errorWidget: (context, imgUrl, error) =>
+                                      const Icon(Icons.no_photography_outlined,
+                                          size: 50),
+                                ),
                               );
                             },
                             separatorBuilder: (context, index) {
@@ -292,7 +304,8 @@ class _SuggestionsState extends State<Suggestions> {
                                 color: Colors.amberAccent,
                               );
                             },
-                            itemCount: snapshot.data!.length);
+                            itemCount: 20);
+                        // itemCount: snapshot.data!.length);
                       } else if (snapshot.hasError) {
                         return Text("Error: ${snapshot.error}");
                       }
