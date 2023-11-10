@@ -80,7 +80,8 @@ class _OptionsDialogState extends State<OptionsDialog> {
                         color: Colors.green.shade800,
                       ),
                 onPressed: () {
-                  if (widget.button == "Provider") {
+                  if (widget.button == "Provider" &&
+                      selectedProviders.isNotEmpty) {
                     widget.onOptionSelected(selectedProviders);
                   }
 
