@@ -18,6 +18,7 @@ class OptionsDialog extends StatefulWidget {
 
 class _OptionsDialogState extends State<OptionsDialog> {
   late Future<List<Provider>> futureProviders;
+  List<Provider> selectedProviders = [];
 
   @override
   void initState() {
@@ -56,9 +57,9 @@ class _OptionsDialogState extends State<OptionsDialog> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Align(
-              heightFactor: 0.35,
-              // alignment: Alignment.topRight,
-              alignment: const Alignment(1.1, -0.1),
+              // heightFactor: 0.35,
+              alignment: Alignment.topRight,
+              // alignment: const Alignment(1.0, -1.0),
               child: IconButton(
                 splashRadius: 10,
                 padding: const EdgeInsets.all(0.0),
@@ -94,47 +95,54 @@ class _OptionsDialogState extends State<OptionsDialog> {
               ),
             ),
 
-            // Convert the iterable to a list of widgets
-            // Padding(padding: EdgeInsets.only(left: 8.0, right: 8.0, b))
-
-            // ...options.map((option) => ListTile(
-            //       title: Text(option),
-            //       onTap: () {
-            //         onOptionSelected(option);
-            //         Navigator.pop(context);
-            //       },
-            //     )),
             // * If the Provider Button was pressed
-            // ! Not working
             (widget.button == "Provider")
                 ? FutureBuilder<List<Provider>>(
                     future: futureProviders,
                     builder: ((context, AsyncSnapshot snapshot) {
                       if (snapshot.hasData) {
-                        return ListView.separated(
-                            itemBuilder: (context, index) {
-                              Provider provider = snapshot.data?[index];
-                              String imgUrl =
-                                  "https://image.tmdb.org/t/p/w45${provider.logoPath}";
-                              return ListTile(
-                                title: Text(provider.providerName),
-                                subtitle:
-                                    Text(provider.displayPriority.toString()),
-                                trailing: CachedNetworkImage(
-                                  imageUrl: imgUrl,
-                                  width: 50.0,
-                                  errorWidget: (context, imgUrl, error) =>
-                                      const Icon(Icons.no_photography_outlined,
-                                          size: 50),
-                                ),
-                              );
-                            },
-                            separatorBuilder: (context, index) {
-                              return const Divider(
-                                color: Colors.amberAccent,
-                              );
-                            },
-                            itemCount: 20);
+                        return Expanded(
+                          child: ListView.separated(
+                              itemBuilder: (context, index) {
+                                Provider provider = snapshot.data?[index];
+                                String imgUrl =
+                                    "https://image.tmdb.org/t/p/w45${provider.logoPath}";
+                                bool isSelected =
+                                    selectedProviders.contains(provider);
+                                return ListTile(
+                                    leading: CachedNetworkImage(
+                                      imageUrl: imgUrl,
+                                      width: 50.0,
+                                      errorWidget: (context, imgUrl, error) =>
+                                          const Icon(
+                                              Icons.no_photography_outlined,
+                                              size: 50),
+                                    ),
+                                    title: Text(provider.providerName),
+                                    subtitle: Text(
+                                        provider.displayPriority.toString()),
+                                    trailing: Checkbox(
+                                        value: isSelected,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            if (value != null) {
+                                              if (value) {
+                                                selectedProviders.add(provider);
+                                              } else {
+                                                selectedProviders
+                                                    .remove(provider);
+                                              }
+                                            }
+                                          });
+                                        }));
+                              },
+                              separatorBuilder: (context, index) {
+                                return const Divider(
+                                  color: Colors.amberAccent,
+                                );
+                              },
+                              itemCount: 20),
+                        );
                         // itemCount: snapshot.data!.length);
                       } else if (snapshot.hasError) {
                         return Text("Error: ${snapshot.error}");
