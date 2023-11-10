@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:wheres_that_movie/api/models/provider_model.dart';
 
 class OptionsDialog extends StatefulWidget {
-  final Function(String) onOptionSelected;
+  final Function(dynamic) onOptionSelected;
   final String button;
   const OptionsDialog({
     super.key,
@@ -17,8 +17,13 @@ class OptionsDialog extends StatefulWidget {
 }
 
 class _OptionsDialogState extends State<OptionsDialog> {
+  // * Provider variables
   late Future<List<Provider>> futureProviders;
   List<Provider> selectedProviders = [];
+
+  // * Length variables
+
+  // * Genre variables
 
   @override
   void initState() {
@@ -63,12 +68,22 @@ class _OptionsDialogState extends State<OptionsDialog> {
               child: IconButton(
                 splashRadius: 10,
                 padding: const EdgeInsets.all(0.0),
-                icon: Icon(
-                  CupertinoIcons.xmark_circle,
-                  size: 30,
-                  color: Theme.of(context).primaryColor,
-                ),
+                icon: selectedProviders.isEmpty
+                    ? Icon(
+                        CupertinoIcons.xmark_circle,
+                        size: 30,
+                        color: Theme.of(context).primaryColor,
+                      )
+                    : Icon(
+                        CupertinoIcons.check_mark_circled,
+                        size: 30,
+                        color: Colors.green.shade800,
+                      ),
                 onPressed: () {
+                  if (widget.button == "Provider") {
+                    widget.onOptionSelected(selectedProviders);
+                  }
+
                   Navigator.pop(context);
                 },
               ),
