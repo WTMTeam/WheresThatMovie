@@ -226,6 +226,41 @@ class _SuggestionsState extends State<Suggestions> {
                   ),
                 ],
               ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 6.0, horizontal: 20.0),
+                child: Divider(
+                  thickness: 2.0,
+                  color: Theme.of(context).highlightColor,
+                ),
+              ),
+              if (currentProviders != null)
+                Wrap(
+                  spacing: 8.0,
+                  children: currentProviders!
+                      .map(
+                        (provider) => ElevatedButton(
+                          onPressed: () {
+                            // Handle the button press for the selected provider
+                            // You can add specific functionality here
+                            print(provider.providerName);
+                          },
+                          style: ElevatedButton.styleFrom(
+                              minimumSize: const Size(100, 40),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                              backgroundColor: Colors.transparent,
+                              // foregroundColor: Theme.of(context).primaryColor,
+                              elevation: 0,
+                              side: BorderSide(
+                                  width: 2.0,
+                                  color: Theme.of(context).primaryColor)),
+                          child: Text(provider.providerName),
+                        ),
+                      )
+                      .toList(),
+                ),
             ],
           ),
         )));
