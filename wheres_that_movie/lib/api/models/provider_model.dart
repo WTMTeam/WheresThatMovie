@@ -30,7 +30,6 @@ class ProviderService {
   Future<List<Provider>> getProviders() async {
     // final response =
     //     await http.get(Uri.parse('https://randomuser.me/api?results=20'));
-    print("here");
     final Map<String, String> headers = {
       'accept': 'application/json',
       'Authorization':
@@ -42,28 +41,15 @@ class ProviderService {
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      print('Here 2');
 
       final List<Provider> providerList = [];
-
+      print("Num Providers: ${data['results'].length}");
       for (var i = 0; i < data['results'].length; i++) {
         final entry = data['results'][i];
-        // print(entry);
-        // print(Provider.fromJson(entry));
         try {
-          // print("\nDISPLAY PRIORITIES!!!!\n");
-          // print(entry['display_priorities']);
-
           Map<String, dynamic> countryData = entry['display_priorities'];
           bool isUSInMap = countryData.containsKey('US');
-          int displayPriority2 = entry['display_priority'];
-          // print("here 3");
           if (isUSInMap) {
-            // print("Entry Inside: $entry");
-            print("Country Data: $countryData");
-            print(entry['provider_name']);
-            print("Display Priority: $displayPriority2");
-
             providerList.add(Provider.fromJson(entry));
           }
         } catch (e) {
