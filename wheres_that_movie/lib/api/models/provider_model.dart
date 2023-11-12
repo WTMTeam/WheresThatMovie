@@ -59,6 +59,7 @@ class ProviderService {
       // Sort the providerList based on displayPriority
       providerList
           .sort((a, b) => a.displayPriority.compareTo(b.displayPriority));
+      print("Provider List length: ${providerList.length}");
 
       return providerList;
     } else {
