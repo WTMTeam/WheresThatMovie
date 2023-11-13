@@ -128,7 +128,7 @@ class _OptionsDialogState extends State<OptionsDialog> {
                   ),
 
                   const Padding(
-                    padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                    padding: EdgeInsets.all(8.0),
                     child: Divider(
                       thickness: 5.0,
                       // color: Colors.red,
@@ -140,148 +140,160 @@ class _OptionsDialogState extends State<OptionsDialog> {
                     Expanded(
                       child: Column(
                         children: [
-                          TextField(
-                            controller: searchController,
-                            onChanged: (value) {
-                              setState(() {
-                                // searchQuery = value;
-                                filterProviders(value);
-                              });
-                            },
-                            onEditingComplete: () {
-                              FocusScopeNode currentFocus =
-                                  FocusScope.of(context);
-                              currentFocus.unfocus();
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'Search Providers',
-                              prefixIcon: const Icon(Icons.search),
-                              suffixIcon: IconButton(
-                                onPressed: () {
-                                  searchController.clear();
-                                  setState(
-                                    () {
-                                      filterProviders("");
-                                    },
-                                  );
-                                },
-                                icon: const Icon(Icons.clear),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 12.0),
+                            child: TextField(
+                              controller: searchController,
+                              onChanged: (value) {
+                                setState(() {
+                                  // searchQuery = value;
+                                  filterProviders(value);
+                                });
+                              },
+                              onEditingComplete: () {
+                                FocusScopeNode currentFocus =
+                                    FocusScope.of(context);
+                                currentFocus.unfocus();
+                              },
+                              decoration: InputDecoration(
+                                labelText: 'Search Providers',
+                                prefixIcon: const Icon(Icons.search),
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    searchController.clear();
+                                    setState(
+                                      () {
+                                        filterProviders("");
+                                      },
+                                    );
+                                  },
+                                  icon: const Icon(Icons.clear),
+                                ),
                               ),
                             ),
                           ),
                           Expanded(
                             child: filteredList.isNotEmpty
-                                ? ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: filteredList.length,
-                                    itemBuilder: ((context, index) {
-                                      Provider provider = filteredList[index];
-                                      String imgUrl =
-                                          "https://image.tmdb.org/t/p/w45${provider.logoPath}";
-                                      bool isSelected = selectedProviders.any(
-                                          (p) =>
-                                              p.providerID ==
-                                              provider.providerID);
-                                      return ListTile(
-                                          leading: CachedNetworkImage(
-                                            imageUrl: imgUrl,
-                                            width: 50.0,
-                                            errorWidget: (context, imgUrl,
-                                                    error) =>
-                                                const Icon(
-                                                    Icons
-                                                        .no_photography_outlined,
-                                                    size: 50),
-                                          ),
-                                          title: Text(provider.providerName),
-                                          subtitle: Text(provider
-                                              .displayPriority
-                                              .toString()),
-                                          trailing: Checkbox(
-                                              value: isSelected,
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  if (value != null) {
-                                                    if (value) {
-                                                      selectedProviders
-                                                          .add(provider);
-                                                    } else {
-                                                      selectedProviders
-                                                          .removeWhere((p) =>
-                                                              p.providerID ==
-                                                              provider
-                                                                  .providerID);
-                                                    }
-                                                  }
-                                                });
-                                              }));
-                                    }))
-                                : FutureBuilder<List<Provider>>(
-                                    future: futureProviders,
-                                    builder:
-                                        ((context, AsyncSnapshot snapshot) {
-                                      if (snapshot.connectionState ==
-                                          ConnectionState.waiting) {
-                                        return CircularProgressIndicator();
-                                      } else if (snapshot.hasError) {
-                                        return Text("Error: ${snapshot.error}");
-                                      } else {
-                                        print(
-                                            "Snapshot: ${snapshot.data.length}");
-                                        return ListView.builder(
-                                          shrinkWrap: true,
-                                          itemBuilder: (context, index) {
-                                            Provider provider =
-                                                snapshot.data?[index];
-
-                                            String imgUrl =
-                                                "https://image.tmdb.org/t/p/w45${provider.logoPath}";
-                                            bool isSelected =
-                                                selectedProviders.any((p) =>
-                                                    p.providerID ==
-                                                    provider.providerID);
-                                            return ListTile(
-                                                leading: CachedNetworkImage(
-                                                  imageUrl: imgUrl,
-                                                  width: 50.0,
-                                                  errorWidget: (context, imgUrl,
-                                                          error) =>
-                                                      const Icon(
-                                                          Icons
-                                                              .no_photography_outlined,
-                                                          size: 50),
-                                                ),
-                                                title:
-                                                    Text(provider.providerName),
-                                                subtitle: Text(provider
-                                                    .displayPriority
-                                                    .toString()),
-                                                trailing: Checkbox(
-                                                    value: isSelected,
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        if (value != null) {
-                                                          if (value) {
-                                                            selectedProviders
-                                                                .add(provider);
-                                                          } else {
-                                                            // selectedProviders
-                                                            //     .remove(
-                                                            //         provider);
-                                                            selectedProviders
-                                                                .removeWhere((p) =>
-                                                                    p.providerID ==
-                                                                    provider
-                                                                        .providerID);
-                                                          }
+                                ? Scrollbar(
+                                    child: ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount: filteredList.length,
+                                        itemBuilder: ((context, index) {
+                                          Provider provider =
+                                              filteredList[index];
+                                          String imgUrl =
+                                              "https://image.tmdb.org/t/p/w45${provider.logoPath}";
+                                          bool isSelected =
+                                              selectedProviders.any((p) =>
+                                                  p.providerID ==
+                                                  provider.providerID);
+                                          return ListTile(
+                                              leading: CachedNetworkImage(
+                                                imageUrl: imgUrl,
+                                                width: 50.0,
+                                                errorWidget: (context, imgUrl,
+                                                        error) =>
+                                                    const Icon(
+                                                        Icons
+                                                            .no_photography_outlined,
+                                                        size: 50),
+                                              ),
+                                              title:
+                                                  Text(provider.providerName),
+                                              subtitle: Text(provider
+                                                  .displayPriority
+                                                  .toString()),
+                                              trailing: Checkbox(
+                                                  value: isSelected,
+                                                  onChanged: (value) {
+                                                    setState(() {
+                                                      if (value != null) {
+                                                        if (value) {
+                                                          selectedProviders
+                                                              .add(provider);
+                                                        } else {
+                                                          selectedProviders
+                                                              .removeWhere((p) =>
+                                                                  p.providerID ==
+                                                                  provider
+                                                                      .providerID);
                                                         }
-                                                      });
-                                                    }));
-                                          },
-                                          itemCount: snapshot.data.length,
-                                        );
-                                      }
-                                    }),
+                                                      }
+                                                    });
+                                                  }));
+                                        })),
+                                  )
+                                : Scrollbar(
+                                    child: FutureBuilder<List<Provider>>(
+                                      future: futureProviders,
+                                      builder:
+                                          ((context, AsyncSnapshot snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return CircularProgressIndicator();
+                                        } else if (snapshot.hasError) {
+                                          return Text(
+                                              "Error: ${snapshot.error}");
+                                        } else {
+                                          print(
+                                              "Snapshot: ${snapshot.data.length}");
+                                          return ListView.builder(
+                                            shrinkWrap: true,
+                                            itemBuilder: (context, index) {
+                                              Provider provider =
+                                                  snapshot.data?[index];
+
+                                              String imgUrl =
+                                                  "https://image.tmdb.org/t/p/w45${provider.logoPath}";
+                                              bool isSelected =
+                                                  selectedProviders.any((p) =>
+                                                      p.providerID ==
+                                                      provider.providerID);
+                                              return ListTile(
+                                                  leading: CachedNetworkImage(
+                                                    imageUrl: imgUrl,
+                                                    width: 50.0,
+                                                    errorWidget: (context,
+                                                            imgUrl, error) =>
+                                                        const Icon(
+                                                            Icons
+                                                                .no_photography_outlined,
+                                                            size: 50),
+                                                  ),
+                                                  title: Text(
+                                                      provider.providerName),
+                                                  subtitle: Text(provider
+                                                      .displayPriority
+                                                      .toString()),
+                                                  trailing: Checkbox(
+                                                      value: isSelected,
+                                                      onChanged: (value) {
+                                                        setState(() {
+                                                          if (value != null) {
+                                                            if (value) {
+                                                              selectedProviders
+                                                                  .add(
+                                                                      provider);
+                                                            } else {
+                                                              // selectedProviders
+                                                              //     .remove(
+                                                              //         provider);
+                                                              selectedProviders
+                                                                  .removeWhere((p) =>
+                                                                      p.providerID ==
+                                                                      provider
+                                                                          .providerID);
+                                                            }
+                                                          }
+                                                        });
+                                                      }));
+                                            },
+                                            itemCount: snapshot.data.length,
+                                          );
+                                        }
+                                      }),
+                                    ),
                                   ),
                           ),
                         ],
