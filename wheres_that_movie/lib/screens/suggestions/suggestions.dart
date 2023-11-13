@@ -88,8 +88,12 @@ class _SuggestionsState extends State<Suggestions> {
 
   void setProviders(dynamic selectedProviders) {
     setState(() {
-      currentProviders = selectedProviders;
-      print(currentProviders![0].providerName);
+      if (selectedProviders.isEmpty) {
+        currentProviders = null;
+      } else {
+        currentProviders = selectedProviders;
+        print(currentProviders![0].providerName);
+      }
     });
   }
 
@@ -112,15 +116,14 @@ class _SuggestionsState extends State<Suggestions> {
   }
 
   void _showOptionsDialog(
-    BuildContext context,
-    Function(dynamic) setCurrentOption,
-    button,
-  ) {
+      BuildContext context, Function(dynamic) setCurrentOption, button,
+      [List<Provider>? currentProviders]) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return OptionsDialog(
           button: button,
+          currentProviders: currentProviders,
           onOptionSelected: (option) {
             setCurrentOption(option);
           },
@@ -143,7 +146,6 @@ class _SuggestionsState extends State<Suggestions> {
               Navigator.of(context).pop();
             },
             icon: Icon(
-              // Icons.arrow_back_ios,
               CupertinoIcons.arrow_left,
               color: Theme.of(context).colorScheme.primary,
             ),
@@ -169,7 +171,8 @@ class _SuggestionsState extends State<Suggestions> {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          _showOptionsDialog(context, setProviders, "Provider");
+                          _showOptionsDialog(context, setProviders, "Provider",
+                              currentProviders);
                         },
                         style: ElevatedButton.styleFrom(
                             minimumSize: const Size(175, 40),
@@ -203,7 +206,6 @@ class _SuggestionsState extends State<Suggestions> {
                         },
                         style: ElevatedButton.styleFrom(
                             minimumSize: const Size(175, 40),
-                            // maximumSize: const Size(250, 40),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20.0))),
                         child: Text(currentMovieOrShow),
@@ -217,7 +219,6 @@ class _SuggestionsState extends State<Suggestions> {
                         },
                         style: ElevatedButton.styleFrom(
                             minimumSize: const Size(175, 40),
-                            // maximumSize: const Size(250, 40),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20.0))),
                         child: Text(currentLength),
@@ -241,8 +242,6 @@ class _SuggestionsState extends State<Suggestions> {
                       .map(
                         (provider) => ElevatedButton(
                           onPressed: () {
-                            // Handle the button press for the selected provider
-                            // You can add specific functionality here
                             print(provider.providerName);
                           },
                           style: ElevatedButton.styleFrom(
@@ -251,7 +250,6 @@ class _SuggestionsState extends State<Suggestions> {
                                 borderRadius: BorderRadius.circular(20.0),
                               ),
                               backgroundColor: Colors.transparent,
-                              // foregroundColor: Theme.of(context).primaryColor,
                               elevation: 0,
                               side: BorderSide(
                                   width: 2.0,

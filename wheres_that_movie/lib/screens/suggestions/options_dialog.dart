@@ -6,10 +6,12 @@ import 'package:wheres_that_movie/api/models/provider_model.dart';
 class OptionsDialog extends StatefulWidget {
   final Function(dynamic) onOptionSelected;
   final String button;
+  final List<Provider>? currentProviders;
   const OptionsDialog({
     super.key,
     required this.onOptionSelected,
     required this.button,
+    this.currentProviders,
   });
 
   @override
@@ -32,6 +34,10 @@ class _OptionsDialogState extends State<OptionsDialog> {
     // futureUsers = UserService().getUser();
     // getAllFilms();
     futureProviders = ProviderService().getProviders();
+    if (widget.currentProviders != null) {
+      print("There are already providers");
+      selectedProviders = widget.currentProviders!;
+    }
   }
 
   @override
@@ -40,6 +46,7 @@ class _OptionsDialogState extends State<OptionsDialog> {
     // double screenHeight = MediaQuery.of(context).size.height;
     TextEditingController searchController = TextEditingController();
     List<Provider> filteredList = [];
+    // ignore: unused_local_variable
     String searchQuery = '';
 
     Future<void> filterProviders(String query) async {
@@ -67,10 +74,8 @@ class _OptionsDialogState extends State<OptionsDialog> {
     }
 
     return AlertDialog(
-      // scrollable: true,
       backgroundColor: Theme.of(context).cardColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-      // title: Text(alertTitle),
       insetPadding: const EdgeInsets.all(0.0),
       contentPadding: const EdgeInsets.all(0.0),
       content: StatefulBuilder(
@@ -84,9 +89,7 @@ class _OptionsDialogState extends State<OptionsDialog> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Align(
-                    // heightFactor: 0.35,
                     alignment: Alignment.topRight,
-                    // alignment: const Alignment(1.0, -1.0),
                     child: IconButton(
                       splashRadius: 10,
                       padding: const EdgeInsets.all(0.0),
@@ -102,8 +105,7 @@ class _OptionsDialogState extends State<OptionsDialog> {
                               color: Colors.green.shade800,
                             ),
                       onPressed: () {
-                        if (widget.button == "Provider" &&
-                            selectedProviders.isNotEmpty) {
+                        if (widget.button == "Provider") {
                           widget.onOptionSelected(selectedProviders);
                         }
 
@@ -147,14 +149,6 @@ class _OptionsDialogState extends State<OptionsDialog> {
                               });
                             },
                             onEditingComplete: () {
-                              // print(searchController.text);
-                              // print("Search Query: $searchQuery");
-                              // setState(
-                              //   () {
-                              //     filterProviders(searchQuery);
-                              //   },
-                              // );
-                              // filterProviders(searchQuery);
                               FocusScopeNode currentFocus =
                                   FocusScope.of(context);
                               currentFocus.unfocus();
@@ -173,8 +167,10 @@ class _OptionsDialogState extends State<OptionsDialog> {
                                       Provider provider = filteredList[index];
                                       String imgUrl =
                                           "https://image.tmdb.org/t/p/w45${provider.logoPath}";
-                                      bool isSelected =
-                                          selectedProviders.contains(provider);
+                                      bool isSelected = selectedProviders.any(
+                                          (p) =>
+                                              p.providerID ==
+                                              provider.providerID);
                                       return ListTile(
                                           leading: CachedNetworkImage(
                                             imageUrl: imgUrl,
@@ -200,7 +196,10 @@ class _OptionsDialogState extends State<OptionsDialog> {
                                                           .add(provider);
                                                     } else {
                                                       selectedProviders
-                                                          .remove(provider);
+                                                          .removeWhere((p) =>
+                                                              p.providerID ==
+                                                              provider
+                                                                  .providerID);
                                                     }
                                                   }
                                                 });
@@ -219,7 +218,6 @@ class _OptionsDialogState extends State<OptionsDialog> {
                                         print(
                                             "Snapshot: ${snapshot.data.length}");
                                         return ListView.builder(
-                                          // physics: const NeverScrollableScrollPhysics(),
                                           shrinkWrap: true,
                                           itemBuilder: (context, index) {
                                             Provider provider =
@@ -227,8 +225,10 @@ class _OptionsDialogState extends State<OptionsDialog> {
 
                                             String imgUrl =
                                                 "https://image.tmdb.org/t/p/w45${provider.logoPath}";
-                                            bool isSelected = selectedProviders
-                                                .contains(provider);
+                                            bool isSelected =
+                                                selectedProviders.any((p) =>
+                                                    p.providerID ==
+                                                    provider.providerID);
                                             return ListTile(
                                                 leading: CachedNetworkImage(
                                                   imageUrl: imgUrl,
@@ -254,15 +254,19 @@ class _OptionsDialogState extends State<OptionsDialog> {
                                                             selectedProviders
                                                                 .add(provider);
                                                           } else {
+                                                            // selectedProviders
+                                                            //     .remove(
+                                                            //         provider);
                                                             selectedProviders
-                                                                .remove(
-                                                                    provider);
+                                                                .removeWhere((p) =>
+                                                                    p.providerID ==
+                                                                    provider
+                                                                        .providerID);
                                                           }
                                                         }
                                                       });
                                                     }));
                                           },
-
                                           itemCount: snapshot.data.length,
                                         );
                                       }
