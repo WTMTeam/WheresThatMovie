@@ -144,7 +144,7 @@ class _OptionsDialogState extends State<OptionsDialog> {
                             controller: searchController,
                             onChanged: (value) {
                               setState(() {
-                                searchQuery = value;
+                                // searchQuery = value;
                                 filterProviders(value);
                               });
                             },
@@ -155,7 +155,18 @@ class _OptionsDialogState extends State<OptionsDialog> {
                             },
                             decoration: InputDecoration(
                               labelText: 'Search Providers',
-                              prefixIcon: Icon(Icons.search),
+                              prefixIcon: const Icon(Icons.search),
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                  searchController.clear();
+                                  setState(
+                                    () {
+                                      filterProviders("");
+                                    },
+                                  );
+                                },
+                                icon: const Icon(Icons.clear),
+                              ),
                             ),
                           ),
                           Expanded(
