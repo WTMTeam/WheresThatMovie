@@ -49,17 +49,6 @@ class _OptionsDialogState extends State<OptionsDialog> {
     // ignore: unused_local_variable
     String searchQuery = '';
 
-//     sortSelectedFirst() {
-//       // Move items from anotherList to the beginning of mainList
-// if (selectedProviders.isNotEmpty) {
-//   // Remove items from mainList if they exist
-//   mainList.removeWhere((item) => anotherList.contains(item));
-
-//   // Insert items at the beginning of mainList
-//   mainList.insertAll(0, anotherList);
-// }
-//     }
-
     Future<void> filterProviders(String query) async {
       print("Query: $query");
       List<Provider> providers = await futureProviders;
@@ -175,7 +164,7 @@ class _OptionsDialogState extends State<OptionsDialog> {
                                     searchController.clear();
                                     setState(
                                       () {
-                                        filterProviders("");
+                                        // filterProviders("");
                                       },
                                     );
                                   },
@@ -183,6 +172,27 @@ class _OptionsDialogState extends State<OptionsDialog> {
                                 ),
                               ),
                             ),
+                          ),
+                          Row(
+                            children: [
+                              ElevatedButton(
+                                  onPressed: () {
+                                    // Set all providers to selected.
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                      minimumSize: const Size(100, 40),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20.0),
+                                      ),
+                                      backgroundColor: Colors.transparent,
+                                      elevation: 0,
+                                      side: BorderSide(
+                                          width: 2.0,
+                                          color:
+                                              Theme.of(context).primaryColor)),
+                                  child: Text("Select All"))
+                            ],
                           ),
                           Expanded(
                             child: filteredList.isNotEmpty
@@ -195,6 +205,7 @@ class _OptionsDialogState extends State<OptionsDialog> {
                                               filteredList[index];
                                           String imgUrl =
                                               "https://image.tmdb.org/t/p/w45${provider.logoPath}";
+
                                           bool isSelected =
                                               selectedProviders.any((p) =>
                                                   p.providerID ==
@@ -242,7 +253,9 @@ class _OptionsDialogState extends State<OptionsDialog> {
                                           ((context, AsyncSnapshot snapshot) {
                                         if (snapshot.connectionState ==
                                             ConnectionState.waiting) {
-                                          return CircularProgressIndicator();
+                                          return const Center(
+                                              child:
+                                                  CircularProgressIndicator());
                                         } else if (snapshot.hasError) {
                                           return Text(
                                               "Error: ${snapshot.error}");
