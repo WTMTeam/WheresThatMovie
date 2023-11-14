@@ -49,6 +49,17 @@ class _OptionsDialogState extends State<OptionsDialog> {
     // ignore: unused_local_variable
     String searchQuery = '';
 
+//     sortSelectedFirst() {
+//       // Move items from anotherList to the beginning of mainList
+// if (selectedProviders.isNotEmpty) {
+//   // Remove items from mainList if they exist
+//   mainList.removeWhere((item) => anotherList.contains(item));
+
+//   // Insert items at the beginning of mainList
+//   mainList.insertAll(0, anotherList);
+// }
+//     }
+
     Future<void> filterProviders(String query) async {
       print("Query: $query");
       List<Provider> providers = await futureProviders;
@@ -238,11 +249,36 @@ class _OptionsDialogState extends State<OptionsDialog> {
                                         } else {
                                           print(
                                               "Snapshot: ${snapshot.data.length}");
+                                          // Create two lists: one for selected providers and one for unselected providers
+                                          List<Provider> selectedList = [];
+                                          List<Provider> unselectedList = [];
+
+                                          // Iterate through the snapshot data and categorize providers
+                                          for (Provider provider
+                                              in snapshot.data) {
+                                            bool isSelected =
+                                                selectedProviders.any((p) =>
+                                                    p.providerID ==
+                                                    provider.providerID);
+
+                                            if (isSelected) {
+                                              selectedList.add(provider);
+                                            } else {
+                                              unselectedList.add(provider);
+                                            }
+                                          }
+                                          // Combine the selected and unselected lists, placing selected providers first
+                                          List<Provider> combinedList = [
+                                            ...selectedList,
+                                            ...unselectedList
+                                          ];
                                           return ListView.builder(
                                             shrinkWrap: true,
                                             itemBuilder: (context, index) {
+                                              // Provider provider =
+                                              //     snapshot.data?[index];
                                               Provider provider =
-                                                  snapshot.data?[index];
+                                                  combinedList[index];
 
                                               String imgUrl =
                                                   "https://image.tmdb.org/t/p/w45${provider.logoPath}";

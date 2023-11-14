@@ -4,8 +4,6 @@
 //
 
 class ApiEndPoint {
-  late String FILM_ALL;
-  late String FILM_SINGLE;
   late String getMovieSuggestions;
   late String getMovieGenresUrl;
   late String getTvShowGenresUrl;
@@ -19,9 +17,6 @@ class ApiEndPoint {
     //Value added for simplicity but it is always better
     //  to add it in a configuration file
     String baseUrlPath = 'https://api.themoviedb.org/3';
-
-    //   FILM_ALL = '$baseUrlPath/films/';
-    //   FILM_SINGLE = '$baseUrlPath/films/$id';
 
     String region = "US";
     String genreIDs = "35|53"; // Use pipe | for "or".
