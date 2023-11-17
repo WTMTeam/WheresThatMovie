@@ -48,6 +48,7 @@ class _OptionsDialogState extends State<OptionsDialog> {
     List<Provider> filteredList = [];
     // ignore: unused_local_variable
     String searchQuery = '';
+    bool selectAll = false;
 
     Future<void> filterProviders(String query) async {
       print("Query: $query");
@@ -107,6 +108,7 @@ class _OptionsDialogState extends State<OptionsDialog> {
                       onPressed: () {
                         if (widget.button == "Provider") {
                           widget.onOptionSelected(selectedProviders);
+                          // ! Todo: if selectAll, send back something so that it only displays a text saying all providers are selected.
                         }
 
                         Navigator.pop(context);
@@ -176,8 +178,17 @@ class _OptionsDialogState extends State<OptionsDialog> {
                           Row(
                             children: [
                               ElevatedButton(
-                                  onPressed: () {
+                                  onPressed: () async {
                                     // Set all providers to selected.
+                                    List<Provider> providerList =
+                                        await futureProviders;
+                                    // for (Provider provider in providerList) {
+                                    //   selectedProviders.add(provider);
+                                    // }
+                                    setState(() {
+                                      selectedProviders = providerList;
+                                      selectAll = true;
+                                    });
                                   },
                                   style: ElevatedButton.styleFrom(
                                       minimumSize: const Size(100, 40),
@@ -191,7 +202,32 @@ class _OptionsDialogState extends State<OptionsDialog> {
                                           width: 2.0,
                                           color:
                                               Theme.of(context).primaryColor)),
-                                  child: Text("Select All"))
+                                  child: Text("Select All")),
+                              ElevatedButton(
+                                  onPressed: () async {
+                                    // setState(() {
+                                    //   selectedProviders.clear();
+                                    //   selectAll = false;
+                                    // });
+
+                                    selectedProviders.clear();
+                                    setState(
+                                      () {},
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                      minimumSize: const Size(100, 40),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20.0),
+                                      ),
+                                      backgroundColor: Colors.transparent,
+                                      elevation: 0,
+                                      side: BorderSide(
+                                          width: 2.0,
+                                          color:
+                                              Theme.of(context).primaryColor)),
+                                  child: Text("Unselect All")),
                             ],
                           ),
                           Expanded(
