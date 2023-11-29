@@ -166,7 +166,6 @@ class _OptionsDialogState extends State<OptionsDialog> {
                                     searchController.clear();
                                     setState(
                                       () {
-                                        // ! This does return the original list of providers
                                         filterProviders("");
                                       },
                                     );
@@ -206,12 +205,6 @@ class _OptionsDialogState extends State<OptionsDialog> {
                                   child: Text("Select All")),
                               ElevatedButton(
                                   onPressed: () async {
-                                    // setState(() {
-                                    //   selectedProviders.clear();
-                                    //   selectAll = false;
-                                    // });
-
-
                                     setState(() {
                                       selectedProviders = [];
                                       selectAll = false;
