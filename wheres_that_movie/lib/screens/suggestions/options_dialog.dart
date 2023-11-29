@@ -166,7 +166,8 @@ class _OptionsDialogState extends State<OptionsDialog> {
                                     searchController.clear();
                                     setState(
                                       () {
-                                        // filterProviders("");
+                                        // ! This does return the original list of providers
+                                        filterProviders("");
                                       },
                                     );
                                   },
@@ -210,10 +211,12 @@ class _OptionsDialogState extends State<OptionsDialog> {
                                     //   selectAll = false;
                                     // });
 
-                                    selectedProviders.clear();
-                                    setState(
-                                      () {},
-                                    );
+
+                                    setState(() {
+                                      selectedProviders = [];
+                                      selectAll = false;
+                                    });
+
                                   },
                                   style: ElevatedButton.styleFrom(
                                       minimumSize: const Size(100, 40),
