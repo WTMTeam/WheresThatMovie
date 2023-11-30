@@ -109,6 +109,17 @@ class _OptionsDialogState extends State<OptionsDialog> {
                         if (widget.button == "Provider") {
                           widget.onOptionSelected(selectedProviders);
                           // ! Todo: if selectAll, send back something so that it only displays a text saying all providers are selected.
+                          if (selectAll) {
+                            widget.onOptionSelected([
+                              const Provider(
+                                  providerID: 00,
+                                  providerName: "All Providers",
+                                  logoPath: "",
+                                  displayPriority: 00)
+                            ]);
+                          } else {
+                            widget.onOptionSelected(selectedProviders);
+                          }
                         }
 
                         Navigator.pop(context);
@@ -209,7 +220,6 @@ class _OptionsDialogState extends State<OptionsDialog> {
                                       selectedProviders = [];
                                       selectAll = false;
                                     });
-
                                   },
                                   style: ElevatedButton.styleFrom(
                                       minimumSize: const Size(100, 40),
