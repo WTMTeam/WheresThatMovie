@@ -236,28 +236,31 @@ class _SuggestionsState extends State<Suggestions> {
                 ),
               ),
               if (currentProviders != null)
-                Wrap(
-                  spacing: 8.0,
-                  children: currentProviders!
-                      .map(
-                        (provider) => ElevatedButton(
-                          onPressed: () {
-                            print(provider.providerName);
-                          },
-                          style: ElevatedButton.styleFrom(
-                              minimumSize: const Size(100, 40),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20.0),
-                              ),
-                              backgroundColor: Colors.transparent,
-                              elevation: 0,
-                              side: BorderSide(
-                                  width: 2.0,
-                                  color: Theme.of(context).primaryColor)),
-                          child: Text(provider.providerName),
-                        ),
-                      )
-                      .toList(),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Wrap(
+                    spacing: 8.0,
+                    children: currentProviders!
+                        .map(
+                          (provider) => ElevatedButton(
+                            onPressed: () {
+                              print(provider.providerName);
+                            },
+                            style: ElevatedButton.styleFrom(
+                                minimumSize: const Size(100, 40),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+                                backgroundColor: Colors.transparent,
+                                elevation: 0,
+                                side: BorderSide(
+                                    width: 2.0,
+                                    color: Theme.of(context).primaryColor)),
+                            child: Text(provider.providerName),
+                          ),
+                        )
+                        .toList(),
+                  ),
                 ),
             ],
           ),

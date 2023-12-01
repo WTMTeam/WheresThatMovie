@@ -35,9 +35,17 @@ class _OptionsDialogState extends State<OptionsDialog> {
     // getAllFilms();
     futureProviders = ProviderService().getProviders();
     if (widget.currentProviders != null) {
-      print("There are already providers");
-      selectedProviders = widget.currentProviders!;
+      if (widget.currentProviders![0].providerName == "All Providers") {
+        assignAllProviders();
+      } else {
+        print("There are already providers");
+        selectedProviders = widget.currentProviders!;
+      }
     }
+  }
+
+  Future<void> assignAllProviders() async {
+    selectedProviders = await futureProviders;
   }
 
   @override
