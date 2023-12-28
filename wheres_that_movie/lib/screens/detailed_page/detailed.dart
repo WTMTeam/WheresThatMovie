@@ -334,7 +334,8 @@ class _DetailedPageState extends State<DetailedPage> {
               },
               icon: Icon(
                 // Icons.arrow_back_ios,
-                CupertinoIcons.arrow_down_right_arrow_up_left,
+                //CupertinoIcons.arrow_down_right_arrow_up_left,
+                CupertinoIcons.fullscreen_exit,
                 color: Theme.of(context).colorScheme.primary,
               ),
             ),
