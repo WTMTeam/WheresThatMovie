@@ -116,7 +116,6 @@ class _OptionsDialogState extends State<OptionsDialog> {
                       onPressed: () {
                         if (widget.button == "Provider") {
                           widget.onOptionSelected(selectedProviders);
-                          // ! Todo: if selectAll, send back something so that it only displays a text saying all providers are selected.
                           if (selectAll) {
                             widget.onOptionSelected([
                               const Provider(
