@@ -104,6 +104,11 @@ class _SuggestionsState extends State<Suggestions> {
   }
 
   void setMovieOrShow(dynamic option) {
+    if (option == "Movie") {
+      option = "TV Show";
+    } else if (option == "TV Show") {
+      option = "Movie";
+    }
     setState(() {
       currentMovieOrShow = option;
     });
@@ -199,21 +204,27 @@ class _SuggestionsState extends State<Suggestions> {
                   ),
                   Column(
                     children: [
-                      ElevatedButton(
+                      ElevatedButton.icon(
+                        //icon: const Icon(Icons.sync_outlined),
+                        icon: const Icon(CupertinoIcons.shuffle),
                         onPressed: () {
-                          _showOptionsDialog(
-                              context, setMovieOrShow, "movieOrShow");
+                          // * Todo:
+                          //    - Change this to have a toggle switch and don't call _showOptionsDialog
+                          setMovieOrShow(currentMovieOrShow);
+                          // _showOptionsDialog(
+                          //     context, setMovieOrShow, "movieOrShow");
                         },
                         style: ElevatedButton.styleFrom(
                             minimumSize: const Size(175, 40),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20.0))),
-                        child: Text(currentMovieOrShow),
+                        label: Text(currentMovieOrShow),
                       ),
                       const SizedBox(
                         height: 4.0,
                       ),
-                      ElevatedButton(
+                      ElevatedButton.icon(
+                        icon: const Icon(CupertinoIcons.timer),
                         onPressed: () {
                           _showOptionsDialog(context, setLength, "length");
                         },
@@ -221,7 +232,7 @@ class _SuggestionsState extends State<Suggestions> {
                             minimumSize: const Size(175, 40),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20.0))),
-                        child: Text(currentLength),
+                       label: Text(currentLength),
                       ),
                     ],
                   ),
