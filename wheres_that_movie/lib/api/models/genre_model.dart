@@ -1,5 +1,5 @@
-import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 import 'package:wheres_that_movie/api/constants.dart';
 
@@ -31,10 +31,11 @@ class GenreService {
         headers: headers);
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
+      print(data);
       final List<Genre> genreList = [];
 
-      for (var i = 0; i < data['results'].length; i++) {
-        final entry = data['results'][i];
+      for (var i = 0; i < data['genres'].length; i++) {
+        final entry = data['genres'][i];
         genreList.add(Genre.fromJson(entry));
       }
       return genreList;
