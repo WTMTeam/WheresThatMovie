@@ -1,17 +1,20 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wheres_that_movie/api/models/genre_model.dart';
 import 'package:wheres_that_movie/api/models/provider_model.dart';
 
 class OptionsDialog extends StatefulWidget {
   final Function(dynamic) onOptionSelected;
   final String button;
   final List<Provider>? currentProviders;
+  final List<Genre>? currentGenres;
   const OptionsDialog({
     super.key,
     required this.onOptionSelected,
     required this.button,
     this.currentProviders,
+    this.currentGenres,
   });
 
   @override
@@ -26,6 +29,8 @@ class _OptionsDialogState extends State<OptionsDialog> {
   // * Length variables
 
   // * Genre variables
+  late Future<List<Genre>> futureGenres;
+  List<Genre> selectedGenres = [];
 
   @override
   void initState() {
@@ -33,6 +38,9 @@ class _OptionsDialogState extends State<OptionsDialog> {
     // loadUsers();
     // futureUsers = UserService().getUser();
     // getAllFilms();
+
+    // Todo:
+    //  * Filter here so not all APIs are called every time
     futureProviders = ProviderService().getProviders();
     if (widget.currentProviders != null) {
       if (widget.currentProviders![0].providerName == "All Providers") {
@@ -42,10 +50,22 @@ class _OptionsDialogState extends State<OptionsDialog> {
         selectedProviders = widget.currentProviders!;
       }
     }
+    futureGenres = GenreService().getGenres();
+    if (widget.currentGenres != null) {
+      if (widget.currentGenres![0].genreName == "All Genres") {
+        assignAllGenres();
+      } else {
+        selectedGenres = widget.currentGenres!;
+      }
+    }
   }
 
   Future<void> assignAllProviders() async {
     selectedProviders = await futureProviders;
+  }
+
+  Future<void> assignAllGenres() async {
+    selectedGenres = await futureGenres;
   }
 
   @override
@@ -126,6 +146,17 @@ class _OptionsDialogState extends State<OptionsDialog> {
                             ]);
                           } else {
                             widget.onOptionSelected(selectedProviders);
+                          }
+                        } else if (widget.button == "Genre") {
+                          if (selectAll) {
+                            widget.onOptionSelected([
+                              const Genre(
+                                genreID: 00,
+                                genreName: "All Genres",
+                              )
+                            ]);
+                          } else {
+                            widget.onOptionSelected(selectedGenres);
                           }
                         }
 
@@ -396,9 +427,69 @@ class _OptionsDialogState extends State<OptionsDialog> {
                         ],
                       ),
                     )
-                  else if (widget.button == "Genre") 
-                    const Text("Genre")
-               
+                  else if (widget.button == "Genre")
+                    Scrollbar(
+                      child: FutureBuilder<List<Genre>>(
+                        future: futureGenres,
+                        builder: ((context, AsyncSnapshot snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          } else if (snapshot.hasError) {
+                            return Text("Error: ${snapshot.error}");
+                          } else {
+                            print("Snapshot: ${snapshot.data.length}");
+                            // Create two lists: one for selected providers and one for unselected providers
+                            List<Genre> selectedList = [];
+                            List<Genre> unselectedList = [];
+
+                            // Iterate through the snapshot data and categorize providers
+                            for (Genre genre in snapshot.data) {
+                              bool isSelected = selectedGenres
+                                  .any((g) => g.genreID == genre.genreID);
+
+                              if (isSelected) {
+                                selectedList.add(genre);
+                              } else {
+                                unselectedList.add(genre);
+                              }
+                            }
+                            // Combine the selected and unselected lists, placing selected providers first
+                            List<Genre> combinedList = [
+                              ...selectedList,
+                              ...unselectedList
+                            ];
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                Genre genre = combinedList[index];
+                                bool isSelected = selectedGenres
+                                    .any((g) => g.genreID == genre.genreID);
+                                return ListTile(
+                                  title: Text(genre.genreName),
+                                  trailing: Checkbox(
+                                      value: isSelected,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          if (value != null) {
+                                            if (value) {
+                                              selectedGenres.add(genre);
+                                            } else {
+                                              selectedGenres.removeWhere((g) =>
+                                                  g.genreID == genre.genreID);
+                                            }
+                                          }
+                                        });
+                                      }),
+                                );
+                              },
+                              itemCount: snapshot.data.length,
+                            );
+                          }
+                        }),
+                      ),
+                    )
                   else
                     const Text("test")
                 ],
