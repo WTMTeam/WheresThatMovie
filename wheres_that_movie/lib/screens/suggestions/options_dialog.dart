@@ -396,6 +396,9 @@ class _OptionsDialogState extends State<OptionsDialog> {
                         ],
                       ),
                     )
+                  else if (widget.button == "Genre") 
+                    const Text("Genre")
+               
                   else
                     const Text("test")
                 ],
