@@ -59,8 +59,8 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wheres_that_movie/api/models/genre_model.dart';
 import 'package:wheres_that_movie/api/models/provider_model.dart';
-
 import 'package:wheres_that_movie/screens/suggestions/options_dialog.dart';
 
 class Suggestions extends StatefulWidget {
@@ -82,7 +82,7 @@ class _SuggestionsState extends State<Suggestions> {
     '120min>'
   ];
   List<Provider>? currentProviders;
-  String currentGenre = 'Choose Genre';
+  List<Genre>? currentGenres;
   String currentMovieOrShow = 'Movie';
   String currentLength = 'Choose Length';
 
@@ -97,9 +97,13 @@ class _SuggestionsState extends State<Suggestions> {
     });
   }
 
-  void setGenre(dynamic option) {
+  void setGenres(dynamic selectedGenres) {
     setState(() {
-      currentGenre = option;
+      if (selectedGenres.isEmpty) {
+        currentGenres = null;
+      }
+      currentGenres = selectedGenres;
+      print(currentGenres![0].genreName);
     });
   }
 
@@ -122,13 +126,14 @@ class _SuggestionsState extends State<Suggestions> {
 
   void _showOptionsDialog(
       BuildContext context, Function(dynamic) setCurrentOption, button,
-      [List<Provider>? currentProviders]) {
+      {List<Provider>? currentProviders, List<Genre>? currentGenres}) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return OptionsDialog(
           button: button,
           currentProviders: currentProviders,
+          currentGenres: currentGenres,
           onOptionSelected: (option) {
             setCurrentOption(option);
           },
@@ -177,13 +182,15 @@ class _SuggestionsState extends State<Suggestions> {
                       ElevatedButton(
                         onPressed: () {
                           _showOptionsDialog(context, setProviders, "Provider",
-                              currentProviders);
+                              currentProviders: currentProviders);
                         },
                         style: ElevatedButton.styleFrom(
-                            minimumSize: const Size(175, 40),
-                            // maximumSize: const Size(200, 40),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20.0))),
+                          minimumSize: const Size(175, 40),
+                          // maximumSize: const Size(200, 40),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                        ),
                         child: const Text("Providers"),
                       ),
                       const SizedBox(
@@ -191,14 +198,17 @@ class _SuggestionsState extends State<Suggestions> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          _showOptionsDialog(context, setGenre, "Genre");
+                          _showOptionsDialog(context, setGenres, "Genre",
+                              currentGenres: currentGenres);
                         },
                         style: ElevatedButton.styleFrom(
-                            minimumSize: const Size(175, 40),
-                            // maximumSize: const Size(200, 40),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20.0))),
-                        child: Text(currentGenre),
+                          minimumSize: const Size(175, 40),
+                          // maximumSize: const Size(200, 40),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                        ),
+                        child: const Text("Genres"),
                       ),
                     ],
                   ),
@@ -232,7 +242,7 @@ class _SuggestionsState extends State<Suggestions> {
                             minimumSize: const Size(175, 40),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20.0))),
-                       label: Text(currentLength),
+                        label: Text(currentLength),
                       ),
                     ],
                   ),
@@ -268,6 +278,33 @@ class _SuggestionsState extends State<Suggestions> {
                                     width: 2.0,
                                     color: Theme.of(context).primaryColor)),
                             child: Text(provider.providerName),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
+              if (currentGenres != null)
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Wrap(
+                    spacing: 8.0,
+                    children: currentGenres!
+                        .map(
+                          (genre) => ElevatedButton(
+                            onPressed: () {
+                              print(genre.genreName);
+                            },
+                            style: ElevatedButton.styleFrom(
+                                minimumSize: const Size(100, 40),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+                                backgroundColor: Colors.transparent,
+                                elevation: 0,
+                                side: BorderSide(
+                                    width: 2.0,
+                                    color: Theme.of(context).primaryColor)),
+                            child: Text(genre.genreName),
                           ),
                         )
                         .toList(),
