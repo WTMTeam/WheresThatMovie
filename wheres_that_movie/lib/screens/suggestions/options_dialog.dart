@@ -428,66 +428,68 @@ class _OptionsDialogState extends State<OptionsDialog> {
                       ),
                     )
                   else if (widget.button == "Genre")
-                    Scrollbar(
-                      child: FutureBuilder<List<Genre>>(
-                        future: futureGenres,
-                        builder: ((context, AsyncSnapshot snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const Center(
-                                child: CircularProgressIndicator());
-                          } else if (snapshot.hasError) {
-                            return Text("Error: ${snapshot.error}");
-                          } else {
-                            print("Snapshot: ${snapshot.data.length}");
-                            // Create two lists: one for selected providers and one for unselected providers
-                            List<Genre> selectedList = [];
-                            List<Genre> unselectedList = [];
+                    Expanded(
+                      child: Scrollbar(
+                        child: FutureBuilder<List<Genre>>(
+                          future: futureGenres,
+                          builder: ((context, AsyncSnapshot snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            } else if (snapshot.hasError) {
+                              return Text("Error: ${snapshot.error}");
+                            } else {
+                              print("Snapshot: ${snapshot.data.length}");
+                              // Create two lists: one for selected providers and one for unselected providers
+                              List<Genre> selectedList = [];
+                              List<Genre> unselectedList = [];
 
-                            // Iterate through the snapshot data and categorize providers
-                            for (Genre genre in snapshot.data) {
-                              bool isSelected = selectedGenres
-                                  .any((g) => g.genreID == genre.genreID);
-
-                              if (isSelected) {
-                                selectedList.add(genre);
-                              } else {
-                                unselectedList.add(genre);
-                              }
-                            }
-                            // Combine the selected and unselected lists, placing selected providers first
-                            List<Genre> combinedList = [
-                              ...selectedList,
-                              ...unselectedList
-                            ];
-                            return ListView.builder(
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                Genre genre = combinedList[index];
+                              // Iterate through the snapshot data and categorize providers
+                              for (Genre genre in snapshot.data) {
                                 bool isSelected = selectedGenres
                                     .any((g) => g.genreID == genre.genreID);
-                                return ListTile(
-                                  title: Text(genre.genreName),
-                                  trailing: Checkbox(
-                                      value: isSelected,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          if (value != null) {
-                                            if (value) {
-                                              selectedGenres.add(genre);
-                                            } else {
-                                              selectedGenres.removeWhere((g) =>
-                                                  g.genreID == genre.genreID);
+
+                                if (isSelected) {
+                                  selectedList.add(genre);
+                                } else {
+                                  unselectedList.add(genre);
+                                }
+                              }
+                              // Combine the selected and unselected lists, placing selected providers first
+                              List<Genre> combinedList = [
+                                ...selectedList,
+                                ...unselectedList
+                              ];
+                              return ListView.builder(
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  Genre genre = combinedList[index];
+                                  bool isSelected = selectedGenres
+                                      .any((g) => g.genreID == genre.genreID);
+                                  return ListTile(
+                                    title: Text(genre.genreName),
+                                    trailing: Checkbox(
+                                        value: isSelected,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            if (value != null) {
+                                              if (value) {
+                                                selectedGenres.add(genre);
+                                              } else {
+                                                selectedGenres.removeWhere((g) =>
+                                                    g.genreID == genre.genreID);
+                                              }
                                             }
-                                          }
-                                        });
-                                      }),
-                                );
-                              },
-                              itemCount: snapshot.data.length,
-                            );
-                          }
-                        }),
+                                          });
+                                        }),
+                                  );
+                                },
+                                itemCount: snapshot.data.length,
+                              );
+                            }
+                          }),
+                        ),
                       ),
                     )
                   else
