@@ -73,7 +73,7 @@ class _OptionsDialogState extends State<OptionsDialog> {
     double screenWidth = MediaQuery.of(context).size.width;
     // double screenHeight = MediaQuery.of(context).size.height;
     TextEditingController searchController = TextEditingController();
-    List<Provider> filteredList = [];
+    List<Provider> filteredProviderList = [];
     // ignore: unused_local_variable
     String searchQuery = '';
     bool selectAll = false;
@@ -88,7 +88,7 @@ class _OptionsDialogState extends State<OptionsDialog> {
           newProviders.add(provider);
         }
       }
-      filteredList = newProviders;
+      filteredProviderList = newProviders;
     }
 
     String alertTitle = "";
@@ -277,13 +277,13 @@ class _OptionsDialogState extends State<OptionsDialog> {
                             ),
                           ),
                           Expanded(
-                            child: filteredList.isNotEmpty
+                            child: filteredProviderList.isNotEmpty
                                 ? Scrollbar(
                                     child: ListView.builder(
                                       shrinkWrap: true,
-                                      itemCount: filteredList.length,
+                                      itemCount: filteredProviderList.length,
                                       itemBuilder: ((context, index) {
-                                        Provider provider = filteredList[index];
+                                        Provider provider = filteredProviderList[index];
                                         String imgUrl =
                                             "https://image.tmdb.org/t/p/w45${provider.logoPath}";
 
