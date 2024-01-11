@@ -110,6 +110,12 @@ class _OptionsDialogState extends State<OptionsDialog> {
       content: StatefulBuilder(
         builder: ((context, setState) {
           double contentHeight = MediaQuery.of(context).size.height * 0.6;
+          List<dynamic> comparisonList = [];
+          if (widget.button == "Provider") {
+            comparisonList = selectedProviders;
+          } else if (widget.button == "Genre") {
+            comparisonList = selectedGenres;
+          }
           return SingleChildScrollView(
             child: SizedBox(
               width: screenWidth / 1.2,
@@ -122,7 +128,7 @@ class _OptionsDialogState extends State<OptionsDialog> {
                     child: IconButton(
                       splashRadius: 10,
                       padding: const EdgeInsets.all(0.0),
-                      icon: selectedProviders.isEmpty
+                      icon: comparisonList.isEmpty
                           ? Icon(
                               CupertinoIcons.xmark_circle,
                               size: 30,
@@ -283,7 +289,8 @@ class _OptionsDialogState extends State<OptionsDialog> {
                                       shrinkWrap: true,
                                       itemCount: filteredProviderList.length,
                                       itemBuilder: ((context, index) {
-                                        Provider provider = filteredProviderList[index];
+                                        Provider provider =
+                                            filteredProviderList[index];
                                         String imgUrl =
                                             "https://image.tmdb.org/t/p/w45${provider.logoPath}";
 
@@ -459,7 +466,7 @@ class _OptionsDialogState extends State<OptionsDialog> {
                                 ),
                                 ElevatedButton(
                                   onPressed: () async {
-                                    // Set all providers to selected.
+                                    // Set all genres to selected.
                                     List<Genre> genreList = await futureGenres;
                                     setState(() {
                                       selectedGenres = genreList;
@@ -501,8 +508,8 @@ class _OptionsDialogState extends State<OptionsDialog> {
 
                                     // Iterate through the snapshot data and categorize providers
                                     for (Genre genre in snapshot.data) {
-                                      bool isSelected = selectedGenres
-                                          .any((g) => g.genreID == genre.genreID);
+                                      bool isSelected = selectedGenres.any(
+                                          (g) => g.genreID == genre.genreID);
 
                                       if (isSelected) {
                                         selectedList.add(genre);
@@ -531,8 +538,8 @@ class _OptionsDialogState extends State<OptionsDialog> {
                                                     if (value) {
                                                       selectedGenres.add(genre);
                                                     } else {
-                                                      selectedGenres.removeWhere(
-                                                          (g) =>
+                                                      selectedGenres
+                                                          .removeWhere((g) =>
                                                               g.genreID ==
                                                               genre.genreID);
                                                     }
