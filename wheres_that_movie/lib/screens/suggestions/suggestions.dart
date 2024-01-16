@@ -93,7 +93,6 @@ class _SuggestionsState extends State<Suggestions> {
         currentProviders = null;
       } else {
         currentProviders = selectedProviders;
-        print(currentProviders![0].providerName);
       }
     });
   }
@@ -104,7 +103,6 @@ class _SuggestionsState extends State<Suggestions> {
         currentGenres = null;
       }
       currentGenres = selectedGenres;
-      // print(currentGenres![0].genreName);
     });
   }
 
