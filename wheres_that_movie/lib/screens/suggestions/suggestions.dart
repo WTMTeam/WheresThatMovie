@@ -84,7 +84,8 @@ class _SuggestionsState extends State<Suggestions> {
   List<Provider>? currentProviders;
   List<Genre>? currentGenres;
   String currentMovieOrShow = 'Movie';
-  String currentLength = 'Choose Length';
+  dynamic currentLength = 'Choose Length';
+  bool lengthLessThan = false;
 
   void setProviders(dynamic selectedProviders) {
     setState(() {
@@ -118,9 +119,10 @@ class _SuggestionsState extends State<Suggestions> {
     });
   }
 
-  void setLength(dynamic option) {
+  void setLength(dynamic lengthList) {
     setState(() {
-      currentLength = option;
+      currentLength = lengthList[0];
+      lengthLessThan = lengthList[1];
     });
   }
 
@@ -242,7 +244,7 @@ class _SuggestionsState extends State<Suggestions> {
                             minimumSize: const Size(175, 40),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20.0))),
-                        label: Text(currentLength),
+                        label: Text('${currentLength.toString()}min'),
                       ),
                     ],
                   ),
