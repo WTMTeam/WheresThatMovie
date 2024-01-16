@@ -36,7 +36,7 @@ class _OptionsDialogState extends State<OptionsDialog> {
 
   // * Length variables
   double selectedLength = 120.0;
-  bool slectedLengthLessThan = false;
+  bool selectedLengthLessThan = false;
 
   @override
   void initState() {
@@ -66,6 +66,9 @@ class _OptionsDialogState extends State<OptionsDialog> {
     }
     if (widget.currentLength != null) {
       selectedLength = widget.currentLength!;
+    }
+    if (widget.currentLengthLessThan != null) {
+      selectedLengthLessThan = widget.currentLengthLessThan!;
     }
   }
 
@@ -173,6 +176,12 @@ class _OptionsDialogState extends State<OptionsDialog> {
                           } else {
                             widget.onOptionSelected(selectedGenres);
                           }
+                        } else if (widget.button == "length") {
+                          List<dynamic> lengthList = [
+                            selectedLength.toInt(),
+                            selectedLengthLessThan
+                          ];
+                          widget.onOptionSelected(lengthList);
                         }
 
                         Navigator.pop(context);
@@ -569,40 +578,39 @@ class _OptionsDialogState extends State<OptionsDialog> {
                     )
                   else if (widget.button == "length")
                     Expanded(
-                        child: Column(
-                      children: [
-                        CupertinoSlider(
-                            value: selectedLength,
-                            divisions: 6,
-                            max: 180,
-                            onChanged: (double value) {
-                              setState(() {
-                                selectedLength = value;
-                              });
-                            }),
-                        Text(selectedLength.toString()),
-                        ElevatedButton(
-                          onPressed: () {},
-                          child: const Text("<60min"),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {},
-                          child: const Text("60-90min"),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {},
-                          child: const Text("90-120min"),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {},
-                          child: const Text("120-180min"),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {},
-                          child: const Text(">180min"),
-                        ),
-                      ],
-                    ))
+                      child: Column(
+                        children: [
+                          CupertinoSlider(
+                              value: selectedLength,
+                              divisions: 6,
+                              max: 180,
+                              onChanged: (double value) {
+                                setState(() {
+                                  selectedLength = value;
+                                });
+                              }),
+                          Text('${selectedLength.toInt().toString()} min'),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text('<='),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: CupertinoSwitch(
+                                    value: selectedLengthLessThan,
+                                    onChanged: (value) {
+                                      print("Value Changed");
+                                      setState(() {
+                                        selectedLengthLessThan = value;
+                                      });
+                                    }),
+                              ),
+                              const Text('>='),
+                            ],
+                          )
+                        ],
+                      ),
+                    )
                   else
                     const Text("test")
                 ],
