@@ -103,7 +103,7 @@ class _SuggestionsState extends State<Suggestions> {
         currentGenres = null;
       }
       currentGenres = selectedGenres;
-      print(currentGenres![0].genreName);
+      // print(currentGenres![0].genreName);
     });
   }
 

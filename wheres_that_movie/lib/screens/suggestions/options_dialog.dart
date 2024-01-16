@@ -9,12 +9,16 @@ class OptionsDialog extends StatefulWidget {
   final String button;
   final List<Provider>? currentProviders;
   final List<Genre>? currentGenres;
+  final double? currentLength;
+  final bool? currentLengthLessThan;
   const OptionsDialog({
     super.key,
     required this.onOptionSelected,
     required this.button,
     this.currentProviders,
     this.currentGenres,
+    this.currentLength,
+    this.currentLengthLessThan,
   });
 
   @override
@@ -26,11 +30,13 @@ class _OptionsDialogState extends State<OptionsDialog> {
   late Future<List<Provider>> futureProviders;
   List<Provider> selectedProviders = [];
 
-  // * Length variables
-
   // * Genre variables
   late Future<List<Genre>> futureGenres;
   List<Genre> selectedGenres = [];
+
+  // * Length variables
+  double selectedLength = 120.0;
+  bool slectedLengthLessThan = false;
 
   @override
   void initState() {
@@ -57,6 +63,9 @@ class _OptionsDialogState extends State<OptionsDialog> {
       } else {
         selectedGenres = widget.currentGenres!;
       }
+    }
+    if (widget.currentLength != null) {
+      selectedLength = widget.currentLength!;
     }
   }
 
@@ -558,6 +567,42 @@ class _OptionsDialogState extends State<OptionsDialog> {
                         ],
                       ),
                     )
+                  else if (widget.button == "length")
+                    Expanded(
+                        child: Column(
+                      children: [
+                        CupertinoSlider(
+                            value: selectedLength,
+                            divisions: 6,
+                            max: 180,
+                            onChanged: (double value) {
+                              setState(() {
+                                selectedLength = value;
+                              });
+                            }),
+                        Text(selectedLength.toString()),
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: const Text("<60min"),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: const Text("60-90min"),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: const Text("90-120min"),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: const Text("120-180min"),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: const Text(">180min"),
+                        ),
+                      ],
+                    ))
                   else
                     const Text("test")
                 ],
