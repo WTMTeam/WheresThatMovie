@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wheres_that_movie/api/models/genre_model.dart';
+import 'package:wheres_that_movie/api/models/movie_model.dart';
 import 'package:wheres_that_movie/api/models/provider_model.dart';
 
 class OptionsDialog extends StatefulWidget {
@@ -42,6 +43,7 @@ class _OptionsDialogState extends State<OptionsDialog> {
   void initState() {
     super.initState();
     // loadUsers();
+    Future<List<Movie>>testMovieSuggestion = MovieService().getMovieSuggestions();
     // futureUsers = UserService().getUser();
     // getAllFilms();
 
