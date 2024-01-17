@@ -43,7 +43,6 @@ class ProviderService {
       final data = jsonDecode(response.body);
 
       final List<Provider> providerList = [];
-      print("Num Providers: ${data['results'].length}");
       for (var i = 0; i < data['results'].length; i++) {
         final entry = data['results'][i];
         try {
@@ -59,7 +58,6 @@ class ProviderService {
       // Sort the providerList based on displayPriority
       providerList
           .sort((a, b) => a.displayPriority.compareTo(b.displayPriority));
-      print("Provider List length: ${providerList.length}");
 
       return providerList;
     } else {
