@@ -23,7 +23,6 @@ class SuggestionsHandler {
 
   String buildUrlString(dynamic urlVariable) {
     String urlString = "";
-
     return urlString;
   }
 
