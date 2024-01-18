@@ -59,6 +59,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wheres_that_movie/api/models/movie_model.dart';
 import 'package:wheres_that_movie/api/models/genre_model.dart';
 import 'package:wheres_that_movie/api/models/provider_model.dart';
 import 'package:wheres_that_movie/screens/suggestions/options_dialog.dart';
@@ -150,27 +151,27 @@ class _SuggestionsState extends State<Suggestions> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            icon: Icon(
-              CupertinoIcons.arrow_left,
-              color: Theme.of(context).colorScheme.primary,
-            ),
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: Icon(
+            CupertinoIcons.arrow_left,
+            color: Theme.of(context).colorScheme.primary,
           ),
-          title: Text(
-            "Suggestions",
-            style: Theme.of(context).textTheme.displayLarge,
-            overflow: TextOverflow.ellipsis,
-          ),
-          centerTitle: true,
-          backgroundColor: Theme.of(context).canvasColor,
-          elevation: 10.0,
         ),
-        body: SafeArea(
-            child: Padding(
+        title: Text(
+          "Suggestions",
+          style: Theme.of(context).textTheme.displayLarge,
+          overflow: TextOverflow.ellipsis,
+        ),
+        centerTitle: true,
+        backgroundColor: Theme.of(context).canvasColor,
+        elevation: 10.0,
+      ),
+      body: SafeArea(
+        child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 20.0),
           child: Column(
             children: [
@@ -310,8 +311,17 @@ class _SuggestionsState extends State<Suggestions> {
                         .toList(),
                   ),
                 ),
+              ElevatedButton(
+                  child: Text("get suggestions"),
+                  onPressed: () {
+                    Future<List<Movie>> testMovieSuggestion = MovieService()
+                        .getMovieSuggestions(
+                            providers: currentProviders, genres: currentGenres);
+                  }),
             ],
           ),
-        )));
+        ),
+      ),
+    );
   }
 }
