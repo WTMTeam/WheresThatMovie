@@ -43,7 +43,6 @@ class _OptionsDialogState extends State<OptionsDialog> {
   void initState() {
     super.initState();
     // loadUsers();
-    Future<List<Movie>>testMovieSuggestion = MovieService().getMovieSuggestions();
     // futureUsers = UserService().getUser();
     // getAllFilms();
 

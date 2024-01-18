@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:wheres_that_movie/api/constants.dart';
+import 'package:wheres_that_movie/api/models/genre_model.dart';
+import 'package:wheres_that_movie/api/models/provider_model.dart';
 
 class Movie {
   final int movieID;
@@ -37,7 +39,37 @@ class MovieService {
   // - Sort based on something
   // - Accept and send on provider data, genre data osv.
   // - is there additional data we want to grab?
-  Future<List<Movie>> getMovieSuggestions() async {
+  Future<List<Movie>> getMovieSuggestions(
+      {List<Provider>? providers,
+      List<Genre>? genres,
+      int? runtime,
+      bool? runtimeLessThan}) async {
+    String providerIDs = "";
+    String genreIDs = "";
+
+    // Concatenate Provider IDs
+    if (providers != null && providers.isNotEmpty) {
+      for (Provider provider in providers) {
+        providerIDs += "${provider.providerID}|";
+      }
+
+      // Remove the trailing "|"
+      providerIDs = providerIDs.substring(0, providerIDs.length - 1);
+    }
+    print("Provider IDs: $providerIDs");
+    // Concatenate Genre IDs
+    if (genres != null && genres.isNotEmpty) {
+      for (Genre genre in genres) {
+        genreIDs += "${genre.genreID}|";
+      }
+
+      // Remove the trailing "|"
+      genreIDs = genreIDs.substring(0, genreIDs.length - 1);
+    }
+    print("Genre IDs: $genreIDs");
+    print(ApiEndPoint().getMovieSuggestions);
+    print(ApiEndPoint(providerIDs: providerIDs, genreIDs: genreIDs, region: "US").getMovieSuggestions);
+
     final Map<String, String> headers = {
       'accept': 'application/json',
       'Authorization':
@@ -60,8 +92,8 @@ class MovieService {
         }
       }
       for (Movie movie in movieList) {
-      print(movie.title);
-    }
+        print(movie.title);
+      }
       return movieList;
     } else {
       throw Exception('HTTP FAILED with status code: ${response.statusCode}');

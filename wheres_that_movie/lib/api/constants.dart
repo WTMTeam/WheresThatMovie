@@ -3,6 +3,9 @@
 //
 //
 
+import 'package:wheres_that_movie/api/models/genre_model.dart';
+import 'package:wheres_that_movie/api/models/provider_model.dart';
+
 class ApiEndPoint {
   late String getMovieSuggestions;
   late String getMovieGenresUrl;
@@ -13,17 +16,27 @@ class ApiEndPoint {
 
   // * Genre Docs: https://developer.themoviedb.org/reference/genre-movie-list
 
-  ApiEndPoint({int? id, List? suggestionsVariables}) {
+  ApiEndPoint(
+  {int? id,
+    String? providerIDs,
+    String? genreIDs,
+    int? runtime,
+    bool? runtimeLessThan,
+    String? region}) {
     //Value added for simplicity but it is always better
     //  to add it in a configuration file
     String baseUrlPath = 'https://api.themoviedb.org/3';
 
-    String region = "US";
-    String genreIDs = "35|53"; // Use pipe | for "or".
-    String providers = "8|9";
+    region ??= "US";
+    genreIDs ??= "35|53"; // Use pipe | for "or".
+    providerIDs ??= "8|9";
+
+    // if (this.providerIDs) {
+    //   providerIDs = this.providerIDs;
+    // }
 
     getMovieSuggestions =
-        '$baseUrlPath/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&watch_region=$region&with_genres=$genreIDs&with_watch_providers=$providers';
+    '$baseUrlPath/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&watch_region=$region&with_genres=$genreIDs&with_watch_providers=$providerIDs';
 
     // discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&watch_region=US&with_genres=35&with_watch_providers=8
 
@@ -33,9 +46,9 @@ class ApiEndPoint {
 
     // Get the streaming provider information for movies
     getMovieStreamingProviderInfo =
-        '$baseUrlPath/watch/providers/movie?language=en-US';
+    '$baseUrlPath/watch/providers/movie?language=en-US';
     getMovieStreamingProviderInfoRegion =
-        '$baseUrlPath/watch/providers/movie?language=en-US&watch_region=US';
+    '$baseUrlPath/watch/providers/movie?language=en-US&watch_region=US';
 
     // Get the Countries used in TMDB
     getCountries = '$baseUrlPath/configuration/countries?language=en-US';
