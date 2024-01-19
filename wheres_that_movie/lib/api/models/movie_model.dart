@@ -68,14 +68,20 @@ class MovieService {
     }
     print("Genre IDs: $genreIDs");
     print(ApiEndPoint().getMovieSuggestions);
-    print(ApiEndPoint(providerIDs: providerIDs, genreIDs: genreIDs, region: "US").getMovieSuggestions);
+    print(
+        ApiEndPoint(providerIDs: providerIDs, genreIDs: genreIDs, region: "US")
+            .getMovieSuggestions);
 
     final Map<String, String> headers = {
       'accept': 'application/json',
       'Authorization':
           'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmZmYTBkMTZmYjhkYzI4NzM1MzExNTZhNWM1ZjQxYSIsInN1YiI6IjYzODYzNzE0MDM5OGFiMDBjODM5MTJkOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.qQjwnSQLDfVNAuinpsM-ATK400-dnwuWUVirc7_AiQY',
     };
-    var response = await http.get(Uri.parse(ApiEndPoint().getMovieSuggestions),
+    var response = await http.get(
+        Uri.parse(ApiEndPoint(
+                providerIDs: providerIDs, genreIDs: genreIDs, region: "US")
+            .getMovieSuggestions),
+        //var response = await http.get(Uri.parse(ApiEndPoint().getMovieSuggestions),
         headers: headers);
 
     if (response.statusCode == 200) {
@@ -83,7 +89,8 @@ class MovieService {
       print(data);
       final List<Movie> movieList = [];
 
-      for (var i = 0; i < data['results'].length; i++) {
+      //for (var i = 0; i < data['results'].length; i++) {
+      for (var i = 0; i < 11; i++) {
         final entry = data['results'][i];
         try {
           movieList.add(Movie.fromJson(entry));

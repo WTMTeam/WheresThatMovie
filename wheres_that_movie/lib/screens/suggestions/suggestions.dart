@@ -88,6 +88,8 @@ class _SuggestionsState extends State<Suggestions> {
   dynamic currentLength = 'Choose Length';
   bool lengthLessThan = false;
 
+  late Future<List<Movie>> movieSuggestions;
+
   void setProviders(dynamic selectedProviders) {
     setState(() {
       if (selectedProviders.isEmpty) {
@@ -312,12 +314,15 @@ class _SuggestionsState extends State<Suggestions> {
                   ),
                 ),
               ElevatedButton(
-                  child: Text("get suggestions"),
-                  onPressed: () {
-                    Future<List<Movie>> testMovieSuggestion = MovieService()
-                        .getMovieSuggestions(
-                            providers: currentProviders, genres: currentGenres);
-                  }),
+                child: const Text("Get Suggestions"),
+                onPressed: () {
+                  setState(() {
+                    movieSuggestions = MovieService().getMovieSuggestions(
+                        providers: currentProviders, genres: currentGenres);
+                  });
+                },
+              ),
+              // Add list of movies for suggestions
             ],
           ),
         ),
