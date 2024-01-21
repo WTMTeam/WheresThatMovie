@@ -10,7 +10,8 @@ class Movie {
   final List<dynamic> genreIDs;
   final String title;
   final String overview;
-  final String imageUrl;
+  final String posterPath;
+  final String backdropPath;
   final double rating;
 
   const Movie({
@@ -18,7 +19,8 @@ class Movie {
     required this.genreIDs,
     required this.title,
     required this.overview,
-    required this.imageUrl,
+    required this.posterPath,
+    required this.backdropPath,
     required this.rating,
   });
 
@@ -28,7 +30,8 @@ class Movie {
       genreIDs: json['genre_ids'],
       title: json['title'],
       overview: json['overview'],
-      imageUrl: json['poster_path'],
+      posterPath: json['poster_path'],
+      backdropPath: json['backdrop_path'],
       rating: json['vote_average'],
     );
   }
@@ -67,10 +70,10 @@ class MovieService {
       genreIDs = genreIDs.substring(0, genreIDs.length - 1);
     }
     print("Genre IDs: $genreIDs");
-    print(ApiEndPoint().getMovieSuggestions);
-    print(
-        ApiEndPoint(providerIDs: providerIDs, genreIDs: genreIDs, region: "US")
-            .getMovieSuggestions);
+    //print(ApiEndPoint().getMovieSuggestions);
+    // print(
+    //     ApiEndPoint(providerIDs: providerIDs, genreIDs: genreIDs, region: "US")
+    //         .getMovieSuggestions);
 
     final Map<String, String> headers = {
       'accept': 'application/json',
@@ -86,7 +89,7 @@ class MovieService {
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      print(data);
+      print("Data: $data");
       final List<Movie> movieList = [];
 
       //for (var i = 0; i < data['results'].length; i++) {
@@ -99,7 +102,7 @@ class MovieService {
         }
       }
       for (Movie movie in movieList) {
-        print(movie.title);
+        print("${movie.movieID}, ${movie.title}");
       }
       return movieList;
     } else {
