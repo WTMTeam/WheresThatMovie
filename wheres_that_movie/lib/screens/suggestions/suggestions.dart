@@ -57,6 +57,7 @@
 
 // * Example: https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=true&language=en-US&page=1&sort_by=popularity.desc&watch_region=US&with_genres=35&with_watch_providers=8'
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wheres_that_movie/api/models/movie_model.dart';
@@ -88,7 +89,7 @@ class _SuggestionsState extends State<Suggestions> {
   dynamic currentLength = 'Choose Length';
   bool lengthLessThan = false;
 
-  late Future<List<Movie>> movieSuggestions;
+  Future<List<Movie>>? movieSuggestions;
 
   void setProviders(dynamic selectedProviders) {
     setState(() {
@@ -215,40 +216,40 @@ class _SuggestionsState extends State<Suggestions> {
                       ),
                     ],
                   ),
-                  Column(
-                    children: [
-                      ElevatedButton.icon(
-                        //icon: const Icon(Icons.sync_outlined),
-                        icon: const Icon(CupertinoIcons.shuffle),
-                        onPressed: () {
-                          // * Todo:
-                          //    - Change this to have a toggle switch and don't call _showOptionsDialog
-                          setMovieOrShow(currentMovieOrShow);
-                          // _showOptionsDialog(
-                          //     context, setMovieOrShow, "movieOrShow");
-                        },
-                        style: ElevatedButton.styleFrom(
-                            minimumSize: const Size(175, 40),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20.0))),
-                        label: Text(currentMovieOrShow),
-                      ),
-                      const SizedBox(
-                        height: 4.0,
-                      ),
-                      ElevatedButton.icon(
-                        icon: const Icon(CupertinoIcons.timer),
-                        onPressed: () {
-                          _showOptionsDialog(context, setLength, "length");
-                        },
-                        style: ElevatedButton.styleFrom(
-                            minimumSize: const Size(175, 40),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20.0))),
-                        label: Text('${currentLength.toString()}min'),
-                      ),
-                    ],
-                  ),
+                  // Column(
+                  //   children: [
+                  //     ElevatedButton.icon(
+                  //       //icon: const Icon(Icons.sync_outlined),
+                  //       icon: const Icon(CupertinoIcons.shuffle),
+                  //       onPressed: () {
+                  //         // * Todo:
+                  //         //    - Change this to have a toggle switch and don't call _showOptionsDialog
+                  //         setMovieOrShow(currentMovieOrShow);
+                  //         // _showOptionsDialog(
+                  //         //     context, setMovieOrShow, "movieOrShow");
+                  //       },
+                  //       style: ElevatedButton.styleFrom(
+                  //           minimumSize: const Size(175, 40),
+                  //           shape: RoundedRectangleBorder(
+                  //               borderRadius: BorderRadius.circular(20.0))),
+                  //       label: Text(currentMovieOrShow),
+                  //     ),
+                  //     const SizedBox(
+                  //       height: 4.0,
+                  //     ),
+                  //     ElevatedButton.icon(
+                  //       icon: const Icon(CupertinoIcons.timer),
+                  //       onPressed: () {
+                  //         _showOptionsDialog(context, setLength, "length");
+                  //       },
+                  //       style: ElevatedButton.styleFrom(
+                  //           minimumSize: const Size(175, 40),
+                  //           shape: RoundedRectangleBorder(
+                  //               borderRadius: BorderRadius.circular(20.0))),
+                  //       label: Text('${currentLength.toString()}min'),
+                  //     ),
+                  //   ],
+                  // ),
                 ],
               ),
               Padding(
@@ -315,14 +316,76 @@ class _SuggestionsState extends State<Suggestions> {
                 ),
               ElevatedButton(
                 child: const Text("Get Suggestions"),
-                onPressed: () {
-                  setState(() {
-                    movieSuggestions = MovieService().getMovieSuggestions(
-                        providers: currentProviders, genres: currentGenres);
-                  });
+                onPressed: () async {
+                  try {
+                    // Call the asynchronous function and wait for the result
+                    setState(() {
+                      movieSuggestions = MovieService().getMovieSuggestions(
+                        providers: currentProviders,
+                        genres: currentGenres,
+                      );
+                    });
+                  } catch (error) {
+                    // Handle errors if any
+                    print("Error fetching movie suggestions: $error");
+                  }
                 },
+                // onPressed: () {
+                //   setState(() {
+                //     movieSuggestions = MovieService().getMovieSuggestions(
+                //         providers: currentProviders, genres: currentGenres);
+                //   });
+                // },
               ),
+              Scrollbar(
+                child: FutureBuilder<List<Movie>>(
+                  future: movieSuggestions,
+                  builder: ((context, AsyncSnapshot snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Text("Error: ${snapshot.error}");
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Center(child: Text("No movie suggestions."));
+                    } else {
+                      print("Snapshot: ${snapshot.data.length}");
+                      return ListView.builder(
+                            shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          Movie movie = snapshot.data[index];
+                          String posterUrl =
+                              "https://image.tmdb.org/t/p/w45${movie.posterPath}";
+
+                          return ListTile(
+                            leading: CachedNetworkImage(
+                              imageUrl: posterUrl,
+                              width: 50.0,
+                              errorWidget: (context, imgUrl, error) =>
+                                  const Icon(Icons.no_photography_outlined,
+                                      size: 50),
+                            ),
+                            title: Text(movie.title),
+                          );
+                        },
+                        itemCount: snapshot.data!.length,
+                      );
+                    }
+                  }),
+                ),
+              ),
+              // Create two lists: one for selected providers and one for unselected providers
               // Add list of movies for suggestions
+              // ListView.builder(
+              //   shrinkWrap: true,
+              //   itemCount: 10,
+              //   itemBuilder: ((context, index) {
+              //     Movie suggestedMovie = movieSuggestions[index];
+              //     return ListTile(
+              //         leading: CachedNetworkImage(
+              //             imageUrl:
+              //                 "https://image.tmdb.org/t/p/w45${suggestedMovie.posterPath}"));
+              //   }),
+              // ),
             ],
           ),
         ),
