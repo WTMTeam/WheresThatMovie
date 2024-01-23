@@ -456,7 +456,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                 Card(
                   child: ListTile(
                     title: Text(
-                      "Magic",
+                      "Suggestions",
                       style: Theme.of(context).textTheme.labelMedium,
                     ),
                     // leading: const Icon(CupertinoIcons.shuffle_medium),
