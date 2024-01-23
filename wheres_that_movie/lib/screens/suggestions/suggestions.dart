@@ -63,7 +63,9 @@ import 'package:flutter/material.dart';
 import 'package:wheres_that_movie/api/models/movie_model.dart';
 import 'package:wheres_that_movie/api/models/genre_model.dart';
 import 'package:wheres_that_movie/api/models/provider_model.dart';
+import 'package:wheres_that_movie/screens/detailed_page/detailed.dart';
 import 'package:wheres_that_movie/screens/suggestions/options_dialog.dart';
+import 'package:wheres_that_movie/widgets/my_container.dart';
 
 class Suggestions extends StatefulWidget {
   const Suggestions({super.key});
@@ -337,40 +339,75 @@ class _SuggestionsState extends State<Suggestions> {
                 //   });
                 // },
               ),
-              Scrollbar(
-                child: FutureBuilder<List<Movie>>(
-                  future: movieSuggestions,
-                  builder: ((context, AsyncSnapshot snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError) {
-                      return Text("Error: ${snapshot.error}");
-                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return const Center(child: Text("No movie suggestions."));
-                    } else {
-                      print("Snapshot: ${snapshot.data.length}");
-                      return ListView.builder(
+              Expanded(
+                child: Scrollbar(
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(top: 16.0, left: 8.0, right: 8.0),
+                    child: FutureBuilder<List<Movie>>(
+                      future: movieSuggestions,
+                      builder: ((context, AsyncSnapshot snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        } else if (snapshot.hasError) {
+                          return Text("Error: ${snapshot.error}");
+                        } else if (!snapshot.hasData ||
+                            snapshot.data!.isEmpty) {
+                          return const Center(
+                              child: Text("No movie suggestions."));
+                        } else {
+                          print("Snapshot: ${snapshot.data.length}");
+                          return ListView.builder(
                             shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          Movie movie = snapshot.data[index];
-                          String posterUrl =
-                              "https://image.tmdb.org/t/p/w45${movie.posterPath}";
+                            itemBuilder: (context, index) {
+                              Movie movie = snapshot.data[index];
+                              String posterUrl =
+                                  "https://image.tmdb.org/t/p/w45${movie.posterPath}";
 
-                          return ListTile(
-                            leading: CachedNetworkImage(
-                              imageUrl: posterUrl,
-                              width: 50.0,
-                              errorWidget: (context, imgUrl, error) =>
-                                  const Icon(Icons.no_photography_outlined,
-                                      size: 50),
-                            ),
-                            title: Text(movie.title),
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10.0, horizontal: 10.0),
+                                child: MyContainer(
+                                  child: ListTile(
+                                    dense: true,
+                                    visualDensity:
+                                        const VisualDensity(vertical: 0.0),
+                                    leading: CachedNetworkImage(
+                                      imageUrl: posterUrl,
+                                      width: 50.0,
+                                      errorWidget: (context, imgUrl, error) =>
+                                          const Icon(
+                                              Icons.no_photography_outlined,
+                                              size: 50),
+                                    ),
+                                    title: Text(movie.title,
+                                        style: TextStyle(
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.bold)),
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) => DetailedPage(
+                                            id: movie.movieID,
+                                            isMovie: true,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              );
+                            },
+                            itemCount: snapshot.data!.length,
                           );
-                        },
-                        itemCount: snapshot.data!.length,
-                      );
-                    }
-                  }),
+                        }
+                      }),
+                    ),
+                  ),
                 ),
               ),
               // Create two lists: one for selected providers and one for unselected providers
