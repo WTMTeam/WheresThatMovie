@@ -410,19 +410,6 @@ class _SuggestionsState extends State<Suggestions> {
                   ),
                 ),
               ),
-              // Create two lists: one for selected providers and one for unselected providers
-              // Add list of movies for suggestions
-              // ListView.builder(
-              //   shrinkWrap: true,
-              //   itemCount: 10,
-              //   itemBuilder: ((context, index) {
-              //     Movie suggestedMovie = movieSuggestions[index];
-              //     return ListTile(
-              //         leading: CachedNetworkImage(
-              //             imageUrl:
-              //                 "https://image.tmdb.org/t/p/w45${suggestedMovie.posterPath}"));
-              //   }),
-              // ),
             ],
           ),
         ),
