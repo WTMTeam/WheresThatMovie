@@ -218,6 +218,17 @@ class _MyLoggedInState extends State<MyLoggedIn> {
           "Search Movies and Shows",
           style: Theme.of(context).textTheme.displayMedium,
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const Suggestions(),
+              ));
+            },
+            icon: Icon(CupertinoIcons.wand_rays,
+                color: Theme.of(context).colorScheme.primary),
+          ),
+        ],
         centerTitle: true,
         backgroundColor: Theme.of(context).canvasColor,
         shadowColor: Theme.of(context).colorScheme.secondary,
