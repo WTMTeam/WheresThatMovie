@@ -66,6 +66,7 @@ import 'package:wheres_that_movie/api/models/provider_model.dart';
 import 'package:wheres_that_movie/screens/detailed_page/detailed.dart';
 import 'package:wheres_that_movie/screens/suggestions/options_dialog.dart';
 import 'package:wheres_that_movie/widgets/my_container.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class Suggestions extends StatefulWidget {
   const Suggestions({super.key});
@@ -92,6 +93,8 @@ class _SuggestionsState extends State<Suggestions> {
   bool lengthLessThan = false;
 
   Future<List<Movie>>? movieSuggestions;
+
+  List<int> testList = [1, 2, 3, 4, 5, 6];
 
   void setProviders(dynamic selectedProviders) {
     setState(() {
@@ -340,7 +343,6 @@ class _SuggestionsState extends State<Suggestions> {
                 // },
               ),
               Expanded(
-                child: Scrollbar(
                   child: Padding(
                     padding:
                         const EdgeInsets.only(top: 16.0, left: 8.0, right: 8.0),
@@ -359,57 +361,76 @@ class _SuggestionsState extends State<Suggestions> {
                               child: Text("No movie suggestions."));
                         } else {
                           print("Snapshot: ${snapshot.data.length}");
-                          return ListView.builder(
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              Movie movie = snapshot.data[index];
-                              String posterUrl =
-                                  "https://image.tmdb.org/t/p/w45${movie.posterPath}";
-
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 10.0, horizontal: 10.0),
-                                child: MyContainer(
-                                  child: ListTile(
-                                    dense: true,
-                                    visualDensity:
-                                        const VisualDensity(vertical: 0.0),
-                                    leading: CachedNetworkImage(
+                          return CarouselSlider.builder(
+                              options: CarouselOptions(height: 700.0),
+                              itemCount: snapshot.data.length,
+                              itemBuilder: (context, index, realIndex) {
+                                Movie movie = snapshot.data[index];
+                                String posterUrl =
+                                    "https://image.tmdb.org/t/p/w500${movie.posterPath}";
+                                return ClipRRect(
+                                  borderRadius: BorderRadius.circular(24),
+                                  child: CachedNetworkImage(
                                       imageUrl: posterUrl,
-                                      width: 50.0,
-                                      errorWidget: (context, imgUrl, error) =>
-                                          const Icon(
-                                              Icons.no_photography_outlined,
-                                              size: 50),
-                                    ),
-                                    title: Text(movie.title,
-                                        style: TextStyle(
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                            fontSize: 20.0,
-                                            fontWeight: FontWeight.bold)),
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) => DetailedPage(
-                                            id: movie.movieID,
-                                            isMovie: true,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              );
-                            },
-                            itemCount: snapshot.data!.length,
-                          );
+                                      width: 500,
+                                      errorWidget:
+                                          (context, posterUrl, error) =>
+                                              const Icon(
+                                                Icons.no_photography_outlined,
+                                                size: 50,
+                                              )),
+                                );
+                              });
+                          //             return ListView.builder(
+                          //               shrinkWrap: true,
+                          //               itemBuilder: (context, index) {
+                          //                 Movie movie = snapshot.data[index];
+                          //                 String posterUrl =
+                          //                     "https://image.tmdb.org/t/p/w45${movie.posterPath}";
+                          //
+                          //                 return Padding(
+                          //                   padding: const EdgeInsets.symmetric(
+                          //                       vertical: 10.0, horizontal: 10.0),
+                          //                   child: MyContainer(
+                          //                     child: ListTile(
+                          //                       dense: true,
+                          //                       visualDensity:
+                          //                           const VisualDensity(vertical: 0.0),
+                          //                       leading: CachedNetworkImage(
+                          //                         imageUrl: posterUrl,
+                          //                         width: 50.0,
+                          //                         errorWidget: (context, imgUrl, error) =>
+                          //                             const Icon(
+                          //                                 Icons.no_photography_outlined,
+                          //                                 size: 50),
+                          //                       ),
+                          //                       title: Text(movie.title,
+                          //                           style: TextStyle(
+                          //                               color:
+                          //                                   Theme.of(context).primaryColor,
+                          //                               fontSize: 20.0,
+                          //                               fontWeight: FontWeight.bold)),
+                          //                       onTap: () {
+                          //                         Navigator.of(context).push(
+                          //                           MaterialPageRoute(
+                          //                             builder: (context) => DetailedPage(
+                          //                               id: movie.movieID,
+                          //                               isMovie: true,
+                          //                             ),
+                          //                           ),
+                          //                         );
+                          //                       },
+                          //                     ),
+                          //                   ),
+                          //                 );
+                          //               },
+                          //               itemCount: snapshot.data!.length,
+                          //             );
                         }
                       }),
                     ),
                   ),
                 ),
-              ),
             ],
           ),
         ),
