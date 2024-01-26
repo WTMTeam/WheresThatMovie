@@ -343,32 +343,38 @@ class _SuggestionsState extends State<Suggestions> {
                 // },
               ),
               Expanded(
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.only(top: 16.0, left: 8.0, right: 8.0),
-                    child: FutureBuilder<List<Movie>>(
-                      future: movieSuggestions,
-                      builder: ((context, AsyncSnapshot snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        } else if (snapshot.hasError) {
-                          return Text("Error: ${snapshot.error}");
-                        } else if (!snapshot.hasData ||
-                            snapshot.data!.isEmpty) {
-                          return const Center(
-                              child: Text("No movie suggestions."));
-                        } else {
-                          print("Snapshot: ${snapshot.data.length}");
-                          return CarouselSlider.builder(
-                              options: CarouselOptions(height: 700.0),
-                              itemCount: snapshot.data.length,
-                              itemBuilder: (context, index, realIndex) {
-                                Movie movie = snapshot.data[index];
-                                String posterUrl =
-                                    "https://image.tmdb.org/t/p/w500${movie.posterPath}";
-                                return ClipRRect(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.only(top: 16.0, left: 8.0, right: 8.0),
+                  child: FutureBuilder<List<Movie>>(
+                    future: movieSuggestions,
+                    builder: ((context, AsyncSnapshot snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Text("Error: ${snapshot.error}");
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return const Center(
+                            child: Text("No movie suggestions."));
+                      } else {
+                        print("Snapshot: ${snapshot.data.length}");
+                        return CarouselSlider.builder(
+                            options: CarouselOptions(height: 700.0),
+                            itemCount: snapshot.data.length,
+                            itemBuilder: (context, index, realIndex) {
+                              Movie movie = snapshot.data[index];
+                              String posterUrl =
+                                  "https://image.tmdb.org/t/p/w500${movie.posterPath}";
+                              return InkWell(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => DetailedPage(
+                                          id: movie.movieID, isMovie: true),
+                                    ),
+                                  );
+                                },
+                                child: ClipRRect(
                                   borderRadius: BorderRadius.circular(24),
                                   child: CachedNetworkImage(
                                       imageUrl: posterUrl,
@@ -379,58 +385,59 @@ class _SuggestionsState extends State<Suggestions> {
                                                 Icons.no_photography_outlined,
                                                 size: 50,
                                               )),
-                                );
-                              });
-                          //             return ListView.builder(
-                          //               shrinkWrap: true,
-                          //               itemBuilder: (context, index) {
-                          //                 Movie movie = snapshot.data[index];
-                          //                 String posterUrl =
-                          //                     "https://image.tmdb.org/t/p/w45${movie.posterPath}";
-                          //
-                          //                 return Padding(
-                          //                   padding: const EdgeInsets.symmetric(
-                          //                       vertical: 10.0, horizontal: 10.0),
-                          //                   child: MyContainer(
-                          //                     child: ListTile(
-                          //                       dense: true,
-                          //                       visualDensity:
-                          //                           const VisualDensity(vertical: 0.0),
-                          //                       leading: CachedNetworkImage(
-                          //                         imageUrl: posterUrl,
-                          //                         width: 50.0,
-                          //                         errorWidget: (context, imgUrl, error) =>
-                          //                             const Icon(
-                          //                                 Icons.no_photography_outlined,
-                          //                                 size: 50),
-                          //                       ),
-                          //                       title: Text(movie.title,
-                          //                           style: TextStyle(
-                          //                               color:
-                          //                                   Theme.of(context).primaryColor,
-                          //                               fontSize: 20.0,
-                          //                               fontWeight: FontWeight.bold)),
-                          //                       onTap: () {
-                          //                         Navigator.of(context).push(
-                          //                           MaterialPageRoute(
-                          //                             builder: (context) => DetailedPage(
-                          //                               id: movie.movieID,
-                          //                               isMovie: true,
-                          //                             ),
-                          //                           ),
-                          //                         );
-                          //                       },
-                          //                     ),
-                          //                   ),
-                          //                 );
-                          //               },
-                          //               itemCount: snapshot.data!.length,
-                          //             );
-                        }
-                      }),
-                    ),
+                                ),
+                              );
+                            });
+                        //             return ListView.builder(
+                        //               shrinkWrap: true,
+                        //               itemBuilder: (context, index) {
+                        //                 Movie movie = snapshot.data[index];
+                        //                 String posterUrl =
+                        //                     "https://image.tmdb.org/t/p/w45${movie.posterPath}";
+                        //
+                        //                 return Padding(
+                        //                   padding: const EdgeInsets.symmetric(
+                        //                       vertical: 10.0, horizontal: 10.0),
+                        //                   child: MyContainer(
+                        //                     child: ListTile(
+                        //                       dense: true,
+                        //                       visualDensity:
+                        //                           const VisualDensity(vertical: 0.0),
+                        //                       leading: CachedNetworkImage(
+                        //                         imageUrl: posterUrl,
+                        //                         width: 50.0,
+                        //                         errorWidget: (context, imgUrl, error) =>
+                        //                             const Icon(
+                        //                                 Icons.no_photography_outlined,
+                        //                                 size: 50),
+                        //                       ),
+                        //                       title: Text(movie.title,
+                        //                           style: TextStyle(
+                        //                               color:
+                        //                                   Theme.of(context).primaryColor,
+                        //                               fontSize: 20.0,
+                        //                               fontWeight: FontWeight.bold)),
+                        //                       onTap: () {
+                        //                         Navigator.of(context).push(
+                        //                           MaterialPageRoute(
+                        //                             builder: (context) => DetailedPage(
+                        //                               id: movie.movieID,
+                        //                               isMovie: true,
+                        //                             ),
+                        //                           ),
+                        //                         );
+                        //                       },
+                        //                     ),
+                        //                   ),
+                        //                 );
+                        //               },
+                        //               itemCount: snapshot.data!.length,
+                        //             );
+                      }
+                    }),
                   ),
                 ),
+              ),
             ],
           ),
         ),
