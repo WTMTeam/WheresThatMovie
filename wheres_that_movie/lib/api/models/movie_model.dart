@@ -45,7 +45,7 @@ class MovieService {
   Future<List<Movie>> getMovieSuggestions(
       {List<Provider>? providers,
       List<Genre>? genres,
-    String? region,
+      String? region,
       int? runtime,
       bool? runtimeLessThan}) async {
     String providerIDs = "";
