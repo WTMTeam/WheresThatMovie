@@ -45,6 +45,7 @@ class MovieService {
   Future<List<Movie>> getMovieSuggestions(
       {List<Provider>? providers,
       List<Genre>? genres,
+    String? region,
       int? runtime,
       bool? runtimeLessThan}) async {
     String providerIDs = "";
@@ -82,7 +83,7 @@ class MovieService {
     };
     var response = await http.get(
         Uri.parse(ApiEndPoint(
-                providerIDs: providerIDs, genreIDs: genreIDs, region: "US")
+                providerIDs: providerIDs, genreIDs: genreIDs, region: region)
             .getMovieSuggestions),
         //var response = await http.get(Uri.parse(ApiEndPoint().getMovieSuggestions),
         headers: headers);
