@@ -65,6 +65,7 @@ import 'package:wheres_that_movie/api/models/genre_model.dart';
 import 'package:wheres_that_movie/api/models/provider_model.dart';
 import 'package:wheres_that_movie/screens/detailed_page/detailed.dart';
 import 'package:wheres_that_movie/screens/suggestions/options_dialog.dart';
+import 'package:wheres_that_movie/widgets/country_dropdown.dart';
 import 'package:wheres_that_movie/widgets/my_container.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -76,6 +77,7 @@ class Suggestions extends StatefulWidget {
 }
 
 class _SuggestionsState extends State<Suggestions> {
+  final ScrollController _scrollController = ScrollController();
   final List<String> providers = ['Netflix', 'Apple TV', 'Disney'];
   final List<String> genres = ['Comedy', 'Horror', 'Thriller'];
   final List<String> movieOrShow = ['Movie', 'TV-Show'];
@@ -89,6 +91,7 @@ class _SuggestionsState extends State<Suggestions> {
   List<Provider>? currentProviders;
   List<Genre>? currentGenres;
   String currentMovieOrShow = 'Movie';
+  String countryCode = "US";
   dynamic currentLength = 'Choose Length';
   bool lengthLessThan = false;
 
@@ -179,171 +182,188 @@ class _SuggestionsState extends State<Suggestions> {
         elevation: 10.0,
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 20.0),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          _showOptionsDialog(context, setProviders, "Provider",
-                              currentProviders: currentProviders);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: const Size(175, 40),
-                          // maximumSize: const Size(200, 40),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
+        child: SingleChildScrollView(
+          controller: _scrollController,
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 0.0, vertical: 20.0),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            _showOptionsDialog(
+                                context, setProviders, "Provider",
+                                currentProviders: currentProviders);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: const Size(175, 40),
+                            // maximumSize: const Size(200, 40),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
                           ),
+                          child: const Text("Providers"),
                         ),
-                        child: const Text("Providers"),
-                      ),
-                      const SizedBox(
-                        height: 4.0,
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          _showOptionsDialog(context, setGenres, "Genre",
-                              currentGenres: currentGenres);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: const Size(175, 40),
-                          // maximumSize: const Size(200, 40),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
+                        const SizedBox(
+                          height: 4.0,
                         ),
-                        child: const Text("Genres"),
-                      ),
-                    ],
-                  ),
-                  // Column(
-                  //   children: [
-                  //     ElevatedButton.icon(
-                  //       //icon: const Icon(Icons.sync_outlined),
-                  //       icon: const Icon(CupertinoIcons.shuffle),
-                  //       onPressed: () {
-                  //         // * Todo:
-                  //         //    - Change this to have a toggle switch and don't call _showOptionsDialog
-                  //         setMovieOrShow(currentMovieOrShow);
-                  //         // _showOptionsDialog(
-                  //         //     context, setMovieOrShow, "movieOrShow");
-                  //       },
-                  //       style: ElevatedButton.styleFrom(
-                  //           minimumSize: const Size(175, 40),
-                  //           shape: RoundedRectangleBorder(
-                  //               borderRadius: BorderRadius.circular(20.0))),
-                  //       label: Text(currentMovieOrShow),
-                  //     ),
-                  //     const SizedBox(
-                  //       height: 4.0,
-                  //     ),
-                  //     ElevatedButton.icon(
-                  //       icon: const Icon(CupertinoIcons.timer),
-                  //       onPressed: () {
-                  //         _showOptionsDialog(context, setLength, "length");
-                  //       },
-                  //       style: ElevatedButton.styleFrom(
-                  //           minimumSize: const Size(175, 40),
-                  //           shape: RoundedRectangleBorder(
-                  //               borderRadius: BorderRadius.circular(20.0))),
-                  //       label: Text('${currentLength.toString()}min'),
-                  //     ),
-                  //   ],
-                  // ),
-                ],
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 6.0, horizontal: 20.0),
-                child: Divider(
-                  thickness: 2.0,
-                  color: Theme.of(context).highlightColor,
-                ),
-              ),
-              if (currentProviders != null)
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Wrap(
-                    spacing: 8.0,
-                    children: currentProviders!
-                        .map(
-                          (provider) => ElevatedButton(
-                            onPressed: () {
-                              print(provider.providerName);
-                            },
-                            style: ElevatedButton.styleFrom(
-                                minimumSize: const Size(100, 40),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                ),
-                                backgroundColor: Colors.transparent,
-                                elevation: 0,
-                                side: BorderSide(
-                                    width: 2.0,
-                                    color: Theme.of(context).primaryColor)),
-                            child: Text(provider.providerName),
+                        ElevatedButton(
+                          onPressed: () {
+                            _showOptionsDialog(context, setGenres, "Genre",
+                                currentGenres: currentGenres);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: const Size(175, 40),
+                            // maximumSize: const Size(200, 40),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
                           ),
-                        )
-                        .toList(),
+                          child: const Text("Genres"),
+                        ),
+                      ],
+                    ),
+                    // Column(
+                    //   children: [
+                    //     ElevatedButton.icon(
+                    //       //icon: const Icon(Icons.sync_outlined),
+                    //       icon: const Icon(CupertinoIcons.shuffle),
+                    //       onPressed: () {
+                    //         // * Todo:
+                    //         //    - Change this to have a toggle switch and don't call _showOptionsDialog
+                    //         setMovieOrShow(currentMovieOrShow);
+                    //         // _showOptionsDialog(
+                    //         //     context, setMovieOrShow, "movieOrShow");
+                    //       },
+                    //       style: ElevatedButton.styleFrom(
+                    //           minimumSize: const Size(175, 40),
+                    //           shape: RoundedRectangleBorder(
+                    //               borderRadius: BorderRadius.circular(20.0))),
+                    //       label: Text(currentMovieOrShow),
+                    //     ),
+                    //     const SizedBox(
+                    //       height: 4.0,
+                    //     ),
+                    //     ElevatedButton.icon(
+                    //       icon: const Icon(CupertinoIcons.timer),
+                    //       onPressed: () {
+                    //         _showOptionsDialog(context, setLength, "length");
+                    //       },
+                    //       style: ElevatedButton.styleFrom(
+                    //           minimumSize: const Size(175, 40),
+                    //           shape: RoundedRectangleBorder(
+                    //               borderRadius: BorderRadius.circular(20.0))),
+                    //       label: Text('${currentLength.toString()}min'),
+                    //     ),
+                    //   ],
+                    // ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 6.0, horizontal: 20.0),
+                  child: Divider(
+                    thickness: 2.0,
+                    color: Theme.of(context).highlightColor,
                   ),
                 ),
-              if (currentGenres != null)
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Wrap(
-                    spacing: 8.0,
-                    children: currentGenres!
-                        .map(
-                          (genre) => ElevatedButton(
-                            onPressed: () {
-                              print(genre.genreName);
-                            },
-                            style: ElevatedButton.styleFrom(
-                                minimumSize: const Size(100, 40),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                ),
-                                backgroundColor: Colors.transparent,
-                                elevation: 0,
-                                side: BorderSide(
-                                    width: 2.0,
-                                    color: Theme.of(context).primaryColor)),
-                            child: Text(genre.genreName),
-                          ),
-                        )
-                        .toList(),
+                if (currentProviders != null)
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Wrap(
+                      spacing: 8.0,
+                      children: currentProviders!
+                          .map(
+                            (provider) => ElevatedButton(
+                              onPressed: () {
+                                print(provider.providerName);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  minimumSize: const Size(100, 40),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                  backgroundColor: Colors.transparent,
+                                  elevation: 0,
+                                  side: BorderSide(
+                                      width: 2.0,
+                                      color: Theme.of(context).primaryColor)),
+                              child: Text(provider.providerName),
+                            ),
+                          )
+                          .toList(),
+                    ),
                   ),
+                if (currentGenres != null)
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Wrap(
+                      spacing: 8.0,
+                      children: currentGenres!
+                          .map(
+                            (genre) => ElevatedButton(
+                              onPressed: () {
+                                print(genre.genreName);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  minimumSize: const Size(100, 40),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                  backgroundColor: Colors.transparent,
+                                  elevation: 0,
+                                  side: BorderSide(
+                                      width: 2.0,
+                                      color: Theme.of(context).primaryColor)),
+                              child: Text(genre.genreName),
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ),
+                Container(
+                    margin: const EdgeInsets.symmetric(
+                      vertical: 15.0,
+                      horizontal: 10.0,
+                    ),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50.0)),
+                    child: CountryDropdown(
+                      onChanged: (code) {
+                        countryCode = code;
+                        print("Code: $code");
+                      },
+                    )),
+                ElevatedButton(
+                  child: const Text("Get Suggestions"),
+                  onPressed: () async {
+                    try {
+                      // Call the asynchronous function and wait for the result
+                      setState(() {
+                        movieSuggestions = MovieService().getMovieSuggestions(
+                          providers: currentProviders,
+                          genres: currentGenres,
+                          region: countryCode,
+                        );
+                      });
+                    } catch (error) {
+                      // Handle errors if any
+                      print("Error fetching movie suggestions: $error");
+                    }
+                  },
+                  // onPressed: () {
+                  //   setState(() {
+                  //     movieSuggestions = MovieService().getMovieSuggestions(
+                  //         providers: currentProviders, genres: currentGenres);
+                  //   });
+                  // },
                 ),
-              ElevatedButton(
-                child: const Text("Get Suggestions"),
-                onPressed: () async {
-                  try {
-                    // Call the asynchronous function and wait for the result
-                    setState(() {
-                      movieSuggestions = MovieService().getMovieSuggestions(
-                        providers: currentProviders,
-                        genres: currentGenres,
-                      );
-                    });
-                  } catch (error) {
-                    // Handle errors if any
-                    print("Error fetching movie suggestions: $error");
-                  }
-                },
-                // onPressed: () {
-                //   setState(() {
-                //     movieSuggestions = MovieService().getMovieSuggestions(
-                //         providers: currentProviders, genres: currentGenres);
-                //   });
-                // },
-              ),
-              Expanded(
-                child: Padding(
+                Padding(
                   padding:
                       const EdgeInsets.only(top: 16.0, left: 8.0, right: 8.0),
                   child: FutureBuilder<List<Movie>>(
@@ -358,8 +378,23 @@ class _SuggestionsState extends State<Suggestions> {
                             child: Text("No movie suggestions."));
                       } else {
                         print("Snapshot: ${snapshot.data.length}");
+// After loading your content, scroll to a specific position
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+// Get the screen height
+                          double screenHeight =
+                              MediaQuery.of(context).size.height;
+
+                          // Calculate the scrolling position as a percentage of the screen height
+                          double scrollPosition = screenHeight * 0.3;
+                          _scrollController.animateTo(
+                            scrollPosition,
+                            // Specify the position where you want to scroll
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.easeInOut,
+                          );
+                        });
                         return CarouselSlider.builder(
-                            options: CarouselOptions(height: 700.0),
+                            options: CarouselOptions(height: 500.0),
                             itemCount: snapshot.data.length,
                             itemBuilder: (context, index, realIndex) {
                               Movie movie = snapshot.data[index];
@@ -388,6 +423,7 @@ class _SuggestionsState extends State<Suggestions> {
                                 ),
                               );
                             });
+
                         //             return ListView.builder(
                         //               shrinkWrap: true,
                         //               itemBuilder: (context, index) {
@@ -437,8 +473,8 @@ class _SuggestionsState extends State<Suggestions> {
                     }),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
