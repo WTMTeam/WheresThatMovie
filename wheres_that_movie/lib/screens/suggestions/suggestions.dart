@@ -68,6 +68,7 @@ import 'package:wheres_that_movie/screens/suggestions/options_dialog.dart';
 import 'package:wheres_that_movie/widgets/country_dropdown.dart';
 import 'package:wheres_that_movie/widgets/my_container.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:get/get.dart';
 
 class Suggestions extends StatefulWidget {
   const Suggestions({super.key});
@@ -380,8 +381,7 @@ class _SuggestionsState extends State<Suggestions> {
                         return const Text("Something Went Wrong ");
                         //return Text("Error: ${snapshot.error}");
                       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return const Center(
-                            child: Text("No movie suggestions."));
+                        return const Center(child: Text(""));
                       } else {
                         print("Snapshot: ${snapshot.data.length}");
 // After loading your content, scroll to a specific position
@@ -409,12 +409,16 @@ class _SuggestionsState extends State<Suggestions> {
                                 "https://image.tmdb.org/t/p/w300${movie.posterPath}";
                             return InkWell(
                               onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => DetailedPage(
+                                Get.to(
+                                    () => DetailedPage(
                                         id: movie.movieID, isMovie: true),
-                                  ),
-                                );
+                                    transition: Transition.zoom);
+                                // Navigator.of(context).push(
+                                //   MaterialPageRoute(
+                                //     builder: (context) => DetailedPage(
+                                //         id: movie.movieID, isMovie: true),
+                                //   ),
+                                // );
                               },
                               child: Container(
                                 height: 450,
