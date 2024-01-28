@@ -154,6 +154,17 @@ class _SuggestionsState extends State<Suggestions> {
     );
   }
 
+  double getViewportFraction(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    // Adjust these threshold values based on your preference
+    if (screenWidth > 400) {
+      return 0.8;
+    } else {
+      return 0.9;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -356,19 +367,13 @@ class _SuggestionsState extends State<Suggestions> {
                       print("Error fetching movie suggestions: $error");
                     }
                   },
-                  // onPressed: () {
-                  //   setState(() {
-                  //     movieSuggestions = MovieService().getMovieSuggestions(
-                  //         providers: currentProviders, genres: currentGenres);
-                  //   });
-                  // },
                 ),
                 Padding(
                   padding:
                       const EdgeInsets.only(top: 16.0, left: 8.0, right: 8.0),
                   child: FutureBuilder<List<Movie>>(
                     future: movieSuggestions,
-                    builder: ((context, AsyncSnapshot snapshot) {
+                    builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(child: CircularProgressIndicator());
                       } else if (snapshot.hasError) {
@@ -380,97 +385,60 @@ class _SuggestionsState extends State<Suggestions> {
                         print("Snapshot: ${snapshot.data.length}");
 // After loading your content, scroll to a specific position
                         WidgetsBinding.instance.addPostFrameCallback((_) {
-// Get the screen height
-                          double screenHeight =
-                              MediaQuery.of(context).size.height;
+                          double maxScrollOffset =
+                              _scrollController.position.maxScrollExtent;
 
                           // Calculate the scrolling position as a percentage of the screen height
-                          double scrollPosition = screenHeight * 0.3;
                           _scrollController.animateTo(
-                            scrollPosition,
+                            maxScrollOffset,
                             // Specify the position where you want to scroll
                             duration: const Duration(milliseconds: 500),
                             curve: Curves.easeInOut,
                           );
                         });
                         return CarouselSlider.builder(
-                            options: CarouselOptions(height: 500.0),
-                            itemCount: snapshot.data.length,
-                            itemBuilder: (context, index, realIndex) {
-                              Movie movie = snapshot.data[index];
-                              String posterUrl =
-                                  "https://image.tmdb.org/t/p/w500${movie.posterPath}";
-                              return InkWell(
-                                onTap: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => DetailedPage(
-                                          id: movie.movieID, isMovie: true),
-                                    ),
-                                  );
-                                },
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(24),
-                                  child: CachedNetworkImage(
-                                      imageUrl: posterUrl,
-                                      width: 500,
-                                      errorWidget:
-                                          (context, posterUrl, error) =>
-                                              const Icon(
-                                                Icons.no_photography_outlined,
-                                                size: 50,
-                                              )),
+                          options: CarouselOptions(
+                              height: 450.0,
+                              aspectRatio: 1.5,
+                              viewportFraction: getViewportFraction(context)),
+                          itemCount: snapshot.data.length,
+                          itemBuilder: (context, index, realIndex) {
+                            Movie movie = snapshot.data[index];
+                            String posterUrl =
+                                "https://image.tmdb.org/t/p/w300${movie.posterPath}";
+                            return InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => DetailedPage(
+                                        id: movie.movieID, isMovie: true),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                height: 450,
+                                width: 300,
+                                clipBehavior: Clip.antiAlias,
+                                decoration: const BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(8.0)),
+                                  shape: BoxShape.rectangle,
                                 ),
-                              );
-                            });
-
-                        //             return ListView.builder(
-                        //               shrinkWrap: true,
-                        //               itemBuilder: (context, index) {
-                        //                 Movie movie = snapshot.data[index];
-                        //                 String posterUrl =
-                        //                     "https://image.tmdb.org/t/p/w45${movie.posterPath}";
-                        //
-                        //                 return Padding(
-                        //                   padding: const EdgeInsets.symmetric(
-                        //                       vertical: 10.0, horizontal: 10.0),
-                        //                   child: MyContainer(
-                        //                     child: ListTile(
-                        //                       dense: true,
-                        //                       visualDensity:
-                        //                           const VisualDensity(vertical: 0.0),
-                        //                       leading: CachedNetworkImage(
-                        //                         imageUrl: posterUrl,
-                        //                         width: 50.0,
-                        //                         errorWidget: (context, imgUrl, error) =>
-                        //                             const Icon(
-                        //                                 Icons.no_photography_outlined,
-                        //                                 size: 50),
-                        //                       ),
-                        //                       title: Text(movie.title,
-                        //                           style: TextStyle(
-                        //                               color:
-                        //                                   Theme.of(context).primaryColor,
-                        //                               fontSize: 20.0,
-                        //                               fontWeight: FontWeight.bold)),
-                        //                       onTap: () {
-                        //                         Navigator.of(context).push(
-                        //                           MaterialPageRoute(
-                        //                             builder: (context) => DetailedPage(
-                        //                               id: movie.movieID,
-                        //                               isMovie: true,
-                        //                             ),
-                        //                           ),
-                        //                         );
-                        //                       },
-                        //                     ),
-                        //                   ),
-                        //                 );
-                        //               },
-                        //               itemCount: snapshot.data!.length,
-                        //             );
+                                child: CachedNetworkImage(
+                                  imageUrl: posterUrl,
+                                  width: 500,
+                                  errorWidget: (context, posterUrl, error) =>
+                                      const Icon(
+                                    Icons.no_photography_outlined,
+                                    size: 50,
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        );
                       }
-                    }),
+                    },
                   ),
                 ),
               ],
