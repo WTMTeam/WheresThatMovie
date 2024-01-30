@@ -254,40 +254,40 @@ class _SuggestionsState extends State<Suggestions> {
                         ),
                       ],
                     ),
-                    // Column(
-                    //   children: [
-                    //     ElevatedButton.icon(
-                    //       //icon: const Icon(Icons.sync_outlined),
-                    //       icon: const Icon(CupertinoIcons.shuffle),
-                    //       onPressed: () {
-                    //         // * Todo:
-                    //         //    - Change this to have a toggle switch and don't call _showOptionsDialog
-                    //         setMovieOrShow(currentMovieOrShow);
-                    //         // _showOptionsDialog(
-                    //         //     context, setMovieOrShow, "movieOrShow");
-                    //       },
-                    //       style: ElevatedButton.styleFrom(
-                    //           minimumSize: const Size(175, 40),
-                    //           shape: RoundedRectangleBorder(
-                    //               borderRadius: BorderRadius.circular(20.0))),
-                    //       label: Text(currentMovieOrShow),
-                    //     ),
-                    //     const SizedBox(
-                    //       height: 4.0,
-                    //     ),
-                    //     ElevatedButton.icon(
-                    //       icon: const Icon(CupertinoIcons.timer),
-                    //       onPressed: () {
-                    //         _showOptionsDialog(context, setLength, "length");
-                    //       },
-                    //       style: ElevatedButton.styleFrom(
-                    //           minimumSize: const Size(175, 40),
-                    //           shape: RoundedRectangleBorder(
-                    //               borderRadius: BorderRadius.circular(20.0))),
-                    //       label: Text('${currentLength.toString()}min'),
-                    //     ),
-                    //   ],
-                    // ),
+                    Column(
+                      children: [
+                        ElevatedButton.icon(
+                          //icon: const Icon(Icons.sync_outlined),
+                          icon: const Icon(CupertinoIcons.shuffle),
+                          onPressed: () {
+                            setMovieOrShow(currentMovieOrShow);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: const Size(175, 40),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                          ),
+                          label: Text(currentMovieOrShow),
+                        ),
+                        const SizedBox(
+                          height: 4.0,
+                        ),
+                        ElevatedButton.icon(
+                          icon: const Icon(CupertinoIcons.timer),
+                          onPressed: () {
+                            _showOptionsDialog(context, setLength, "length");
+                          },
+                          style: ElevatedButton.styleFrom(
+                              minimumSize: const Size(175, 40),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0))),
+                          label: currentLength != "Choose Length"
+                              ? Text('${currentLength.toString()}min')
+                              : const Text("Choose Length"),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
                 Padding(

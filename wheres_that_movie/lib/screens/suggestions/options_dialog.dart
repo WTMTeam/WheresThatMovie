@@ -591,25 +591,25 @@ class _OptionsDialogState extends State<OptionsDialog> {
                                   selectedLength = value;
                                 });
                               }),
-                          Text('${selectedLength.toInt().toString()} min'),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text('<='),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: CupertinoSwitch(
-                                    value: selectedLengthLessThan,
-                                    onChanged: (value) {
-                                      print("Value Changed");
-                                      setState(() {
-                                        selectedLengthLessThan = value;
-                                      });
-                                    }),
-                              ),
-                              const Text('>='),
-                            ],
-                          )
+                          Text('Max Run Time: ${selectedLength.toInt().toString()} min'),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.center,
+                          //   children: [
+                          //     const Text('<='),
+                          //     Padding(
+                          //       padding: const EdgeInsets.all(8.0),
+                          //       child: CupertinoSwitch(
+                          //           value: selectedLengthLessThan,
+                          //           onChanged: (value) {
+                          //             print("Value Changed");
+                          //             setState(() {
+                          //               selectedLengthLessThan = value;
+                          //             });
+                          //           }),
+                          //     ),
+                          //     const Text('>='),
+                          //   ],
+                          // )
                         ],
                       ),
                     )
