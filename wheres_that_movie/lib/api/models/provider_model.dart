@@ -27,7 +27,7 @@ class Provider {
 }
 
 class ProviderService {
-  Future<List<Provider>> getProviders() async {
+  Future<List<Provider>> getProviders(String countryCode) async {
     // final response =
     //     await http.get(Uri.parse('https://randomuser.me/api?results=20'));
     final Map<String, String> headers = {
@@ -47,11 +47,13 @@ class ProviderService {
         final entry = data['results'][i];
         try {
           Map<String, dynamic> countryData = entry['display_priorities'];
-          bool isUSInMap = countryData.containsKey('US');
+          bool isUSInMap = countryData.containsKey(countryCode);
+          //bool isUSInMap = countryData.containsKey('US');
           if (isUSInMap) {
             providerList.add(Provider.fromJson(entry));
           }
         } catch (e) {
+          print("HERE");
           print("Exception: $e");
         }
       }

@@ -12,7 +12,7 @@ class Movie {
   final String overview;
   final String posterPath;
   final String backdropPath;
-  final double rating;
+  final num rating;
 
   const Movie({
     required this.movieID,
@@ -60,7 +60,7 @@ class MovieService {
       // Remove the trailing "|"
       providerIDs = providerIDs.substring(0, providerIDs.length - 1);
     }
-    print("Provider IDs: $providerIDs");
+    //print("Provider IDs: $providerIDs");
     // Concatenate Genre IDs
     if (genres != null && genres.isNotEmpty) {
       for (Genre genre in genres) {
@@ -70,7 +70,7 @@ class MovieService {
       // Remove the trailing "|"
       genreIDs = genreIDs.substring(0, genreIDs.length - 1);
     }
-    print("Genre IDs: $genreIDs");
+    //print("Genre IDs: $genreIDs");
     //print(ApiEndPoint().getMovieSuggestions);
     // print(
     //     ApiEndPoint(providerIDs: providerIDs, genreIDs: genreIDs, region: "US")
@@ -90,7 +90,7 @@ class MovieService {
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      print("Data: $data");
+      //print("Data: $data");
       final List<Movie> movieList = [];
 
       //for (var i = 0; i < data['results'].length; i++) {
@@ -102,9 +102,9 @@ class MovieService {
           print("Exception: $e");
         }
       }
-      for (Movie movie in movieList) {
-        print("${movie.movieID}, ${movie.title}");
-      }
+      // for (Movie movie in movieList) {
+      //   print("${movie.movieID}, ${movie.title}");
+      // }
       return movieList;
     } else {
       throw Exception('HTTP FAILED with status code: ${response.statusCode}');

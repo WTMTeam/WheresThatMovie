@@ -2,12 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wheres_that_movie/api/models/genre_model.dart';
-import 'package:wheres_that_movie/api/models/movie_model.dart';
 import 'package:wheres_that_movie/api/models/provider_model.dart';
 
 class OptionsDialog extends StatefulWidget {
   final Function(dynamic) onOptionSelected;
   final String button;
+  final String? countryCode;
   final List<Provider>? currentProviders;
   final List<Genre>? currentGenres;
   final double? currentLength;
@@ -16,6 +16,7 @@ class OptionsDialog extends StatefulWidget {
     super.key,
     required this.onOptionSelected,
     required this.button,
+    this.countryCode,
     this.currentProviders,
     this.currentGenres,
     this.currentLength,
@@ -48,7 +49,7 @@ class _OptionsDialogState extends State<OptionsDialog> {
 
     // Todo:
     //  * Filter here so not all APIs are called every time
-    futureProviders = ProviderService().getProviders();
+    futureProviders = ProviderService().getProviders(widget.countryCode!);
     if (widget.currentProviders != null) {
       if (widget.currentProviders![0].providerName == "All Providers") {
         assignAllProviders();

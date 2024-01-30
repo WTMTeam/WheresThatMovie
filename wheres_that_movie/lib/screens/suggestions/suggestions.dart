@@ -66,7 +66,6 @@ import 'package:wheres_that_movie/api/models/provider_model.dart';
 import 'package:wheres_that_movie/screens/detailed_page/detailed.dart';
 import 'package:wheres_that_movie/screens/suggestions/options_dialog.dart';
 import 'package:wheres_that_movie/widgets/country_dropdown.dart';
-import 'package:wheres_that_movie/widgets/my_container.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart';
 
@@ -145,6 +144,7 @@ class _SuggestionsState extends State<Suggestions> {
       builder: (BuildContext context) {
         return OptionsDialog(
           button: button,
+          countryCode: countryCode,
           currentProviders: currentProviders,
           currentGenres: currentGenres,
           onOptionSelected: (option) {
@@ -201,6 +201,20 @@ class _SuggestionsState extends State<Suggestions> {
                 const EdgeInsets.symmetric(horizontal: 0.0, vertical: 20.0),
             child: Column(
               children: [
+                Container(
+                  margin: const EdgeInsets.symmetric(
+                    vertical: 15.0,
+                    horizontal: 10.0,
+                  ),
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(50.0)),
+                  child: CountryDropdown(
+                    onChanged: (code) {
+                      countryCode = code;
+                      print("Code: $code");
+                    },
+                  ),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -338,19 +352,6 @@ class _SuggestionsState extends State<Suggestions> {
                           .toList(),
                     ),
                   ),
-                Container(
-                    margin: const EdgeInsets.symmetric(
-                      vertical: 15.0,
-                      horizontal: 10.0,
-                    ),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50.0)),
-                    child: CountryDropdown(
-                      onChanged: (code) {
-                        countryCode = code;
-                        print("Code: $code");
-                      },
-                    )),
                 ElevatedButton(
                   child: const Text("Get Suggestions"),
                   onPressed: () async {
@@ -383,7 +384,7 @@ class _SuggestionsState extends State<Suggestions> {
                       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                         return const Center(child: Text(""));
                       } else {
-                        print("Snapshot: ${snapshot.data.length}");
+                        //print("Snapshot: ${snapshot.data.length}");
 // After loading your content, scroll to a specific position
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           double maxScrollOffset =
