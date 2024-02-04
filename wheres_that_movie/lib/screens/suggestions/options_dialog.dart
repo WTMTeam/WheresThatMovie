@@ -282,7 +282,8 @@ class _OptionsDialogState extends State<OptionsDialog> {
                                     List<Provider> providerList =
                                         await futureProviders;
                                     setState(() {
-                                      selectedProviders = providerList;
+                                      selectedProviders =
+                                          List.from(providerList);
                                       selectAll = true;
                                     });
                                   },
@@ -347,6 +348,7 @@ class _OptionsDialogState extends State<OptionsDialog> {
                                                               p.providerID ==
                                                               provider
                                                                   .providerID);
+                                                      selectAll = false;
                                                     }
                                                   }
                                                 });
@@ -438,6 +440,7 @@ class _OptionsDialogState extends State<OptionsDialog> {
                                                                     p.providerID ==
                                                                     provider
                                                                         .providerID);
+                                                            selectAll = false;
                                                           }
                                                         }
                                                       });
@@ -486,11 +489,10 @@ class _OptionsDialogState extends State<OptionsDialog> {
                                 ),
                                 ElevatedButton(
                                   onPressed: () async {
-                                    // Set all genres to selected.
                                     List<Genre> genreList = await futureGenres;
                                     setState(() {
-                                      selectedGenres = genreList;
                                       selectAll = true;
+                                      selectedGenres = List.from(genreList);
                                     });
                                   },
                                   style: ElevatedButton.styleFrom(
@@ -558,6 +560,7 @@ class _OptionsDialogState extends State<OptionsDialog> {
                                                     if (value) {
                                                       selectedGenres.add(genre);
                                                     } else {
+                                                      selectAll = false;
                                                       selectedGenres
                                                           .removeWhere((g) =>
                                                               g.genreID ==
@@ -591,7 +594,8 @@ class _OptionsDialogState extends State<OptionsDialog> {
                                   selectedLength = value;
                                 });
                               }),
-                          Text('Max Run Time: ${selectedLength.toInt().toString()} min'),
+                          Text(
+                              'Max Run Time: ${selectedLength.toInt().toString()} min'),
                           // Row(
                           //   mainAxisAlignment: MainAxisAlignment.center,
                           //   children: [
