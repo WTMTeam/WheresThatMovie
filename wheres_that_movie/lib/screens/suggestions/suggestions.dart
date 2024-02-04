@@ -14,44 +14,6 @@
 
 // GENRE CODES
 //https://www.themoviedb.org/talk/5daf6eb0ae36680011d7e6ee
-// MOVIE
-// Action          28
-// Adventure       12
-// Animation       16
-// Comedy          35
-// Crime           80
-// Documentary     99
-// Drama           18
-// Family          10751
-// Fantasy         14
-// History         36
-// Horror          27
-// Music           10402
-// Mystery         9648
-// Romance         10749
-// Science Fiction 878
-// TV Movie        10770
-// Thriller        53
-// War             10752
-// Western         37
-
-// TV SHOW
-// Action & Adventure  10759
-// Animation           16
-// Comedy              35
-// Crime               80
-// Documentary         99
-// Drama               18
-// Family              10751
-// Kids                10762
-// Mystery             9648
-// News                10763
-// Reality             10764
-// Sci-Fi & Fantasy    10765
-// Soap                10766
-// Talk                10767
-// War & Politics      10768
-// Western             37
 
 // ? https://levelup.gitconnected.com/how-i-organize-api-files-in-my-flutter-project-8f21c17050df
 
@@ -94,31 +56,41 @@ class _SuggestionsState extends State<Suggestions> {
   String countryCode = "US";
   dynamic currentLength = 'Choose Length';
   bool lengthLessThan = false;
+  bool providerSelectAll = false;
+  bool genreSelectAll = false;
 
   Future<List<Movie>>? movieSuggestions;
 
   List<int> testList = [1, 2, 3, 4, 5, 6];
 
-  void setProviders(dynamic selectedProviders) {
-    setState(() {
-      if (selectedProviders.isEmpty) {
+  void setProviders(dynamic selectedProviders, {bool? selectAll}) {
+    if (selectedProviders.isEmpty) {
+      setState(() {
         currentProviders = null;
-      } else {
-        currentProviders = selectedProviders;
+      });
+    } else {
+      currentProviders = selectedProviders;
+      if (selectAll != null) {
+        setState(() {
+          providerSelectAll = selectAll;
+        });
       }
-    });
+    }
   }
 
-  void setGenres(dynamic selectedGenres) {
+  void setGenres(dynamic selectedGenres, {bool? selectAll}) {
     setState(() {
       if (selectedGenres.isEmpty) {
         currentGenres = null;
       }
       currentGenres = selectedGenres;
+      if (selectAll != null) {
+        genreSelectAll = selectAll;
+      }
     });
   }
 
-  void setMovieOrShow(dynamic option) {
+  void setMovieOrShow(dynamic option, {bool? selectAll}) {
     if (option == "Movie") {
       option = "TV Show";
     } else if (option == "TV Show") {
@@ -129,15 +101,15 @@ class _SuggestionsState extends State<Suggestions> {
     });
   }
 
-  void setLength(dynamic lengthList) {
+  void setLength(dynamic lengthList, {bool? selectAll}) {
     setState(() {
       currentLength = lengthList[0];
       lengthLessThan = lengthList[1];
     });
   }
 
-  void _showOptionsDialog(
-      BuildContext context, Function(dynamic) setCurrentOption, button,
+  void _showOptionsDialog(BuildContext context,
+      Function(dynamic, {bool? selectAll}) setCurrentOption, button,
       {List<Provider>? currentProviders, List<Genre>? currentGenres}) {
     showDialog(
       context: context,
@@ -147,8 +119,8 @@ class _SuggestionsState extends State<Suggestions> {
           countryCode: countryCode,
           currentProviders: currentProviders,
           currentGenres: currentGenres,
-          onOptionSelected: (option) {
-            setCurrentOption(option);
+          onOptionSelected: (option, {bool? selectAllCallback}) {
+            setCurrentOption(option, selectAll: selectAllCallback);
           },
         );
       },
@@ -299,59 +271,93 @@ class _SuggestionsState extends State<Suggestions> {
                   ),
                 ),
                 if (currentProviders != null)
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Wrap(
-                      spacing: 8.0,
-                      children: currentProviders!
-                          .map(
-                            (provider) => ElevatedButton(
-                              onPressed: () {
-                                print(provider.providerName);
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  minimumSize: const Size(100, 40),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
-                                  backgroundColor: Colors.transparent,
-                                  elevation: 0,
-                                  side: BorderSide(
-                                      width: 2.0,
-                                      color: Theme.of(context).primaryColor)),
-                              child: Text(provider.providerName),
-                            ),
-                          )
-                          .toList(),
+                  if (!providerSelectAll)
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Wrap(
+                        spacing: 8.0,
+                        children: currentProviders!
+                            .map(
+                              (provider) => ElevatedButton(
+                                onPressed: () {
+                                  print(provider.providerName);
+                                  print(
+                                      "PRovider select all: $providerSelectAll");
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    minimumSize: const Size(100, 40),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20.0),
+                                    ),
+                                    backgroundColor: Colors.transparent,
+                                    elevation: 0,
+                                    side: BorderSide(
+                                        width: 2.0,
+                                        color: Theme.of(context).primaryColor)),
+                                child: Text(provider.providerName),
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    )
+                  else
+                    ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(100, 40),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          backgroundColor: Colors.transparent,
+                          elevation: 0,
+                          side: BorderSide(
+                              width: 2.0,
+                              color: Theme.of(context).primaryColor)),
+                      child: const Text("All Providers"),
                     ),
-                  ),
                 if (currentGenres != null)
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Wrap(
-                      spacing: 8.0,
-                      children: currentGenres!
-                          .map(
-                            (genre) => ElevatedButton(
-                              onPressed: () {
-                                print(genre.genreName);
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  minimumSize: const Size(100, 40),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
-                                  backgroundColor: Colors.transparent,
-                                  elevation: 0,
-                                  side: BorderSide(
-                                      width: 2.0,
-                                      color: Theme.of(context).primaryColor)),
-                              child: Text(genre.genreName),
-                            ),
-                          )
-                          .toList(),
+                  if (!genreSelectAll)
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Wrap(
+                        spacing: 8.0,
+                        children: currentGenres!
+                            .map(
+                              (genre) => ElevatedButton(
+                                onPressed: () {
+                                  print(genre.genreName);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    minimumSize: const Size(100, 40),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20.0),
+                                    ),
+                                    backgroundColor: Colors.transparent,
+                                    elevation: 0,
+                                    side: BorderSide(
+                                        width: 2.0,
+                                        color: Theme.of(context).primaryColor)),
+                                child: Text(genre.genreName),
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    )
+                  else
+                    ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(100, 40),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          backgroundColor: Colors.transparent,
+                          elevation: 0,
+                          side: BorderSide(
+                              width: 2.0,
+                              color: Theme.of(context).primaryColor)),
+                      child: const Text("All Genres"),
                     ),
-                  ),
                 ElevatedButton(
                   child: const Text("Get Suggestions"),
                   onPressed: () async {
