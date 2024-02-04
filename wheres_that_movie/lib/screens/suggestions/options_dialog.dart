@@ -426,24 +426,29 @@ class _OptionsDialogState extends State<OptionsDialog> {
                                                 trailing: Checkbox(
                                                     value: isSelected,
                                                     onChanged: (value) {
-                                                      setState(() {
-                                                        if (value != null) {
-                                                          if (value) {
+                                                      if (value != null) {
+                                                        if (value) {
+                                                          setState(() {
                                                             selectedProviders
                                                                 .add(provider);
-                                                          } else {
-                                                            // selectedProviders
-                                                            //     .remove(
-                                                            //         provider);
+                                                            if (selectedProviders
+                                                                    .length ==
+                                                                combinedList
+                                                                    .length) {
+                                                              selectAll = true;
+                                                            }
+                                                          });
+                                                        } else {
+                                                          setState(() {
                                                             selectedProviders
                                                                 .removeWhere((p) =>
                                                                     p.providerID ==
                                                                     provider
                                                                         .providerID);
                                                             selectAll = false;
-                                                          }
+                                                          });
                                                         }
-                                                      });
+                                                      }
                                                     }),
                                               );
                                             },
@@ -559,6 +564,11 @@ class _OptionsDialogState extends State<OptionsDialog> {
                                                   if (value != null) {
                                                     if (value) {
                                                       selectedGenres.add(genre);
+                                                      if (selectedGenres
+                                                              .length ==
+                                                          combinedList.length) {
+                                                        selectAll = true;
+                                                      }
                                                     } else {
                                                       selectAll = false;
                                                       selectedGenres
