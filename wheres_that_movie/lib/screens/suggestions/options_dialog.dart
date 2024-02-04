@@ -60,7 +60,7 @@ class _OptionsDialogState extends State<OptionsDialog> {
       }
     }
     futureGenres = GenreService().getGenres();
-    if (widget.currentGenres != null) {
+    if (widget.currentGenres != null && widget.currentGenres!.isNotEmpty) {
       if (widget.currentGenres![0].genreName == "All Genres") {
         assignAllGenres();
       } else {
