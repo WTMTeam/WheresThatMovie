@@ -5,8 +5,9 @@ import 'package:wheres_that_movie/api/models/genre_model.dart';
 import 'package:wheres_that_movie/api/models/provider_model.dart';
 
 class OptionsDialog extends StatefulWidget {
-  final Function(dynamic) onOptionSelected;
+  final Function(dynamic, {bool? selectAllCallback}) onOptionSelected;
   final String button;
+  final bool? genreSelectAll;
   final String? countryCode;
   final List<Provider>? currentProviders;
   final List<Genre>? currentGenres;
@@ -16,6 +17,7 @@ class OptionsDialog extends StatefulWidget {
     super.key,
     required this.onOptionSelected,
     required this.button,
+    this.genreSelectAll,
     this.countryCode,
     this.currentProviders,
     this.currentGenres,
@@ -54,7 +56,6 @@ class _OptionsDialogState extends State<OptionsDialog> {
       if (widget.currentProviders![0].providerName == "All Providers") {
         assignAllProviders();
       } else {
-        print("There are already providers");
         selectedProviders = widget.currentProviders!;
       }
     }
@@ -155,29 +156,11 @@ class _OptionsDialogState extends State<OptionsDialog> {
                             ),
                       onPressed: () {
                         if (widget.button == "Provider") {
-                          widget.onOptionSelected(selectedProviders);
-                          if (selectAll) {
-                            widget.onOptionSelected([
-                              const Provider(
-                                  providerID: 00,
-                                  providerName: "All Providers",
-                                  logoPath: "",
-                                  displayPriority: 00)
-                            ]);
-                          } else {
-                            widget.onOptionSelected(selectedProviders);
-                          }
+                          widget.onOptionSelected(selectedProviders,
+                              selectAllCallback: selectAll);
                         } else if (widget.button == "Genre") {
-                          if (selectAll) {
-                            widget.onOptionSelected([
-                              const Genre(
-                                genreID: 00,
-                                genreName: "All Genres",
-                              )
-                            ]);
-                          } else {
-                            widget.onOptionSelected(selectedGenres);
-                          }
+                          widget.onOptionSelected(selectedGenres,
+                              selectAllCallback: selectAll);
                         } else if (widget.button == "length") {
                           List<dynamic> lengthList = [
                             selectedLength.toInt(),
