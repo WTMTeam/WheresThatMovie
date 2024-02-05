@@ -26,10 +26,13 @@ class ApiEndPoint {
     //Value added for simplicity but it is always better
     //  to add it in a configuration file
     String baseUrlPath = 'https://api.themoviedb.org/3';
-
+print("RUNTIME: $runtime");
     region ??= "US";
-    genreIDs ??= "35|53"; // Use pipe | for "or".
-    providerIDs ??= "8|9";
+    genreIDs ??= ""; // Use pipe | for "or".
+    //genreIDs ??= "35|53"; // Use pipe | for "or".
+    providerIDs ??= "";
+    //runtime ??= 300;
+    //providerIDs ??= "8|9";
 
     // if (this.providerIDs) {
     //   providerIDs = this.providerIDs;
@@ -37,6 +40,20 @@ class ApiEndPoint {
 
     getMovieSuggestions =
     '$baseUrlPath/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&watch_region=$region&with_genres=$genreIDs&with_watch_providers=$providerIDs';
+    // getMovieSuggestions =
+    // '$baseUrlPath/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&watch_region=$region&with_genres=$genreIDs&with_watch_providers=$providerIDs&with_runtime.lte=$runtime';
+    print("URL: $getMovieSuggestions");
+
+
+
+    if (runtime != null) {
+    getMovieSuggestions += '&with_runtime.lte=$runtime';
+    print("here");
+    print("URL2: $getMovieSuggestions");
+
+    }
+    // getMovieSuggestions =
+    // '$baseUrlPath/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&watch_region=$region&with_genres=$genreIDs&with_watch_providers=$providerIDs';
 
     // discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&watch_region=US&with_genres=35&with_watch_providers=8
 

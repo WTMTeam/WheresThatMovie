@@ -46,7 +46,7 @@ class MovieService {
       {List<Provider>? providers,
       List<Genre>? genres,
       String? region,
-      int? runtime,
+      int? runtime, // runtime in minutes
       bool? runtimeLessThan}) async {
     String providerIDs = "";
     String genreIDs = "";
@@ -76,6 +76,8 @@ class MovieService {
     //     ApiEndPoint(providerIDs: providerIDs, genreIDs: genreIDs, region: "US")
     //         .getMovieSuggestions);
 
+    runtime ??= 999;
+
     final Map<String, String> headers = {
       'accept': 'application/json',
       'Authorization':
@@ -83,7 +85,7 @@ class MovieService {
     };
     var response = await http.get(
         Uri.parse(ApiEndPoint(
-                providerIDs: providerIDs, genreIDs: genreIDs, region: region)
+                providerIDs: providerIDs, genreIDs: genreIDs, region: region, runtime: runtime)
             .getMovieSuggestions),
         //var response = await http.get(Uri.parse(ApiEndPoint().getMovieSuggestions),
         headers: headers);
