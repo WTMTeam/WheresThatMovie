@@ -70,11 +70,6 @@ class MovieService {
       // Remove the trailing "|"
       genreIDs = genreIDs.substring(0, genreIDs.length - 1);
     }
-    //print("Genre IDs: $genreIDs");
-    //print(ApiEndPoint().getMovieSuggestions);
-    // print(
-    //     ApiEndPoint(providerIDs: providerIDs, genreIDs: genreIDs, region: "US")
-    //         .getMovieSuggestions);
 
     runtime ??= 999;
 
@@ -85,9 +80,11 @@ class MovieService {
     };
     var response = await http.get(
         Uri.parse(ApiEndPoint(
-                providerIDs: providerIDs, genreIDs: genreIDs, region: region, runtime: runtime)
-            .getMovieSuggestions),
-        //var response = await http.get(Uri.parse(ApiEndPoint().getMovieSuggestions),
+          providerIDs: providerIDs,
+          genreIDs: genreIDs,
+          region: region,
+          runtime: runtime,
+        ).getMovieSuggestions),
         headers: headers);
 
     if (response.statusCode == 200) {
