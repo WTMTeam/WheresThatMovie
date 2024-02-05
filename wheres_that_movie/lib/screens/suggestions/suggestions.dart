@@ -231,9 +231,10 @@ class _SuggestionsState extends State<Suggestions> {
                         ElevatedButton.icon(
                           //icon: const Icon(Icons.sync_outlined),
                           icon: const Icon(CupertinoIcons.shuffle),
-                          onPressed: () {
-                            setMovieOrShow(currentMovieOrShow);
-                          },
+                          onPressed: null,
+                          // onPressed: () {
+                          //   setMovieOrShow(currentMovieOrShow);
+                          // },
                           style: ElevatedButton.styleFrom(
                             minimumSize: const Size(175, 40),
                             shape: RoundedRectangleBorder(
@@ -361,15 +362,20 @@ class _SuggestionsState extends State<Suggestions> {
                 ElevatedButton(
                   child: const Text("Get Suggestions"),
                   onPressed: () async {
+                    print("Current length: $currentLength");
+                    print("Current length: ${currentLength.runtimeType}");
                     try {
                       // Call the asynchronous function and wait for the result
+                      if (currentLength != null) {
                       setState(() {
                         movieSuggestions = MovieService().getMovieSuggestions(
                           providers: currentProviders,
                           genres: currentGenres,
                           region: countryCode,
+                          runtime: currentLength,
                         );
                       });
+                      }
                     } catch (error) {
                       // Handle errors if any
                       print("Error fetching movie suggestions: $error");
