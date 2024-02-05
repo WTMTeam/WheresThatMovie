@@ -40,6 +40,7 @@ class _OptionsDialogState extends State<OptionsDialog> {
 
   // * Length variables
   double selectedLength = 120.0;
+  List<double> selectedLength2 = [];
   bool selectedLengthLessThan = false;
 
   @override
@@ -68,8 +69,8 @@ class _OptionsDialogState extends State<OptionsDialog> {
       }
     }
     if (widget.currentLength != null) {
-    print("here");
       selectedLength = widget.currentLength!.toDouble();
+      selectedLength2.insert(0, widget.currentLength!.toDouble());
     }
     if (widget.currentLengthLessThan != null) {
       selectedLengthLessThan = widget.currentLengthLessThan!;
@@ -95,12 +96,10 @@ class _OptionsDialogState extends State<OptionsDialog> {
     bool selectAll = false;
 
     Future<void> filterProviders(String query) async {
-      print("Query: $query");
       List<Provider> providers = await futureProviders;
       List<Provider> newProviders = [];
       for (Provider provider in providers) {
         if (provider.providerName.toLowerCase().contains(query.toLowerCase())) {
-          print(provider.providerName);
           newProviders.add(provider);
         }
       }
@@ -131,6 +130,8 @@ class _OptionsDialogState extends State<OptionsDialog> {
             comparisonList = selectedProviders;
           } else if (widget.button == "Genre") {
             comparisonList = selectedGenres;
+          } else if (widget.button == "length") {
+            comparisonList = selectedLength2;
           }
           return SingleChildScrollView(
             child: SizedBox(
@@ -355,8 +356,6 @@ class _OptionsDialogState extends State<OptionsDialog> {
                                           return Text(
                                               "Error: ${snapshot.error}");
                                         } else {
-                                          print(
-                                              "Snapshot: ${snapshot.data.length}");
                                           // Create two lists: one for selected providers and one for unselected providers
                                           List<Provider> selectedList = [];
                                           List<Provider> unselectedList = [];
@@ -512,7 +511,6 @@ class _OptionsDialogState extends State<OptionsDialog> {
                                   } else if (snapshot.hasError) {
                                     return Text("Error: ${snapshot.error}");
                                   } else {
-                                    print("Snapshot: ${snapshot.data.length}");
                                     // Create two lists: one for selected providers and one for unselected providers
                                     List<Genre> selectedList = [];
                                     List<Genre> unselectedList = [];
@@ -580,14 +578,33 @@ class _OptionsDialogState extends State<OptionsDialog> {
                       child: Column(
                         children: [
                           CupertinoSlider(
-                              value: selectedLength,
-                              divisions: 6,
-                              max: 180,
-                              onChanged: (double value) {
-                                setState(() {
-                                  selectedLength = value;
-                                });
-                              }),
+                            value: selectedLength,
+                            divisions: 6,
+                            max: 180,
+
+                            onChanged: (double value) {
+                              setState(() {
+                                selectedLength = value;
+                                if (value != widget.currentLength) {
+                                  selectedLength2.insert(0, value);
+                                } else {
+                                  selectedLength2 = [];
+                                }
+                              });
+                            },
+
+                            //  onChanged: (double value) {
+                            //    setState(() {
+                            //      selectedLength = value;
+                            //      if (value != widget.currentLength) {
+                            //      print("Current length ${widget.currentLength}");
+                            //        comparisonList = ["value"];
+                            //        print(comparisonList);
+                            //      } else {
+                            // comparisonList = [];
+                            //      }
+                            //     });
+                          ),
                           Text(
                               'Max Run Time: ${selectedLength.toInt().toString()} min'),
                           // Row(
@@ -612,7 +629,7 @@ class _OptionsDialogState extends State<OptionsDialog> {
                       ),
                     )
                   else
-                    const Text("test")
+                    const Text("Something Went Wrong")
                 ],
               ),
             ),
