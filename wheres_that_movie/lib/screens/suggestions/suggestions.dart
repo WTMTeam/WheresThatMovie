@@ -250,6 +250,9 @@ class _SuggestionsState extends State<Suggestions> {
                         ElevatedButton.icon(
                           icon: const Icon(CupertinoIcons.timer),
                           onPressed: () {
+                            if (currentLength.runtimeType != int) {
+                            currentLength = null;
+                            }
                             _showOptionsDialog(context, setLength, "length", currentLength: currentLength);
                           },
                           style: ElevatedButton.styleFrom(
