@@ -110,7 +110,7 @@ class _SuggestionsState extends State<Suggestions> {
 
   void _showOptionsDialog(BuildContext context,
       Function(dynamic, {bool? selectAll}) setCurrentOption, button,
-      {List<Provider>? currentProviders, List<Genre>? currentGenres}) {
+      {List<Provider>? currentProviders, List<Genre>? currentGenres, int? currentLength}) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -119,6 +119,7 @@ class _SuggestionsState extends State<Suggestions> {
           countryCode: countryCode,
           currentProviders: currentProviders,
           currentGenres: currentGenres,
+          currentLength: currentLength,
           onOptionSelected: (option, {bool? selectAllCallback}) {
             setCurrentOption(option, selectAll: selectAllCallback);
           },
@@ -249,7 +250,7 @@ class _SuggestionsState extends State<Suggestions> {
                         ElevatedButton.icon(
                           icon: const Icon(CupertinoIcons.timer),
                           onPressed: () {
-                            _showOptionsDialog(context, setLength, "length");
+                            _showOptionsDialog(context, setLength, "length", currentLength: currentLength);
                           },
                           style: ElevatedButton.styleFrom(
                               minimumSize: const Size(175, 40),
