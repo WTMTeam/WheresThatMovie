@@ -362,11 +362,11 @@ class _SuggestionsState extends State<Suggestions> {
                 ElevatedButton(
                   child: const Text("Get Suggestions"),
                   onPressed: () async {
-                    print("Current length: $currentLength");
-                    print("Current length: ${currentLength.runtimeType}");
                     try {
                       // Call the asynchronous function and wait for the result
-                      if (currentLength != null) {
+                      if (currentLength.runtimeType != int) {
+                        currentLength = 999;
+                      }
                       setState(() {
                         movieSuggestions = MovieService().getMovieSuggestions(
                           providers: currentProviders,
@@ -375,7 +375,6 @@ class _SuggestionsState extends State<Suggestions> {
                           runtime: currentLength,
                         );
                       });
-                      }
                     } catch (error) {
                       // Handle errors if any
                       print("Error fetching movie suggestions: $error");

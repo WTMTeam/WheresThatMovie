@@ -17,41 +17,28 @@ class ApiEndPoint {
   // * Genre Docs: https://developer.themoviedb.org/reference/genre-movie-list
 
   ApiEndPoint(
-  {int? id,
-    String? providerIDs,
-    String? genreIDs,
-    int? runtime,
-    bool? runtimeLessThan,
-    String? region}) {
+      {int? id,
+      String? providerIDs,
+      String? genreIDs,
+      int? runtime,
+      bool? runtimeLessThan,
+      String? region}) {
     //Value added for simplicity but it is always better
     //  to add it in a configuration file
     String baseUrlPath = 'https://api.themoviedb.org/3';
-print("RUNTIME: $runtime");
     region ??= "US";
     genreIDs ??= ""; // Use pipe | for "or".
     //genreIDs ??= "35|53"; // Use pipe | for "or".
     providerIDs ??= "";
     //runtime ??= 300;
     //providerIDs ??= "8|9";
-
-    // if (this.providerIDs) {
-    //   providerIDs = this.providerIDs;
-    // }
-
     getMovieSuggestions =
-    '$baseUrlPath/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&watch_region=$region&with_genres=$genreIDs&with_watch_providers=$providerIDs';
-    // getMovieSuggestions =
-    // '$baseUrlPath/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&watch_region=$region&with_genres=$genreIDs&with_watch_providers=$providerIDs&with_runtime.lte=$runtime';
-    print("URL: $getMovieSuggestions");
-
-
+        '$baseUrlPath/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&watch_region=$region&with_genres=$genreIDs&with_watch_providers=$providerIDs';
 
     if (runtime != null) {
-    getMovieSuggestions += '&with_runtime.lte=$runtime';
-    print("here");
-    print("URL2: $getMovieSuggestions");
-
+      getMovieSuggestions += '&with_runtime.lte=$runtime';
     }
+    print("URL: $getMovieSuggestions");
     // getMovieSuggestions =
     // '$baseUrlPath/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&watch_region=$region&with_genres=$genreIDs&with_watch_providers=$providerIDs';
 
@@ -63,9 +50,9 @@ print("RUNTIME: $runtime");
 
     // Get the streaming provider information for movies
     getMovieStreamingProviderInfo =
-    '$baseUrlPath/watch/providers/movie?language=en-US';
+        '$baseUrlPath/watch/providers/movie?language=en-US';
     getMovieStreamingProviderInfoRegion =
-    '$baseUrlPath/watch/providers/movie?language=en-US&watch_region=US';
+        '$baseUrlPath/watch/providers/movie?language=en-US&watch_region=US';
 
     // Get the Countries used in TMDB
     getCountries = '$baseUrlPath/configuration/countries?language=en-US';
