@@ -11,7 +11,7 @@ class OptionsDialog extends StatefulWidget {
   final String? countryCode;
   final List<Provider>? currentProviders;
   final List<Genre>? currentGenres;
-  final double? currentLength;
+  final int? currentLength;
   final bool? currentLengthLessThan;
   const OptionsDialog({
     super.key,
@@ -68,7 +68,8 @@ class _OptionsDialogState extends State<OptionsDialog> {
       }
     }
     if (widget.currentLength != null) {
-      selectedLength = widget.currentLength!;
+    print("here");
+      selectedLength = widget.currentLength!.toDouble();
     }
     if (widget.currentLengthLessThan != null) {
       selectedLengthLessThan = widget.currentLengthLessThan!;
