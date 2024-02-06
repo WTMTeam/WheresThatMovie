@@ -107,25 +107,25 @@ class MovieService {
         }
         final entry = data['results'][i];
         try {
-          Movie currentMovie = Movie.fromJson(entry);
-          var providerResponse = await http.get(
-              Uri.parse(ApiEndPoint(
-                id: currentMovie.movieID,
-              ).getMovieProvidersByMovieID),
-              headers: headers);
+          if (providerIDs.isNotEmpty) {
+            Movie currentMovie = Movie.fromJson(entry);
+            var providerResponse = await http.get(
+                Uri.parse(ApiEndPoint(
+                  id: currentMovie.movieID,
+                ).getMovieProvidersByMovieID),
+                headers: headers);
 
-          if (providerResponse.statusCode == 200) {
-            final providerData = jsonDecode(providerResponse.body);
+            if (providerResponse.statusCode == 200) {
+              final providerData = jsonDecode(providerResponse.body);
 
-            if (currentOption == "Stream") {
-              List streamingProviders =
-                  providerData['results'][region]['flatrate'] ?? [];
-              List<int> streamingProvidersIDs = streamingProviders
-                  .map<int>((provider) => provider['provider_id'])
-                  .toList();
+              if (currentOption == "Stream") {
+                List streamingProviders =
+                    providerData['results'][region]['flatrate'] ?? [];
+                List<int> streamingProvidersIDs = streamingProviders
+                    .map<int>((provider) => provider['provider_id'])
+                    .toList();
 
-              // Split the concatenated providerIDs string into a list of integers
-              if (providerIDs.isNotEmpty) {
+                // Split the concatenated providerIDs string into a list of integers
                 List<int> selectedProviderIds =
                     providerIDs.split("|").map(int.parse).toList();
 
@@ -136,18 +136,16 @@ class MovieService {
                 if (hasCommonProvider) {
                   counter++;
                   movieList.add(Movie.fromJson(entry));
-                } 
-              }
-            } else if (currentOption == "Rent") {
-              // rent logic
-              List streamingProviders =
-                  providerData['results'][region]['rent'] ?? [];
-              List<int> streamingProvidersIDs = streamingProviders
-                  .map<int>((provider) => provider['provider_id'])
-                  .toList();
+                }
+              } else if (currentOption == "Rent") {
+                // rent logic
+                List streamingProviders =
+                    providerData['results'][region]['rent'] ?? [];
+                List<int> streamingProvidersIDs = streamingProviders
+                    .map<int>((provider) => provider['provider_id'])
+                    .toList();
 
-              // Split the concatenated providerIDs string into a list of integers
-              if (providerIDs.isNotEmpty) {
+                // Split the concatenated providerIDs string into a list of integers
                 List<int> selectedProviderIds =
                     providerIDs.split("|").map(int.parse).toList();
 
@@ -158,18 +156,16 @@ class MovieService {
                 if (hasCommonProvider) {
                   counter++;
                   movieList.add(Movie.fromJson(entry));
-                } 
-              }
-            } else if (currentOption == "Buy") {
-              // buy logic
-              List streamingProviders =
-                  providerData['results'][region]['buy'] ?? [];
-              List<int> streamingProvidersIDs = streamingProviders
-                  .map<int>((provider) => provider['provider_id'])
-                  .toList();
+                }
+              } else if (currentOption == "Buy") {
+                // buy logic
+                List streamingProviders =
+                    providerData['results'][region]['buy'] ?? [];
+                List<int> streamingProvidersIDs = streamingProviders
+                    .map<int>((provider) => provider['provider_id'])
+                    .toList();
 
-              // Split the concatenated providerIDs string into a list of integers
-              if (providerIDs.isNotEmpty) {
+                // Split the concatenated providerIDs string into a list of integers
                 List<int> selectedProviderIds =
                     providerIDs.split("|").map(int.parse).toList();
 
@@ -180,11 +176,13 @@ class MovieService {
                 if (hasCommonProvider) {
                   counter++;
                   movieList.add(Movie.fromJson(entry));
-                } 
+                }
+              } else {
+                print("Error with currentOption in getMovieSuggestions");
               }
-            } else {
-              print("Error with currentOption in getMovieSuggestions");
             }
+          } else {
+            movieList.add(Movie.fromJson(entry));
           }
         } catch (e) {
           print("Exception: $e");
