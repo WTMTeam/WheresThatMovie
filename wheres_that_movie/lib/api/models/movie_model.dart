@@ -93,6 +93,8 @@ class MovieService {
       final List<Movie> movieList = [];
 
       //for (var i = 0; i < data['results'].length; i++) {
+      // TODO: 
+      // Filter the results based on if they have the right streaming provider for flatrate, free or ads
       for (var i = 0; i < 11; i++) {
         final entry = data['results'][i];
         try {
