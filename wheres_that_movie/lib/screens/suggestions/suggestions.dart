@@ -259,9 +259,12 @@ class _SuggestionsState extends State<Suggestions> {
                               minimumSize: const Size(175, 40),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20.0))),
-                          label: currentLength != "Choose Length"
+                          label: currentLength.runtimeType == int
                               ? Text('${currentLength.toString()}min')
                               : const Text("Choose Length"),
+                          // label: currentLength != "Choose Length"
+                          //     ? Text('${currentLength.toString()}min')
+                          //     : const Text("Choose Length"),
                         ),
                       ],
                     ),
@@ -369,7 +372,7 @@ class _SuggestionsState extends State<Suggestions> {
                     try {
                       // Call the asynchronous function and wait for the result
                       if (currentLength.runtimeType != int) {
-                        currentLength = 999;
+                        currentLength = null;
                       }
                       setState(() {
                         movieSuggestions = MovieService().getMovieSuggestions(

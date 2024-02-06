@@ -30,10 +30,16 @@ class ApiEndPoint {
     genreIDs ??= ""; // Use pipe | for "or".
     //genreIDs ??= "35|53"; // Use pipe | for "or".
     providerIDs ??= "";
-    //runtime ??= 300;
+    runtime ??= 999;
     //providerIDs ??= "8|9";
+
+// with_watch_monetization_types
+// string
+// possible values are: [flatrate, free, ads, rent, buy] use in conjunction with watch_region, can be a comma (AND) or pipe (OR) separated query
+
+
     getMovieSuggestions =
-        '$baseUrlPath/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&watch_region=$region&with_genres=$genreIDs&with_watch_providers=$providerIDs';
+        '$baseUrlPath/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&watch_region=$region&with_genres=$genreIDs&with_watch_providers=$providerIDs&with_watch_monetization_types=flatrate|free|ads';
 
     if (runtime != null) {
       getMovieSuggestions += '&with_runtime.lte=$runtime';

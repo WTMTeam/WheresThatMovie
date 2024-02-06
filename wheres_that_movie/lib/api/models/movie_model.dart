@@ -89,7 +89,7 @@ class MovieService {
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      //print("Data: $data");
+      print("Data: $data");
       final List<Movie> movieList = [];
 
       //for (var i = 0; i < data['results'].length; i++) {
