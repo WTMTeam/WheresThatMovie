@@ -140,8 +140,48 @@ class MovieService {
               }
             } else if (currentOption == "Rent") {
               // rent logic
+              List streamingProviders =
+                  providerData['results'][region]['rent'] ?? [];
+              List<int> streamingProvidersIDs = streamingProviders
+                  .map<int>((provider) => provider['provider_id'])
+                  .toList();
+
+              // Split the concatenated providerIDs string into a list of integers
+              if (providerIDs.isNotEmpty) {
+                List<int> selectedProviderIds =
+                    providerIDs.split("|").map(int.parse).toList();
+
+                // Check if any of the selected provider IDs exist in the streaming providers list
+                bool hasCommonProvider = selectedProviderIds
+                    .any((id) => streamingProvidersIDs.contains(id));
+
+                if (hasCommonProvider) {
+                  counter++;
+                  movieList.add(Movie.fromJson(entry));
+                } 
+              }
             } else if (currentOption == "Buy") {
               // buy logic
+              List streamingProviders =
+                  providerData['results'][region]['buy'] ?? [];
+              List<int> streamingProvidersIDs = streamingProviders
+                  .map<int>((provider) => provider['provider_id'])
+                  .toList();
+
+              // Split the concatenated providerIDs string into a list of integers
+              if (providerIDs.isNotEmpty) {
+                List<int> selectedProviderIds =
+                    providerIDs.split("|").map(int.parse).toList();
+
+                // Check if any of the selected provider IDs exist in the streaming providers list
+                bool hasCommonProvider = selectedProviderIds
+                    .any((id) => streamingProvidersIDs.contains(id));
+
+                if (hasCommonProvider) {
+                  counter++;
+                  movieList.add(Movie.fromJson(entry));
+                } 
+              }
             } else {
               print("Error with currentOption in getMovieSuggestions");
             }
