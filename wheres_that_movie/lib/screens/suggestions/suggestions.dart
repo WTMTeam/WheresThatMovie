@@ -52,8 +52,10 @@ class _SuggestionsState extends State<Suggestions> {
   ];
   List<Provider>? currentProviders;
   List<Genre>? currentGenres;
+  List<String> options = ["Stream", "Buy", "Rent"];
   String currentMovieOrShow = 'Movie';
   String countryCode = "US";
+  String currentOption = "Stream";
   dynamic currentLength = 'Choose Length';
   bool lengthLessThan = false;
   bool providerSelectAll = false;
@@ -110,7 +112,9 @@ class _SuggestionsState extends State<Suggestions> {
 
   void _showOptionsDialog(BuildContext context,
       Function(dynamic, {bool? selectAll}) setCurrentOption, button,
-      {List<Provider>? currentProviders, List<Genre>? currentGenres, int? currentLength}) {
+      {List<Provider>? currentProviders,
+      List<Genre>? currentGenres,
+      int? currentLength}) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -188,6 +192,43 @@ class _SuggestionsState extends State<Suggestions> {
                     },
                   ),
                 ),
+                Container(
+                  margin: const EdgeInsets.only(
+                      top: 5.0, bottom: 5.0, left: 10.0, right: 10.0),
+                  alignment: Alignment.bottomLeft,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(18.0),
+                      border:
+                          Border.all(color: Theme.of(context).primaryColor)),
+                  constraints: const BoxConstraints(maxHeight: 55.0),
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 15.0),
+                    child: DropdownButton(
+                      isExpanded: true,
+                      underline: Container(),
+                      borderRadius: BorderRadius.circular(10.0),
+                      dropdownColor:
+                          Theme.of(context).colorScheme.primaryContainer,
+                      value: currentOption,
+                      items: options
+                          .map<DropdownMenuItem<String>>(
+                            (e) => DropdownMenuItem(
+                              value: e,
+                              child: Text(
+                                e,
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (String? value) => setState(
+                        () {
+                          if (value != null) currentOption = value;
+                        },
+                      ),
+                    ),
+                  ),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -251,9 +292,10 @@ class _SuggestionsState extends State<Suggestions> {
                           icon: const Icon(CupertinoIcons.timer),
                           onPressed: () {
                             if (currentLength.runtimeType != int) {
-                            currentLength = null;
+                              currentLength = null;
                             }
-                            _showOptionsDialog(context, setLength, "length", currentLength: currentLength);
+                            _showOptionsDialog(context, setLength, "length",
+                                currentLength: currentLength);
                           },
                           style: ElevatedButton.styleFrom(
                               minimumSize: const Size(175, 40),
@@ -262,9 +304,6 @@ class _SuggestionsState extends State<Suggestions> {
                           label: currentLength.runtimeType == int
                               ? Text('${currentLength.toString()}min')
                               : const Text("Choose Length"),
-                          // label: currentLength != "Choose Length"
-                          //     ? Text('${currentLength.toString()}min')
-                          //     : const Text("Choose Length"),
                         ),
                       ],
                     ),
