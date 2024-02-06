@@ -100,7 +100,11 @@ class MovieService {
       //for (var i = 0; i < data['results'].length; i++) {
       // TODO:
       // Filter the results based on if they have the right streaming provider for flatrate, free or ads
-      for (var i = 0; i < 11; i++) {
+      int counter = 0;
+      for (var i = 0; i < data['results'].length; i++) {
+        if (counter == 11) {
+          break;
+        }
         final entry = data['results'][i];
         try {
           Movie currentMovie = Movie.fromJson(entry);
@@ -119,9 +123,8 @@ class MovieService {
               List<int> streamingProvidersIDs = streamingProviders
                   .map<int>((provider) => provider['provider_id'])
                   .toList();
-              print("Provider IDs: $streamingProvidersIDs");
 
-// Split the concatenated providerIDs string into a list of integers
+              // Split the concatenated providerIDs string into a list of integers
               if (providerIDs.isNotEmpty) {
                 List<int> selectedProviderIds =
                     providerIDs.split("|").map(int.parse).toList();
@@ -131,13 +134,9 @@ class MovieService {
                     .any((id) => streamingProvidersIDs.contains(id));
 
                 if (hasCommonProvider) {
+                  counter++;
                   movieList.add(Movie.fromJson(entry));
-                  print(
-                      "At least one of the selected provider IDs exists in the streaming providers list.");
-                } else {
-                  print(
-                      "None of the selected provider IDs exists in the streaming providers list.");
-                }
+                } 
               }
             } else if (currentOption == "Rent") {
               // rent logic
