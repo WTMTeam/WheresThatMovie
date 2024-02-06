@@ -3,9 +3,6 @@
 //
 //
 
-import 'package:wheres_that_movie/api/models/genre_model.dart';
-import 'package:wheres_that_movie/api/models/provider_model.dart';
-
 class ApiEndPoint {
   late String getMovieSuggestions;
   late String getMovieGenresUrl;
@@ -13,6 +10,7 @@ class ApiEndPoint {
   late String getMovieStreamingProviderInfo;
   late String getMovieStreamingProviderInfoRegion;
   late String getCountries;
+  late String getMovieProvidersByMovieID;
 
   // * Genre Docs: https://developer.themoviedb.org/reference/genre-movie-list
 
@@ -44,7 +42,6 @@ class ApiEndPoint {
     if (runtime != null) {
       getMovieSuggestions += '&with_runtime.lte=$runtime';
     }
-    print("URL: $getMovieSuggestions");
     // getMovieSuggestions =
     // '$baseUrlPath/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&watch_region=$region&with_genres=$genreIDs&with_watch_providers=$providerIDs';
 
@@ -54,13 +51,14 @@ class ApiEndPoint {
     getMovieGenresUrl = '$baseUrlPath/genre/movie/list?language=en';
     getTvShowGenresUrl = '$baseUrlPath/genre/tv/list?language=en';
 
+    getMovieProvidersByMovieID = '$baseUrlPath/movie/$id/watch/providers';
     // Get the streaming provider information for movies
     getMovieStreamingProviderInfo =
         '$baseUrlPath/watch/providers/movie?language=en-US';
     getMovieStreamingProviderInfoRegion =
         '$baseUrlPath/watch/providers/movie?language=en-US&watch_region=US';
 
-    // Get the Countries used in TMDB
+    // Get the Countries used in TMDidB
     getCountries = '$baseUrlPath/configuration/countries?language=en-US';
   }
 }

@@ -415,6 +415,7 @@ class _SuggestionsState extends State<Suggestions> {
                       }
                       setState(() {
                         movieSuggestions = MovieService().getMovieSuggestions(
+                          currentOption: currentOption,
                           providers: currentProviders,
                           genres: currentGenres,
                           region: countryCode,

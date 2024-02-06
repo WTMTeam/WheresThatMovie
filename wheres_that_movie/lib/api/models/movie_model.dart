@@ -43,13 +43,18 @@ class MovieService {
   // - Accept and send on provider data, genre data osv.
   // - is there additional data we want to grab?
   Future<List<Movie>> getMovieSuggestions(
-      {List<Provider>? providers,
+      {String? currentOption,
+      List<Provider>? providers,
       List<Genre>? genres,
       String? region,
       int? runtime, // runtime in minutes
       bool? runtimeLessThan}) async {
     String providerIDs = "";
     String genreIDs = "";
+
+    if (currentOption != null) {
+      print("Current Option: $currentOption");
+    }
 
     // Concatenate Provider IDs
     if (providers != null && providers.isNotEmpty) {
@@ -93,16 +98,67 @@ class MovieService {
       final List<Movie> movieList = [];
 
       //for (var i = 0; i < data['results'].length; i++) {
-      // TODO: 
+      // TODO:
       // Filter the results based on if they have the right streaming provider for flatrate, free or ads
       for (var i = 0; i < 11; i++) {
         final entry = data['results'][i];
         try {
-          movieList.add(Movie.fromJson(entry));
+          Movie currentMovie = Movie.fromJson(entry);
+          var providerResponse = await http.get(
+              Uri.parse(ApiEndPoint(
+                id: currentMovie.movieID,
+              ).getMovieProvidersByMovieID),
+              headers: headers);
+
+          if (providerResponse.statusCode == 200) {
+            final providerData = jsonDecode(providerResponse.body);
+
+            if (currentOption == "Stream") {
+              List streamingProviders =
+                  providerData['results'][region]['flatrate'] ?? [];
+              List<int> streamingProvidersIDs = streamingProviders
+                  .map<int>((provider) => provider['provider_id'])
+                  .toList();
+              print("Provider IDs: $streamingProvidersIDs");
+
+// Split the concatenated providerIDs string into a list of integers
+              if (providerIDs.isNotEmpty) {
+                List<int> selectedProviderIds =
+                    providerIDs.split("|").map(int.parse).toList();
+
+                // Check if any of the selected provider IDs exist in the streaming providers list
+                bool hasCommonProvider = selectedProviderIds
+                    .any((id) => streamingProvidersIDs.contains(id));
+
+                if (hasCommonProvider) {
+                  movieList.add(Movie.fromJson(entry));
+                  print(
+                      "At least one of the selected provider IDs exists in the streaming providers list.");
+                } else {
+                  print(
+                      "None of the selected provider IDs exists in the streaming providers list.");
+                }
+              }
+            } else if (currentOption == "Rent") {
+              // rent logic
+            } else if (currentOption == "Buy") {
+              // buy logic
+            } else {
+              print("Error with currentOption in getMovieSuggestions");
+            }
+          }
         } catch (e) {
           print("Exception: $e");
         }
       }
+      // for (var i = 0; i < 11; i++) {
+      //   final entry = data['results'][i];
+      //   try {
+      //     movieList.add(Movie.fromJson(entry));
+      //   } catch (e) {
+      //     print("Exception: $e");
+      //   }
+      // }
       // for (Movie movie in movieList) {
       //   print("${movie.movieID}, ${movie.title}");
       // }
