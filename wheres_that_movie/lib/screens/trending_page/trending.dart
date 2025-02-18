@@ -11,12 +11,11 @@
 //    (03/07/2023)(SR): Changed deprecated headlines
 //
 
-import 'dart:math';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wheres_that_movie/api/models/movie_model.dart';
+import 'package:wheres_that_movie/screens/trending_page/filter.dart';
 import 'package:wheres_that_movie/screens/trending_page/trending_appbar.dart';
 import 'package:wheres_that_movie/screens/trending_page/trending_card.dart';
 
@@ -79,7 +78,6 @@ class _MyTrendingState extends State<MyTrending> {
 
   double getViewportFraction(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
 
     // Adjust these threshold values based on your preference
     if (screenWidth > 400) {
@@ -97,8 +95,8 @@ class _MyTrendingState extends State<MyTrending> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
 
     if (_isLoading) {
       return Scaffold(
@@ -149,6 +147,7 @@ class _MyTrendingState extends State<MyTrending> {
             ),
           ));
     } else if (!isHorizontal) {
+      print('vertical');
       return Scaffold(
         body: SafeArea(
           bottom: false,
@@ -157,6 +156,7 @@ class _MyTrendingState extends State<MyTrending> {
               padding: const EdgeInsets.only(top: 0.0),
               child: CarouselSlider.builder(
                 options: CarouselOptions(
+                  enableInfiniteScroll: false,
                   height: screenHeight,
                   viewportFraction: 0.7,
                   scrollDirection: Axis.vertical,
@@ -170,6 +170,30 @@ class _MyTrendingState extends State<MyTrending> {
                 },
               ),
             ),
+            // Container(
+            //   padding: const EdgeInsets.only(bottom: 20.0),
+            //   width: screenWidth,
+            //   height: 150,
+            //   //color: Color.fromARGB(200, 0, 0, 0),
+            //   child: IconButton(
+            //     highlightColor: Colors.transparent,
+            //     alignment: Alignment.bottomRight,
+            //     icon: Icon(CupertinoIcons.bars),
+            //     onPressed: () {
+            //       showModalBottomSheet(
+            //         backgroundColor: Theme.of(context).cardColor,
+            //         context: context,
+            //         builder: (BuildContext context) {
+            //           return filterModal(context, (String selectedOption) {
+            //             setState(() {
+            //               //currentOption = selectedOption;
+            //             });
+            //           });
+            //         },
+            //       );
+            //     },
+            //   ),
+            // ),
             MyCustomAppBar(
               title: "Trending",
               onBackButtonPressed: () {
@@ -223,6 +247,7 @@ class _MyTrendingState extends State<MyTrending> {
             padding: EdgeInsets.only(top: screenHeight / 8),
             child: CarouselSlider.builder(
               options: CarouselOptions(
+                enableInfiniteScroll: false,
                 height: 450.0,
                 aspectRatio: 1.5,
                 viewportFraction: getViewportFraction(context),

@@ -335,6 +335,7 @@ class _MyLoggedInState extends State<MyLoggedIn> {
                               horizontal: 8.0, vertical: 8.0),
                           child: CarouselSlider.builder(
                             options: CarouselOptions(
+                                enableInfiniteScroll: false,
                                 height: 450.0,
                                 aspectRatio: 1.5,
                                 viewportFraction: getViewportFraction(context)),
